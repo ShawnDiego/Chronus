@@ -19,6 +19,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view){
         TextView text = (TextView) findViewById(R.id.textView);
-        text.setText("我爱萱萱");
+        text.setText("Hello World");
     }
 }
