@@ -42,14 +42,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         Button btnOK = (Button) findViewById(R.id.button);
         btnOK.setOnClickListener(this);
+
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
     @Override
     public void onClick(View view){
         TextView text = (TextView) findViewById(R.id.textView);
-        text.setText("Hello");//应该同步了吧
-        //Diego添加了一行注释
-        //又添加了一条注释
+        text.setText("Hello");
     }
 }
