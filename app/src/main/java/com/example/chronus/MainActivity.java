@@ -16,7 +16,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
             switch (item.getItemId()) {
+                case R.id.nav_calendar:
 
+                    return true;
+                case R.id.nav_reminders:
+
+                    return true;
+                case R.id.nav_timeline:
+
+                    return true;
+                case R.id.nav_tomato:
+
+                    return true;
+                case R.id.nav_settings:
+
+                    return true;
             }
             return false;
         }
