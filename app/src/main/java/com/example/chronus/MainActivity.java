@@ -49,5 +49,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view){
         TextView text = (TextView) findViewById(R.id.textView);
         text.setText("Hello");//应该同步了吧
+        //Diego添加了一行注释
     }
 }
