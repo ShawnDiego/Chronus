@@ -50,5 +50,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TextView text = (TextView) findViewById(R.id.textView);
         text.setText("Hello");//应该同步了吧
         //Diego添加了一行注释
+        //又添加了一条注释
     }
 }
