@@ -48,6 +48,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view){
         TextView text = (TextView) findViewById(R.id.textView);
-        text.setText("Hello");
+        text.setText("Hello");//应该同步了吧
     }
 }
