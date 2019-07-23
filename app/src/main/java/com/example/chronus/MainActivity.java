@@ -1,54 +1,123 @@
 package com.example.chronus;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener(){
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-            switch (item.getItemId()) {
-                case R.id.nav_calendar:
+    private ViewPager mViewPager;
+    private RadioGroup mTabRadioGroup;
 
-                    return true;
-                case R.id.nav_reminders:
-
-                    return true;
-                case R.id.nav_timeline:
-
-                    return true;
-                case R.id.nav_tomato:
-
-                    return true;
-                case R.id.nav_settings:
-
-                    return true;
-            }
-            return false;
-        }
-    };
+    private List<Fragment>  mFragments;
+    private FragmentPagerAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button btnOK = (Button) findViewById(R.id.button);
-        btnOK.setOnClickListener(this);
+        initView();
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
     }
+    private void initView(){
+        // find view
+        mViewPager = findViewById(R.id.fragment_vp);
+        mTabRadioGroup = findViewById(R.id.tabs_rg);
+        // init layout_fragment
+
+        mFragments = new ArrayList<>(5);
+
+        mFragments.add(ViewFragment.newInstance("日历"));
+        mFragments.add(ViewFragment.newInstance("事项"));
+        mFragments.add(ViewFragment.newInstance("时间轴"));
+        mFragments.add(ViewFragment.newInstance("番茄"));
+        mFragments.add(ViewFragment.newInstance("设置"));
+        mAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragments);
+        mViewPager.setAdapter(mAdapter);
+        // register listener
+        mViewPager.addOnPageChangeListener(mPageChangeListener);
+        mTabRadioGroup.setOnCheckedChangeListener(mOnCheckedChangeListener);
+
+        mTabRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // 具体的fragment切换逻辑可以根据应用调整，例如使用show()/hide()
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_vp,
+                        mFragments.get(checkedId)).commit();
+            }
+        });
+    }
+    private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            RadioButton radioButton = (RadioButton) mTabRadioGroup.getChildAt(position);
+            radioButton.setChecked(true);
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
+    private RadioGroup.OnCheckedChangeListener mOnCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(RadioGroup group, int checkedId) {
+            for (int i = 0; i < group.getChildCount(); i++) {
+                if (group.getChildAt(i).getId() == checkedId) {
+                    mViewPager.setCurrentItem(i);
+                    return;
+                }
+            }
+        }
+    };
+
+    private class MyFragmentPagerAdapter extends FragmentPagerAdapter {
+
+        private List<Fragment> mList;
+
+        public MyFragmentPagerAdapter(FragmentManager fm, List<Fragment> list) {
+            super(fm);
+            this.mList = list;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return this.mList == null ? null : this.mList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return this.mList == null ? 0 : this.mList.size();
+        }
+    }
+
+
+
     @Override
     public void onClick(View view){
-        TextView text = (TextView) findViewById(R.id.textView);
-        text.setText("Hello");
+
     }
+
+
 }
