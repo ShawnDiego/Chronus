@@ -63,7 +63,7 @@
     </RadioGroup>
 
     <ImageView
-        android:id="@+id/sign_iv"
+        android:id="@+id/timeline_tab"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_alignParentBottom="true"

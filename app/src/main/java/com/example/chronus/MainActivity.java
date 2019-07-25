@@ -6,6 +6,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,24 +30,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<Fragment>  mFragments;
     private FragmentPagerAdapter mAdapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-
-
     }
     private void initView(){
         // find view
         mViewPager = findViewById(R.id.fragment_vp);
         mTabRadioGroup = findViewById(R.id.tabs_rg);
         // init layout_fragment
-
         mFragments = new ArrayList<>(5);
-
         mFragments.add(ViewFragment.newInstance("日历"));
-        mFragments.add(ViewFragment.newInstance("事项"));
+        mFragments.add(RemindersFragment.newInstance("事项"));
         mFragments.add(ViewFragment.newInstance("时间轴"));
         mFragments.add(ViewFragment.newInstance("番茄"));
         mFragments.add(ViewFragment.newInstance("设置"));
@@ -53,15 +53,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // register listener
         mViewPager.addOnPageChangeListener(mPageChangeListener);
         mTabRadioGroup.setOnCheckedChangeListener(mOnCheckedChangeListener);
-
-        mTabRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        findViewById(R.id.timeline_tab).setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                // 具体的fragment切换逻辑可以根据应用调整，例如使用show()/hide()
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_vp,
-                        mFragments.get(checkedId)).commit();
+            public void onClick(View v){
+                mViewPager.setCurrentItem(2);
+                return;
             }
         });
+
     }
     private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
@@ -71,8 +70,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void onPageSelected(int position) {
-            RadioButton radioButton = (RadioButton) mTabRadioGroup.getChildAt(position);
-            radioButton.setChecked(true);
+
+
+           // RadioButton radioButton = (RadioButton) mTabRadioGroup.getChildAt(position);
+            //radioButton.setChecked(true);
         }
 
         @Override
