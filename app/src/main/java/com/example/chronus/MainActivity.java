@@ -22,7 +22,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener , RemindersFragment.OnTitleSelectedListener{
 
     private ViewPager mViewPager;
     private RadioGroup mTabRadioGroup;
@@ -41,22 +41,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // find view
         mViewPager = findViewById(R.id.fragment_vp);
         mTabRadioGroup = findViewById(R.id.tabs_rg);
-        // init layout_fragment
-        mFragments = new ArrayList<>(5);
-        mFragments.add(ViewFragment.newInstance("日历"));
+        // init layout_fragment 一级碎片
+        mFragments = new ArrayList<>();
+        mFragments.add(ViewFragment.newInstance("日历"));//Fragment的名字都要修改
         mFragments.add(RemindersFragment.newInstance("事项"));
-        mFragments.add(ViewFragment.newInstance("时间轴"));
-        mFragments.add(ViewFragment.newInstance("番茄"));
-        mFragments.add(ViewFragment.newInstance("设置"));
+        mFragments.add(ViewFragment.newInstance("时间轴"));//Fragment的名字都要修改
+        mFragments.add(ViewFragment.newInstance("番茄"));//Fragment的名字都要修改
+        mFragments.add(ViewFragment.newInstance("设置"));//Fragment的名字都要修改
+        //下面是二级碎片
+        mFragments.add(RemindersItemFragment.newInstance("提醒事项"));
+
         mAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragments);
         mViewPager.setAdapter(mAdapter);
         // register listener
         mViewPager.addOnPageChangeListener(mPageChangeListener);
         mTabRadioGroup.setOnCheckedChangeListener(mOnCheckedChangeListener);
+
+
         findViewById(R.id.timeline_tab).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 mViewPager.setCurrentItem(2);
+                mTabRadioGroup.clearCheck();
                 return;
             }
         });
@@ -120,5 +126,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    @Override
+    public void onEventsSelected(int position){
+//        RemindersItemFragment newFragment = new RemindersItemFragment();
+//        Bundle args = new Bundle();
+//        args.putInt(RemindersItemFragment.EVENTS_POSITION,position);
+//        newFragment.setArguments(args);
+//
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//
+//        transaction.replace(R.id.view, newFragment);
+//        transaction.addToBackStack(null);
+
+       // transaction.commit();
+
+
+        mViewPager.setCurrentItem(5);
+        mTabRadioGroup.clearCheck();
+    }
 
 }

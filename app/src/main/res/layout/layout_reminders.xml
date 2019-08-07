@@ -4,19 +4,183 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="255dp"
-        android:layout_height="307dp"
-        android:contentDescription="@string/test2"
-        app:srcCompat="@color/design_default_color_primary_dark"
-        tools:srcCompat="@tools:sample/avatars[1]" />
-
-    <TextView
-        android:id="@+id/text"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#F1F1F6">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="textView" />
-</LinearLayout >
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:text="编辑"
+                android:textColor="@color/design_default_color_primary"
+                android:textSize="18sp" />
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_marginBottom="5dp"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+
+            <ImageView
+                android:id="@+id/iv_search"
+                android:layout_width="29dp"
+                android:layout_height="33dp"
+                android:layout_alignParentLeft="true"
+
+                app:srcCompat="@android:drawable/ic_menu_search" />
+
+            <EditText
+                android:id="@+id/edit_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#E2E2E7"
+
+
+                android:text="搜索"
+                android:textColor="#7F7E84"
+                android:textSize="18sp" />
+
+        </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+        <Button
+            android:id="@+id/but_today"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="20dp"
+            android:layout_width="159dp"
+            android:layout_height="83dp"
+            android:layout_margin="5dip"
+            android:layout_x="38dp"
+            android:layout_y="63dp"
+            android:background="@drawable/btn_bg_white"
+            android:text="今天" />
+
+        <Button
+            android:id="@+id/but_plan"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:layout_width="159dp"
+            android:layout_height="83dp"
+            android:layout_margin="5dip"
+            android:background="@drawable/btn_bg_white"
+
+            android:text="计划" />
+
+        <Button
+            android:id="@+id/but_all"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="20dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="30dp"
+            android:layout_width="159dp"
+            android:layout_height="83dp"
+            android:layout_margin="5dip"
+            android:layout_x="38dp"
+            android:layout_y="164dp"
+            android:background="@drawable/btn_bg_white"
+            android:gravity="center"
+            android:text="全部" />
+
+        <Button
+            android:id="@+id/but_star"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="30dp"
+            android:layout_width="159dp"
+            android:layout_height="83dp"
+            android:layout_margin="5dip"
+            android:layout_x="217dp"
+            android:layout_y="167dp"
+            android:background="@drawable/btn_bg_white"
+            android:gravity="center"
+            android:text="星标" />
+
+    </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="提醒列表"
+                android:textAlignment="center"
+                android:textSize="22sp" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+
+            <ListView
+                android:id="@+id/reminder_list"
+                android:layout_width="wrap_content"
+                android:layout_height="400dp"
+                android:background="@drawable/btn_bg_white"
+                android:divider="#C6C5C8"
+                android:dividerHeight="1px"
+                android:fadingEdge="none"
+                android:footerDividersEnabled="false"
+                android:headerDividersEnabled="false" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:text="添加列表"
+                android:textAlignment="center"
+                android:textColor="@color/design_default_color_primary"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+</LinearLayout>
