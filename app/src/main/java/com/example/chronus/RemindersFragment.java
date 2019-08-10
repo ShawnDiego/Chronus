@@ -11,7 +11,9 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.SearchView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,11 +25,13 @@ public class RemindersFragment extends Fragment {
     private View view;
     private static final String ARG_SHOW_TEXT = "text";
     private String mContentText;
-
-    private String[] list_name = new String[]{"list1","list2","list3"};
-    private String[] list_num = new String[]{"2","3","0"};
-   // private int[] imgIds = new int[]{R.mipmap.listico, R.mipmap.listico, R.mipmap.listico};
-    private int imgIds =  R.mipmap.listico;
+    private TextView edit_tv;
+    private TextView addlist_tv;
+    private String[] list_name = new String[]{"提醒事项","购物单","任务项","作业","每日提醒计划","电影","书单"};
+    private String[] list_num = new String[]{"2","3","0","2","1","6","9"};
+    private int[] imgIds = new int[]{R.mipmap.lise_icon1, R.mipmap.lise_icon2, R.mipmap.lise_icon3,
+            R.mipmap.lise_icon4, R.mipmap.lise_icon5, R.mipmap.lise_icon6,R.mipmap.lise_icon1, R.mipmap.lise_icon2, R.mipmap.lise_icon3};
+    //private int imgIds =  R.mipmap.listico;
 
     public RemindersFragment() {
         // Required empty public constructor
@@ -60,9 +64,6 @@ public class RemindersFragment extends Fragment {
             agrs1 = bundle.getString(ARG_SHOW_TEXT);
         }
 
-
-
-
         init();
         return view;
     }
@@ -72,14 +73,15 @@ public class RemindersFragment extends Fragment {
         List<Map<String, Object>> listitem = new ArrayList<Map<String, Object>>();
         for (int i = 0; i < list_name.length; i++) {
             Map<String, Object> showitem = new HashMap<String, Object>();
-            showitem.put("list_img", imgIds);
+            showitem.put("list_img", imgIds[i]);
             showitem.put("list_name", list_name[i]);
             showitem.put("list_num", list_num[i]);
             listitem.add(showitem);
         }
 
         //创建一个simpleAdapter
-        SimpleAdapter myAdapter = new SimpleAdapter(getContext(), listitem, R.layout.layout_listview, new String[]{"list_img", "list_name", "list_num"}, new int[]{R.id.list_img, R.id.list_name, R.id.list_num});
+        SimpleAdapter myAdapter = new SimpleAdapter(getContext(), listitem, R.layout.layout_listview, new String[]{"list_img", "list_name", "list_num"},
+                new int[]{R.id.list_img, R.id.list_name, R.id.list_num});
         ListView listView = (ListView) view.findViewById(R.id.reminder_list);
         listView.setAdapter(myAdapter);
 
@@ -87,7 +89,6 @@ public class RemindersFragment extends Fragment {
 
         int width = dm.widthPixels;
         int height = dm.heightPixels;
-        System.out.println(width);
         RelativeLayout.LayoutParams params;
         Button but1 = view.findViewById(R.id.but_today);
         Button but2 = view.findViewById(R.id.but_plan);
@@ -113,7 +114,34 @@ public class RemindersFragment extends Fragment {
             }
         });
 
+        SearchView searchView = view .findViewById(R.id.edit_search);
+
+         edit_tv = view.findViewById(R.id.edit_tv);
+         edit_tv.setClickable(true);
+         edit_tv.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 if(edit_tv.getText().equals("编辑")){
+                     edit_tv.setText("完成");
+                     edit_tv.getPaint().setFakeBoldText(true);
+                 }else{
+                     edit_tv.setText("编辑");
+                     edit_tv.getPaint().setFakeBoldText(false);
+                 }
+             }
+         });
+        addlist_tv = view.findViewById(R.id.addlist_tv);
+        addlist_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
+
+
+
+
     OnTitleSelectedListener mCallback;
     public interface OnTitleSelectedListener{
         public void onEventsSelected(int position);

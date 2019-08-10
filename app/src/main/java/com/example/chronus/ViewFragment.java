@@ -40,9 +40,6 @@ public class ViewFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.layout_fragment, container, false);
         TextView contentTv = rootView.findViewById(R.id.text);
         contentTv.setText(mContentText);
-        ImageView imageView = rootView.findViewById(R.id.imageView2);
-
-
         return rootView;
     }
 }

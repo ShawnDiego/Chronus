@@ -2,6 +2,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowFullscreen">true</item>
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -10,7 +11,6 @@
     <style name="RadioGroupButtonStyle" >
         <!-- 这个属性是去掉button 默认样式-->
         <item name="android:button">@null</item>
-
         <item name="android:gravity">center</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
@@ -18,21 +18,16 @@
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
-    <!-- 搜索框 -->
-    <declare-styleable name="kylin_search_style">
-        <attr name="img_src" format="reference"/><!-- 图片地址 -->
-        <attr name="img_size" format="dimension"/><!-- 图片大小 -->
-        <attr name="img_visibility" format="boolean"/><!-- 图片显示/隐藏 -->
-        <attr name="show_location" format="enum">
-            <enum name="left" value="0"/>
-            <enum name="right" value="2"/>
-            <enum name="centre" value="1"/>
-        </attr>
-        <attr name="edt_hint" format="string"/><!-- 提示文字 -->
-        <attr name="edt_size" format="dimension"/><!-- 提示文字大小 -->
-        <attr name="edt_hint_color" format="color"/><!-- 提示文字的颜色 -->
-        <attr name="search_backgroup" format="reference"/><!-- 搜索框背景 -->
-        <attr name="search_padding" format="reference"/><!-- 搜索框背景 -->
-    </declare-styleable>
+
+    <!--卡片动画-->
+    <style name="FragmentCardAnimation" >
+        <!-- 进入动画 -->
+        <item name="android:windowAnimationStyle">@style/ActionSheetDialogAnimation</item>
+    </style>
+    <!-- ActionSheet进出动画 -->
+    <style name="ActionSheetDialogAnimation" parent="@android:style/Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/fragment_open</item>
+
+    </style>
 
 </resources>
