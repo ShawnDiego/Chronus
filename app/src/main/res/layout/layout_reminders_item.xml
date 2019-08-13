@@ -7,17 +7,27 @@
     android:background="#000000"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/shape_rectangle_with_radius"
+        android:backgroundTint="#BEC3C4"
+        android:orientation="horizontal">
+
+    </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
         android:background="@drawable/shape_rectangle_with_radius"
         android:orientation="vertical">
-
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
             <TextView
@@ -26,10 +36,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerInParent="true"
+                android:layout_marginLeft="10dp"
                 android:text="列表"
                 android:textColor="#0B85FB"
-                android:textSize="16sp"
-                android:layout_marginLeft="10dp"/>
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/item_list_name"
@@ -45,16 +55,16 @@
                 android:id="@+id/item_top_menu"
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="false"
+                android:layout_alignParentStart="false"
                 android:layout_alignParentEnd="false"
                 android:layout_alignParentRight="true"
                 android:layout_centerHorizontal="true"
-                app:srcCompat="@mipmap/menu"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginRight="10dp"
+                app:srcCompat="@mipmap/menu" />
         </RelativeLayout>
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:clipToPadding="false"
             android:scrollbars="none">
         <RelativeLayout
@@ -65,7 +75,9 @@
             <ListView
                 android:id="@+id/item_list"
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
+                android:layout_height="50dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="0dp"
                 android:divider="#C6C5C8"
                 android:dividerHeight="1px"
                 android:fadingEdge="none"
@@ -73,19 +85,6 @@
                 android:headerDividersEnabled="false" />
         </RelativeLayout>
         </ScrollView>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/item_new"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="+新提醒事项"
-                android:textColor="@android:color/holo_green_dark"
-                android:textSize="20sp"
-                android:layout_marginBottom="10dp"/>
-        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

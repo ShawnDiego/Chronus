@@ -16,12 +16,15 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -33,7 +36,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener , RemindersFragment.OnTitleSelectedListener{
 
-    private ViewPager mViewPager;
+    public ViewPager mViewPager;
     private RadioGroup mTabRadioGroup;
 
     private List<Fragment>  mFragments;
@@ -47,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initView();
     }
     private void initView(){
-
         // find view
         mViewPager = findViewById(R.id.fragment_vp);
         mTabRadioGroup = findViewById(R.id.tabs_rg);
@@ -73,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.timeline_tab).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                mViewPager.setCurrentItem(2);
+                mViewPager.setCurrentItem(2,false);
                 mTabRadioGroup.clearCheck();
                 return;
             }
@@ -82,22 +84,57 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
     private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
+
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//            float MIN_SCALE=0.75f;
+//            float scaleFactor=MIN_SCALE+(1-MIN_SCALE)*(1-Math.abs(position));
+//            if (positionOffset>1||positionOffset<-1){
+//                mViewPager.setAlpha(0f);
+//            }else if (positionOffset<=0){
+//                mViewPager.setAlpha(1+positionOffset);
+//                mViewPager.setScaleX(scaleFactor);
+//                mViewPager.setScaleY(scaleFactor);
+//            }else if (positionOffset<=1){
+//                mViewPager.setAlpha(1-positionOffset);
+//                mViewPager.setScaleX(scaleFactor);
+//                mViewPager.setScaleY(scaleFactor);
+//            }
+// 滚动的时候改变自定义控件的动画
+           // Log.d("Scroll", "position：" + position);
+            //Log.d("Scroll", "positionOffset：" + positionOffset);
+            //Log.d("Scroll", "positionOffsetPixels：" + positionOffsetPixels);
 
         }
 
         @Override
         public void onPageSelected(int position) {
 
-
-           // RadioButton radioButton = (RadioButton) mTabRadioGroup.getChildAt(position);
-            //radioButton.setChecked(true);
         }
 
         @Override
         public void onPageScrollStateChanged(int state) {
+            if(state == 2){
+                RadioButton radioButton3 = (RadioButton) findViewById(R.id.tomato_tab);
+                RadioButton radioButton1 = (RadioButton) findViewById(R.id.calendar_tab);
+                RadioButton radioButton2 = (RadioButton) findViewById(R.id.remainder_tab);
+                RadioButton radioButton4 = (RadioButton) findViewById(R.id.settings_tab);
+                switch (mViewPager.getCurrentItem()) {
+                    case 0:
+                        radioButton1.setChecked(true);
+                        break;
+                    case 1:
+                        radioButton2.setChecked(true);
+                        break;
+                    case 3:
+                        radioButton3.setChecked(true);
+                        break;
+                    case 4:
+                        radioButton4.setChecked(true);
+                        break;
+                }
 
+            }
         }
     };
     private RadioGroup.OnCheckedChangeListener mOnCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
@@ -105,12 +142,84 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void onCheckedChanged(RadioGroup group, int checkedId) {
             for (int i = 0; i < group.getChildCount(); i++) {
                 if (group.getChildAt(i).getId() == checkedId) {
-                    mViewPager.setCurrentItem(i);
+                    mViewPager.setCurrentItem(i,false);
                     return;
                 }
             }
         }
     };
+    public class VerticalViewPager extends ViewPager {
+
+        public VerticalViewPager(Context context) {
+            super(context);
+            init();
+        }
+
+        public VerticalViewPager(Context context, AttributeSet attrs) {
+            super(context, attrs);
+            init();
+        }
+
+        private void init() {
+            // 最重要的设置，将viewpager翻转
+            setPageTransformer(true, new VerticalPageTransformer());
+            // 设置去掉滑到最左或最右时的滑动效果
+            setOverScrollMode(OVER_SCROLL_NEVER);
+        }
+
+        private class VerticalPageTransformer implements ViewPager.PageTransformer {
+
+            @Override
+            public void transformPage(View view, float position) {
+
+                if (position < -1) { // [-Infinity,-1)
+                    // 当前页的上一页
+                    view.setAlpha(0);
+
+                } else if (position <= 1) { // [-1,1]
+                    view.setAlpha(1);
+
+                    // 抵消默认幻灯片过渡
+                    view.setTranslationX(view.getWidth() * -position);
+
+                    //设置从上滑动到Y位置
+                    float yPosition = position * view.getHeight();
+                    view.setTranslationY(yPosition);
+
+                } else { // (1,+Infinity]
+                    // 当前页的下一页
+                    view.setAlpha(0);
+                }
+            }
+        }
+
+        /**
+         * 交换触摸事件的X和Y坐标
+         */
+        private MotionEvent swapXY(MotionEvent ev) {
+            float width = getWidth();
+            float height = getHeight();
+
+            float newX = (ev.getY() / height) * width;
+            float newY = (ev.getX() / width) * height;
+
+            ev.setLocation(newX, newY);
+
+            return ev;
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(MotionEvent ev) {
+            boolean intercepted = super.onInterceptTouchEvent(swapXY(ev));
+            swapXY(ev);
+            return intercepted; //为所有子视图返回触摸的原始坐标
+        }
+
+        @Override
+        public boolean onTouchEvent(MotionEvent ev) {
+            return super.onTouchEvent(swapXY(ev));
+        }
+    }
 
     private class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -153,24 +262,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        transaction.commit();
         mTabRadioGroup.clearCheck();
         //mViewPager.setPageTransformer(true, new MyPageTransformer());
-        mViewPager.setCurrentItem(5);
-
-    }
-    private int mCurItem;
-    class MyPageTransformer implements ViewPager.PageTransformer {
-        private final float MIN_SCALE = 0.5f;
-        private final float MIN_ALPHA = 0.5f;
-
-        @Override
-        public void transformPage(@NonNull View page, float position) {
-            float scaleFactor = MIN_SCALE + (1 - MIN_SCALE) * (1 - Math.abs(position));
-            float alphaFactor = MIN_ALPHA + (1 - MIN_ALPHA) * (1 - Math.abs(position));
-            page.setScaleY(scaleFactor);
-            page.setAlpha(alphaFactor);
-
+        TextView edit_tv = findViewById(R.id.edit_tv);
+        ListView listView = findViewById(R.id.reminder_list);
+        if(edit_tv.getText().equals("编辑")){
+            mViewPager.setCurrentItem(5,false);
+            TextView tv_back = findViewById(R.id.item_back);
+            tv_back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mViewPager.setCurrentItem(1,false);
+                    System.out.println("Click Success");
+                }
+            });
+        }else{
+           // ImageView choose_img = listView.getSelectedView().findViewById(R.id.choose_img);
+//            ImageView choose_img = findViewById(R.id.choose_img);
+//            choose_img.setImageAlpha(R.drawable.radio_selected);
         }
 
+
     }
+
 
 
 }
