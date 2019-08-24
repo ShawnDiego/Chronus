@@ -1,19 +1,27 @@
 package com.example.chronus;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.util.Printer;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +39,7 @@ public class RemindersItemFragment extends Fragment {
     private int checked[] ={0,1,0,1,0,0,1};
     private int seleted_img = R.drawable.radio_selected;
     private ViewPager mViewPager;
+    private ImageView mPopupMenu;
 
     public RemindersItemFragment() {
         // Required empty public constructor
@@ -81,6 +90,7 @@ public class RemindersItemFragment extends Fragment {
     }
 
     public void init() {
+        //MainActivity.getCount()用来判断数据库总条数
 
         List<Map<String, Object>> listitem = new ArrayList<Map<String, Object>>();
         for (int i = 0; i < item_name.length; i++) {
@@ -91,7 +101,10 @@ public class RemindersItemFragment extends Fragment {
                 showitem.put("item_img",seleted_img);
             }
 
-            showitem.put("item_name", item_name[i]);
+            //showitem.put("item_name", item_name[i]);
+            //改成从数据库获取
+            showitem.put("item_name", "事项："+MainActivity.ShowLineID(i)+"(查看详细信息请长按)");
+
             listitem.add(showitem);
         }
         //最后加一个添加item
@@ -121,6 +134,9 @@ public class RemindersItemFragment extends Fragment {
                 TextView sel_tv = view.findViewById(R.id.item_name);
                 if(sel_tv.getText().equals("添加新事项")){
                     //弹出新建
+                    //Intent intent = new Intent(getActivity(), ADD_DATA_Activity.class);
+                    Intent intent = new Intent(getActivity(), ADD_DATA_Activity.class);
+                    startActivity(intent);
                 } else if(sel_img.getTag().toString().equals("1") || checked[i] == 1){
                     sel_img.setImageResource(imgIds);
                     sel_img.setTag("0");
@@ -138,11 +154,61 @@ public class RemindersItemFragment extends Fragment {
 
             //弹出事件详情
                 Log.d("Scroll", "当前长按" + i);
+            //跳转到事件详情activity
+                Intent intent = new Intent(getActivity(), Item_tosee.class);
+                //根据所长按的索引的序列号也就是数据库中的第几行，找到对应的ID
+                MainActivity.Line = i;
+                //intent.putExtra("Number", i);
+                startActivity(intent);
 
+                return true;
+            }
+        });
+        mPopupMenu = view.findViewById(R.id.item_top_menu);
+        mPopupMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPopupMenu();
+            }
+        });
+
+
+
+    }
+
+    private void showPopupMenu(){
+        PopupMenu popupMenu = new PopupMenu(getActivity(),mPopupMenu);
+        if(view.getContext() == null){
+            return ;
+        }else {
+           // popupMenu.inflate(R.menu.reminders_menu);
+            MenuInflater inflater = popupMenu.getMenuInflater();
+            inflater.inflate(R.menu.reminders_menu, popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.rem_delete:
+                        Toast.makeText(getContext(),"Option 1",Toast.LENGTH_SHORT).show();
+                        //是否删除，弹出一个对话框问问
+                        return true;
+                    case R.id.rem_edit:
+                        Toast.makeText(getContext(),"Option 2",Toast.LENGTH_SHORT).show();
+                        //样式改变
+                        return true;
+                    case R.id.rem_finish:
+                        Toast.makeText(getContext(),"Option 3",Toast.LENGTH_SHORT).show();
+                        //显示全部完成的事项
+                        return true;
+                    default:
+                        //do nothing
+                }
 
                 return false;
             }
         });
+            popupMenu.show();
+        }
     }
 
 

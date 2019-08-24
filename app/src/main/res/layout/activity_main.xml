@@ -11,59 +11,61 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/tabs_rg" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#85afafaf"
+        android:layout_alignBottom="@id/fragment_vp"/>
 
-
-    <RadioGroup
+    <LinearLayout
         android:id="@+id/tabs_rg"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="37dp"
         android:layout_alignParentBottom="true"
-        android:background="#dcdcdc"
+        android:background="#FAFBFA"
         android:orientation="horizontal"
+        android:layout_marginTop="5dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <RadioButton
+
+
+        <ImageView
             android:id="@+id/calendar_tab"
-            style="@style/RadioGroupButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:button="@android:drawable/ic_menu_my_calendar"
-            android:checked="true"
-            android:text="日历" />
-
-        <RadioButton
+            android:layout_width="0dp"
+            android:layout_height="28dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/cal_un" />
+        <ImageView
             android:id="@+id/remainder_tab"
-            style="@style/RadioGroupButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:button="@android:drawable/ic_popup_reminder"
-            android:text="事项" />
-
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/rem_un" />
         <View
-            android:id="@+id/view"
-            style="@style/RadioGroupButtonStyle"></View>
-
-
-        <RadioButton
+            android:layout_width="76dp"
+            android:layout_height="35dp"
+            ></View>
+        <ImageView
             android:id="@+id/tomato_tab"
-            style="@style/RadioGroupButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:button="@android:drawable/btn_star_big_on"
-            android:text="番茄钟" />
+            android:layout_width="0dp"
+            android:layout_height="33dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/tom_un"
+            />
 
-        <RadioButton
+        <ImageView
             android:id="@+id/settings_tab"
-            style="@style/RadioGroupButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:button="@android:drawable/ic_menu_preferences"
-            android:text="设置" />
-    </RadioGroup>
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/setting_un" />
+
+
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/timeline_tab"
-        android:layout_width="50dp"
+        android:layout_width="48dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
@@ -71,7 +73,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:srcCompat="@mipmap/ic_launcher" />
+        app:srcCompat="@drawable/timeline"
+        android:layout_marginBottom="8dp"/>
 
 
 </RelativeLayout>

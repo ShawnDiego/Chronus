@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/FragmentCardAnimation"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -55,12 +56,14 @@
                 android:id="@+id/item_top_menu"
                 android:layout_width="20dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="false"
-                android:layout_alignParentEnd="false"
+
                 android:layout_alignParentRight="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginRight="10dp"
-                app:srcCompat="@mipmap/menu" />
+                android:onClick="show"
+                app:srcCompat="@mipmap/menu"
+                />
+
         </RelativeLayout>
         <ScrollView
             android:layout_width="match_parent"

@@ -3,6 +3,8 @@ package com.example.chronus;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Camera;
 import android.graphics.Matrix;
 import android.support.annotation.NonNull;
@@ -20,6 +22,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
@@ -28,31 +32,64 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
-
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener , RemindersFragment.OnTitleSelectedListener{
 
     public ViewPager mViewPager;
-    private RadioGroup mTabRadioGroup;
+ //   private RadioGroup mTabRadioGroup;
 
     private List<Fragment>  mFragments;
     private FragmentPagerAdapter mAdapter;
 
+    public static SQDB mDBHelper;
+    //事项列表行数，用来跳转到详细信息页
+    public static int Line;
+    //用来确定所要修改的数据库条目
+    public  static String Edit_ID;
+    private static Context context;
 
+
+
+    private ImageView iv_cal;
+    private ImageView iv_rem;
+    private ImageView iv_timeline;
+    private ImageView iv_tom;
+    private ImageView iv_set;
+
+
+    private static Context getContext() {
+        if(context == null) {
+            context = MainActivity.context;
+        }
+        return context;
+    }
+    private int chooseTab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //进入全屏
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_main);
+
         initView();
+
+        mDBHelper = new SQDB(this);//数据库
+
     }
     private void initView(){
         // find view
         mViewPager = findViewById(R.id.fragment_vp);
-        mTabRadioGroup = findViewById(R.id.tabs_rg);
+        //mTabRadioGroup = findViewById(R.id.tabs_rg);
         // init layout_fragment 一级碎片
         mFragments = new ArrayList<>();
         mFragments.add(ViewFragment.newInstance("日历"));//Fragment的名字都要修改
@@ -69,41 +106,85 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // register listener
         mViewPager.addOnPageChangeListener(mPageChangeListener);
-        mTabRadioGroup.setOnCheckedChangeListener(mOnCheckedChangeListener);
-
+//        mTabRadioGroup.setOnCheckedChangeListener(mOnCheckedChangeListener);
+        iv_cal = findViewById(R.id.calendar_tab);
+          iv_rem = findViewById(R.id.remainder_tab);
+          iv_timeline = findViewById(R.id.timeline_tab);
+          iv_tom = findViewById(R.id.tomato_tab);
+          iv_set = findViewById(R.id.settings_tab);
 
         findViewById(R.id.timeline_tab).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 mViewPager.setCurrentItem(2,false);
-                mTabRadioGroup.clearCheck();
+                chooseTab=3;
+                iv_set.setImageResource(R.drawable.setting_un);
+                iv_cal.setImageResource(R.drawable.cal_un);
+                iv_rem.setImageResource(R.drawable.rem_un);
+                //iv_timeline.setImageResource(R.drawable.setting);
+                iv_tom.setImageResource(R.drawable.tom_un);
                 return;
             }
         });
 
+        findViewById(R.id.remainder_tab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseTab=2;
+                mViewPager.setCurrentItem(1,false);
+                iv_set.setImageResource(R.drawable.setting_un);
+                iv_cal.setImageResource(R.drawable.cal_un);
+                iv_rem.setImageResource(R.drawable.rem);
+                //iv_timeline.setImageResource(R.drawable.setting);
+                iv_tom.setImageResource(R.drawable.tom_un);
 
+            }
+        });
+        findViewById(R.id.tomato_tab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseTab=4;
+                mViewPager.setCurrentItem(3,false);
+                iv_set.setImageResource(R.drawable.setting_un);
+                iv_cal.setImageResource(R.drawable.cal_un);
+                iv_rem.setImageResource(R.drawable.rem_un);
+                //iv_timeline.setImageResource(R.drawable.setting);
+                iv_tom.setImageResource(R.drawable.tom);
+
+            }
+        });
+        findViewById(R.id.settings_tab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseTab=5;
+                mViewPager.setCurrentItem(4,false);
+                iv_set.setImageResource(R.drawable.setting);
+                iv_cal.setImageResource(R.drawable.cal_un);
+               iv_rem.setImageResource(R.drawable.rem_un);
+                //iv_timeline.setImageResource(R.drawable.setting);
+               iv_tom.setImageResource(R.drawable.tom_un);
+
+            }
+        });
+        findViewById(R.id.calendar_tab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chooseTab=1;
+                mViewPager.setCurrentItem(0,false);
+                iv_set.setImageResource(R.drawable.setting_un);
+                iv_cal.setImageResource(R.drawable.cal);
+                iv_rem.setImageResource(R.drawable.rem_un);
+                //iv_timeline.setImageResource(R.drawable.setting);
+                iv_tom.setImageResource(R.drawable.tom_un);
+
+            }
+        });
     }
     private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//            float MIN_SCALE=0.75f;
-//            float scaleFactor=MIN_SCALE+(1-MIN_SCALE)*(1-Math.abs(position));
-//            if (positionOffset>1||positionOffset<-1){
-//                mViewPager.setAlpha(0f);
-//            }else if (positionOffset<=0){
-//                mViewPager.setAlpha(1+positionOffset);
-//                mViewPager.setScaleX(scaleFactor);
-//                mViewPager.setScaleY(scaleFactor);
-//            }else if (positionOffset<=1){
-//                mViewPager.setAlpha(1-positionOffset);
-//                mViewPager.setScaleX(scaleFactor);
-//                mViewPager.setScaleY(scaleFactor);
-//            }
-// 滚动的时候改变自定义控件的动画
-           // Log.d("Scroll", "position：" + position);
-            //Log.d("Scroll", "positionOffset：" + positionOffset);
-            //Log.d("Scroll", "positionOffsetPixels：" + positionOffsetPixels);
+
 
         }
 
@@ -115,39 +196,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onPageScrollStateChanged(int state) {
             if(state == 2){
-                RadioButton radioButton3 = (RadioButton) findViewById(R.id.tomato_tab);
-                RadioButton radioButton1 = (RadioButton) findViewById(R.id.calendar_tab);
-                RadioButton radioButton2 = (RadioButton) findViewById(R.id.remainder_tab);
-                RadioButton radioButton4 = (RadioButton) findViewById(R.id.settings_tab);
+
                 switch (mViewPager.getCurrentItem()) {
                     case 0:
-                        radioButton1.setChecked(true);
+                        chooseTab=1;
+                        //设置图标高亮
                         break;
                     case 1:
-                        radioButton2.setChecked(true);
+                        chooseTab=2;
+                        //设置图标高亮
+                        break;
+                    case 2:
+                        chooseTab=3;
+                        //设置图标高亮
                         break;
                     case 3:
-                        radioButton3.setChecked(true);
+                        chooseTab=4;
+                        //设置图标高亮
                         break;
                     case 4:
-                        radioButton4.setChecked(true);
-                        break;
+                        chooseTab=5;
+                        //设置图标高亮
+                        iv_set.setImageResource(R.drawable.setting);
+                        iv_cal.setImageResource(R.drawable.cal_1);
+                        // iv_rem.setImageResource(R.drawable.setting);
+                        //iv_timeline.setImageResource(R.drawable.setting);
+                        // iv_tom.setImageResource(R.drawable.setting);
+                       break;
                 }
 
             }
         }
     };
-    private RadioGroup.OnCheckedChangeListener mOnCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(RadioGroup group, int checkedId) {
-            for (int i = 0; i < group.getChildCount(); i++) {
-                if (group.getChildAt(i).getId() == checkedId) {
-                    mViewPager.setCurrentItem(i,false);
-                    return;
-                }
-            }
-        }
-    };
+
     public class VerticalViewPager extends ViewPager {
 
         public VerticalViewPager(Context context) {
@@ -245,7 +326,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view){
-
+        switch (view.getId()){
+            case R.id.calendar_tab:
+                chooseTab=1;
+                mViewPager.setCurrentItem(0,false);
+                Toast.makeText(getContext(),"Option 1",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.remainder_tab:
+                chooseTab=2;
+                mViewPager.setCurrentItem(1,false);
+                break;
+            case R.id.timeline_tab:
+                chooseTab=3;
+                mViewPager.setCurrentItem(2,false);
+                break;
+            case R.id.tomato_tab:
+                chooseTab=4;
+                mViewPager.setCurrentItem(3,false);
+                break;
+            case R.id.settings_tab:
+                chooseTab=5;
+                mViewPager.setCurrentItem(4,false);
+                break;
+        }
     }
 
     @Override
@@ -260,7 +363,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        transaction.replace(R.id.view,mFragments.get(5));
 //        transaction.addToBackStack(null);
 //        transaction.commit();
-        mTabRadioGroup.clearCheck();
+ //       mTabRadioGroup.clearCheck();
         //mViewPager.setPageTransformer(true, new MyPageTransformer());
         TextView edit_tv = findViewById(R.id.edit_tv);
         ListView listView = findViewById(R.id.reminder_list);
@@ -283,6 +386,108 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+//数据库操作
+//初始化化以及格式化时间
+private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
+    private static Date date = new Date();
+    private static String Day = formatt.format(date);
 
+    //插入数据
+    public static void INSERT(String type, String id, String title,String m,String time) {
+
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();//获取可写数据库实例
+
+        db.execSQL("INSERT INTO Remind_List(Type,ID,TITLE,DAY,Content) values(?,?,?,?,?)",
+                new String[]{type, id,title,time,m,});
+
+    }
+
+    //删除数据
+    public static void DELETE(String id) {
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        db.execSQL("DELETE FROM Remind_List WHERE ID = ?", new String[]{id});
+    }
+
+    //修改数据
+    public static void update(String type, String  id,String content) {
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        db.execSQL("UPDATE Remind_List SET Content =?,Type =? WHERE ID = ?",
+                new String[]{content,type,id});
+    }
+
+    //根据ID查询数据
+    public static String FIND(String id) {
+
+        StringBuilder result = new StringBuilder();
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM Remind_List WHERE ID = ?",
+                new String[]{id});
+        //存在数据才返回
+        if (cursor.moveToFirst()) {
+            String content = cursor.getString(cursor.getColumnIndex("Content"));
+
+
+            cursor.close();
+            return  result.append(content).toString();
+        } else {
+            cursor.close();
+            return result.append("该ID下没有信息，出现未知错误").toString();
+        }
+    }
+    //显示数据库里指定行的ID
+    public  static String ShowLineID(int i){
+
+        StringBuilder result = new StringBuilder();
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor = db.query("Remind_List",null,null,null,null,null,null,null);
+
+        if (cursor.getCount()<=0){
+            result.append("无信息");
+            cursor.close();
+            return result.toString();
+        }
+        else if(i<cursor.getCount())
+        {
+            cursor.moveToPosition(i);
+            String id = cursor.getString(cursor.getColumnIndex("ID"));
+
+            cursor.close();
+            return id;
+        }
+        else{
+            result.append("无信息");
+            cursor.close();
+            return result.toString();
+        }
+
+    }
+
+    //根据ID查询时间
+    public static String ShowDate(String id) {
+        StringBuilder result = new StringBuilder();
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM Remind_List WHERE ID = ?",
+                new String[]{id});
+        //存在数据才返回
+        if (cursor.moveToFirst()) {
+            String data = cursor.getString(cursor.getColumnIndex("DAY"));
+
+            cursor.close();
+            return result.append(data).toString();
+        } else {
+            cursor.close();
+            return result.append("该ID下没有信息，出现未知错误").toString();
+        }
+    }
+    //判断数据库条目数
+    public static int getCount( )
+    {
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor =  db.rawQuery("SELECT COUNT (*) FROM Remind_List",null);
+        cursor.moveToFirst();
+        int result = cursor.getInt(0);
+        cursor.close();
+        return result;
+    }
 
 }

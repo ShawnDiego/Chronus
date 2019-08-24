@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ADD_DATA_Activity"
+    android:paddingBottom="20dp"
+    android:background="@drawable/backing">
+
+
+    <TextView
+        android:id="@+id/selectType"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="20dp"
+        android:textSize="28sp"
+        android:text="这是修改页面哦" />
+
+
+
+    <Button
+        android:id="@+id/Store"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="修改"
+        android:layout_toRightOf="@id/UpdateContent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="20dp"
+        android:onClick="Update"/>
+
+
+    <EditText
+        android:id="@+id/UpdateContent"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+
+        android:layout_alignParentBottom="true"/>
+
+    <TextView
+        android:id="@+id/请输入修改后的详细内容"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:text="请输入修改后的详细内容："
+        android:layout_above="@id/UpdateContent"
+        android:layout_marginTop="20dp"/>
+    <EditText
+        android:id="@+id/UpdateID"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/请输入修改后的详细内容"
+        />
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/UpdateID"
+        android:text="请输入要修改的ID"/>
+
+
+
+</RelativeLayout>

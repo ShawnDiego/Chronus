@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ADD_DATA_Activity"
+    android:paddingBottom="20dp"
+    android:background="@drawable/backing">
+
+
+    <TextView
+        android:id="@+id/selectType"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="20dp"
+        android:textSize="24sp"
+        android:text="请选择要记录的事项类型" />
+
+    <Spinner
+        android:id="@+id/ADDType"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_below="@id/selectType"
+        android:layout_alignParentTop="false"
+        android:layout_marginTop="18dp"
+        android:layout_centerHorizontal="true"
+        android:entries="@array/addType" />
+
+
+
+    <Button
+        android:id="@+id/Store"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="添加"
+        android:layout_toRightOf="@id/ADDContent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="20dp"
+        android:onClick="Store"/>
+
+
+    <EditText
+        android:id="@+id/ADDContent"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+
+        android:layout_alignParentBottom="true"/>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:text="请输入详细内容："
+        android:layout_above="@id/ADDContent"
+        android:layout_marginTop="20dp"/>
+    <EditText
+        android:id="@+id/ADDID"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/textView2"
+        />
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/ADDID"
+        android:text="请输入ID（自定义事件名）"/>
+    <EditText
+        android:id="@+id/ADDTime"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/textView3"/>
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/ADDTime"
+        android:text="请输入提醒时间（格式）yyyy-MM-dd HH:mm:ss"
+        />
+
+
+
+</RelativeLayout>
