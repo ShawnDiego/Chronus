@@ -1,18 +1,27 @@
 package com.example.chronus;
 
 import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Camera;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -40,6 +49,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener , RemindersFragment.OnTitleSelectedListener{
 
     public ViewPager mViewPager;
@@ -63,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView iv_tom;
     private ImageView iv_set;
 
+    private NotificationManager manager;
 
     private static Context getContext() {
         if(context == null) {
@@ -83,19 +94,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         initView();
 
-        mDBHelper = new SQDB(this);//数据库
+        //数据库
+        mDBHelper = new SQDB(this);
 
     }
+
     private void initView(){
         // find view
         mViewPager = findViewById(R.id.fragment_vp);
-        //mTabRadioGroup = findViewById(R.id.tabs_rg);
+
         // init layout_fragment 一级碎片
         mFragments = new ArrayList<>();
         mFragments.add(ViewFragment.newInstance("日历"));//Fragment的名字都要修改
         mFragments.add(RemindersFragment.newInstance("事项"));
         mFragments.add(ViewFragment.newInstance("时间轴"));//Fragment的名字都要修改
-        mFragments.add(ViewFragment.newInstance("番茄"));//Fragment的名字都要修改
+        mFragments.add(TomatoFragment.newInstance("番茄"));//Fragment的名字都要修改
         mFragments.add(ViewFragment.newInstance("设置"));//Fragment的名字都要修改
 
         //下面是二级碎片
@@ -108,10 +121,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mViewPager.addOnPageChangeListener(mPageChangeListener);
 //        mTabRadioGroup.setOnCheckedChangeListener(mOnCheckedChangeListener);
         iv_cal = findViewById(R.id.calendar_tab);
-          iv_rem = findViewById(R.id.remainder_tab);
-          iv_timeline = findViewById(R.id.timeline_tab);
-          iv_tom = findViewById(R.id.tomato_tab);
-          iv_set = findViewById(R.id.settings_tab);
+        iv_rem = findViewById(R.id.remainder_tab);
+        iv_timeline = findViewById(R.id.timeline_tab);
+        iv_tom = findViewById(R.id.tomato_tab);
+        iv_set = findViewById(R.id.settings_tab);
 
         findViewById(R.id.timeline_tab).setOnClickListener(new View.OnClickListener(){
             @Override
@@ -151,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //iv_timeline.setImageResource(R.drawable.setting);
                 iv_tom.setImageResource(R.drawable.tom);
 
+
             }
         });
         findViewById(R.id.settings_tab).setOnClickListener(new View.OnClickListener() {
@@ -163,6 +177,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                iv_rem.setImageResource(R.drawable.rem_un);
                 //iv_timeline.setImageResource(R.drawable.setting);
                iv_tom.setImageResource(R.drawable.tom_un);
+               
+               
 
             }
         });
@@ -180,6 +196,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
+
+
+
     private ViewPager.OnPageChangeListener mPageChangeListener = new ViewPager.OnPageChangeListener() {
 
         @Override
@@ -466,8 +485,7 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
     public static String ShowDate(String id) {
         StringBuilder result = new StringBuilder();
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM Remind_List WHERE ID = ?",
-                new String[]{id});
+        Cursor cursor = db.rawQuery("SELECT * FROM Remind_List WHERE ID = ?", new String[]{id});
         //存在数据才返回
         if (cursor.moveToFirst()) {
             String data = cursor.getString(cursor.getColumnIndex("DAY"));
