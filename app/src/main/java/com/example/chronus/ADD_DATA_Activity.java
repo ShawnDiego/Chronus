@@ -38,8 +38,7 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         //进入全屏
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_toadd);
 
         context = this;

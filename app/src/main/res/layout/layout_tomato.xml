@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="150dp"
+        android:layout_marginBottom="120dp"
         android:text="滑动圆圈调整时间"
         android:textColor="#DDa4a2a4" />
 </RelativeLayout>

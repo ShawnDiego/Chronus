@@ -16,6 +16,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -44,6 +45,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.chronus.clendar.CalendarFragment;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -53,7 +56,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener , RemindersFragment.OnTitleSelectedListener{
 
     public ViewPager mViewPager;
- //   private RadioGroup mTabRadioGroup;
 
     private List<Fragment>  mFragments;
     private FragmentPagerAdapter mAdapter;
@@ -72,8 +74,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView iv_timeline;
     private ImageView iv_tom;
     private ImageView iv_set;
-
-    private NotificationManager manager;
 
     private static Context getContext() {
         if(context == null) {
@@ -105,21 +105,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // init layout_fragment 一级碎片
         mFragments = new ArrayList<>();
-        mFragments.add(ViewFragment.newInstance("日历"));//Fragment的名字都要修改
+        mFragments.add(CalendarFragment.newInstance("日历"));//Fragment的名字都要修改
         mFragments.add(RemindersFragment.newInstance("事项"));
         mFragments.add(ViewFragment.newInstance("时间轴"));//Fragment的名字都要修改
         mFragments.add(TomatoFragment.newInstance("番茄"));//Fragment的名字都要修改
         mFragments.add(ViewFragment.newInstance("设置"));//Fragment的名字都要修改
 
         //下面是二级碎片
-        mFragments.add(RemindersItemFragment.newInstance("提醒事项"));
+        //mFragments.add(RemindersItemFragment.newInstance("提醒事项"));
 
         mAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragments);
         mViewPager.setAdapter(mAdapter);
 
         // register listener
         mViewPager.addOnPageChangeListener(mPageChangeListener);
-//        mTabRadioGroup.setOnCheckedChangeListener(mOnCheckedChangeListener);
         iv_cal = findViewById(R.id.calendar_tab);
         iv_rem = findViewById(R.id.remainder_tab);
         iv_timeline = findViewById(R.id.timeline_tab);
@@ -183,6 +182,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         findViewById(R.id.calendar_tab).setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 chooseTab=1;
@@ -387,15 +387,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         TextView edit_tv = findViewById(R.id.edit_tv);
         ListView listView = findViewById(R.id.reminder_list);
         if(edit_tv.getText().equals("编辑")){
-            mViewPager.setCurrentItem(5,false);
+            //mViewPager.setCurrentItem(5,false);
+
+            Intent intent = new Intent(this, ReminderItemsActivity.class);
+            startActivity(intent);
+
             TextView tv_back = findViewById(R.id.item_back);
-            tv_back.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mViewPager.setCurrentItem(1,false);
-                    System.out.println("Click Success");
-                }
-            });
+//            tv_back.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    mViewPager.setCurrentItem(1,false);
+//                    System.out.println("Click Success");
+//                }
+//            });
         }else{
            // ImageView choose_img = listView.getSelectedView().findViewById(R.id.choose_img);
 //            ImageView choose_img = findViewById(R.id.choose_img);

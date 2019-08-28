@@ -1,14 +1,25 @@
 package com.example.chronus;
 
 import android.animation.ValueAnimator;
+import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -16,6 +27,8 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.TextView;
 import android.widget.Toast;
+
+
 
 
 public class TomatoView extends View {
@@ -39,6 +52,8 @@ public class TomatoView extends View {
     private float offsetX;
     private float offsetY;
     public boolean isStarted = false;
+    private NotificationManager mNM;
+    private Context mContext;
 
     public TomatoView(Context context) {
         super(context);
@@ -193,6 +208,7 @@ public class TomatoView extends View {
                 invalidate();
             }
 
+
             @Override
             public void onFinish() {
                 valueAnimator.cancel();
@@ -208,9 +224,40 @@ public class TomatoView extends View {
                 TextView tv_exp = getRootView().findViewById(R.id.tv_exp);
                 tv_exp.setVisibility(View.VISIBLE);
                 Toast.makeText(getContext(), "完成番茄钟！", Toast.LENGTH_SHORT).show();
+                mContext = getContext();
+ //               mNM = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                //Notificaitons.getInstance().sendSimpleNotification(mContext,mNM);
+
+//                Intent intent = new Intent(this, AlertDetails.class);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+//                NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+//                        .setSmallIcon(R.mipmap.ic_notification)
+//                        .setContentTitle("番茄钟")
+//                        .setContentText("完成！")
+//                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+//                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
+//                notificationManager.notify(notificationId, builder.build());
             }
+
+
         }.start();
     }
+//    private void createNotificationChannel() {
+//        // Create the NotificationChannel, but only on API 26+ because
+//        // the NotificationChannel class is new and not in the support library
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            CharSequence name = "abc";
+//            String description = "abcd";
+//            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+//            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+//            channel.setDescription(description);
+//            // Register the channel with the system; you can't change the importance
+//            // or other notification behaviors after this
+//            NotificationManager notificationManager = getContext().getSystemService(NotificationManager.class);
+//            notificationManager.createNotificationChannel(channel);
+//        }
+//    }
     public void stop(){
         countDownTimer.cancel();
         valueAnimator.cancel();

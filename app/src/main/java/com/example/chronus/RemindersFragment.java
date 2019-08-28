@@ -154,6 +154,7 @@ public class RemindersFragment extends Fragment {
         });
 
         SearchView searchView = view .findViewById(R.id.edit_search);
+        searchView.setFocusable(false);
         delete_tv = view.findViewById(R.id.delete_tv);
         delete_tv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -280,6 +281,7 @@ public class RemindersFragment extends Fragment {
         });
 
     }
+
 
 
 

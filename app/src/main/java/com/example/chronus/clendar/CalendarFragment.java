@@ -1,9 +1,9 @@
 package com.example.chronus.clendar;
 
 import android.annotation.SuppressLint;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 
 import com.example.chronus.R;
+import com.example.chronus.ViewFragment;
 import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarLayout;
 import com.haibin.calendarview.CalendarView;
@@ -36,6 +37,15 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
             btn15,btn16,btn17,btn18,btn19,btn20,btn21,btn22,btn23,btn24;
     View.OnClickListener listener;
     View.OnFocusChangeListener listener1;
+    private static final String ARG_SHOW_TEXT = "text";
+
+    public static CalendarFragment newInstance(String param1){
+        CalendarFragment fragment = new CalendarFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_SHOW_TEXT, param1);
+        fragment.setArguments(args);
+        return fragment;
+    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

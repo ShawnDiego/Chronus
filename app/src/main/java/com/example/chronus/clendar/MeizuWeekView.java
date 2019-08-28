@@ -10,8 +10,7 @@ import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.WeekView;
 
 /**
- * 魅族周视图
- * Created by huanghaibin on 2017/11/29.
+ * 周视图
  */
 
 public class MeizuWeekView extends WeekView {
