@@ -1,50 +1,32 @@
 package com.example.chronus;
 
-import android.annotation.SuppressLint;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Camera;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
+import com.example.chronus.Reminders.ReminderItemsActivity;
+import com.example.chronus.Reminders.RemindersFragment;
 import com.example.chronus.clendar.CalendarFragment;
 
 import java.text.SimpleDateFormat;
@@ -75,12 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView iv_tom;
     private ImageView iv_set;
 
-    private static Context getContext() {
-        if(context == null) {
-            context = MainActivity.context;
-        }
-        return context;
-    }
+
     private int chooseTab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +66,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+
+        Transition slide = TransitionInflater.from(this).inflateTransition(R.transition.slide);
+
+        //getWindow().setExitTransition(slide);
 
         setContentView(R.layout.activity_main);
 
@@ -99,7 +81,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    @Override
+    public void setContentView(View view) {
+        super.setContentView(view);
+
+
+
+    }
+
     private void initView(){
+        Transition slide = TransitionInflater.from(this).inflateTransition(R.transition.slide);
         // find view
         mViewPager = findViewById(R.id.fragment_vp);
 
@@ -111,8 +102,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mFragments.add(TomatoFragment.newInstance("番茄"));//Fragment的名字都要修改
         mFragments.add(ViewFragment.newInstance("设置"));//Fragment的名字都要修改
 
-        //下面是二级碎片
-        //mFragments.add(RemindersItemFragment.newInstance("提醒事项"));
 
         mAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragments);
         mViewPager.setAdapter(mAdapter);
@@ -349,7 +338,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.calendar_tab:
                 chooseTab=1;
                 mViewPager.setCurrentItem(0,false);
-                Toast.makeText(getContext(),"Option 1",Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getContext(),"Option 1",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.remainder_tab:
                 chooseTab=2;
@@ -372,25 +361,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onEventsSelected(int position){
-//        RemindersItemFragment newFragment = new RemindersItemFragment();
-//        Bundle args = new Bundle();
-//        args.putInt(RemindersItemFragment.EVENTS_POSITION,position);
-//        newFragment.setArguments(args);
 
- //       FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-
-//        transaction.replace(R.id.view,mFragments.get(5));
-//        transaction.addToBackStack(null);
-//        transaction.commit();
- //       mTabRadioGroup.clearCheck();
-        //mViewPager.setPageTransformer(true, new MyPageTransformer());
         TextView edit_tv = findViewById(R.id.edit_tv);
         ListView listView = findViewById(R.id.reminder_list);
         if(edit_tv.getText().equals("编辑")){
             //mViewPager.setCurrentItem(5,false);
 
             Intent intent = new Intent(this, ReminderItemsActivity.class);
-            startActivity(intent);
+
+            startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
 
             TextView tv_back = findViewById(R.id.item_back);
 //            tv_back.setOnClickListener(new View.OnClickListener() {
@@ -484,6 +463,32 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
         }
 
     }
+    public  static String ShowLineTitle(int i){
+
+        StringBuilder result = new StringBuilder();
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor = db.query("Remind_List",null,null,null,null,null,null,null);
+
+        if (cursor.getCount()<=0){
+            result.append("无信息");
+            cursor.close();
+            return result.toString();
+        }
+        else if(i<cursor.getCount())
+        {
+            cursor.moveToPosition(i);
+            String title = cursor.getString(cursor.getColumnIndex("TITLE"));
+
+            cursor.close();
+            return title;
+        }
+        else{
+            result.append("无信息");
+            cursor.close();
+            return result.toString();
+        }
+
+    }
 
     //根据ID查询时间
     public static String ShowDate(String id) {
@@ -511,5 +516,6 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
         cursor.close();
         return result;
     }
+
 
 }

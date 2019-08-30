@@ -1,10 +1,15 @@
-package com.example.chronus;
+package com.example.chronus.Reminders;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Slide;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,6 +18,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
@@ -20,7 +26,13 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.chronus.ADD_DATA_Activity;
+import com.example.chronus.Item_tosee;
+import com.example.chronus.MainActivity;
+import com.example.chronus.R;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,13 +54,21 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
     private ImageView mPopupMenu;
 
     @Override
+    public void setContentView(View view) {
+        super.setContentView(view);
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         //进入全屏
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        Transition slide = TransitionInflater.from(this).inflateTransition(R.transition.slide);
+        getWindow().setEnterTransition(slide);
         setContentView(R.layout.layout_reminders_item);
-
         context = this;
 
     }
@@ -70,13 +90,39 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
 //            updateItemView(mCurrentPosition);
 //        }
         init();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                LinearLayout item_ll = findViewById(R.id.item_ll);
+                item_ll.setBackgroundColor(Color.BLACK);
+                RelativeLayout item_rl = findViewById(R.id.item_rl);
+                item_rl.setVisibility(View.VISIBLE);
+            }
+        },500);
 
     }
+    @Override
+    public void onResume(){
+        super.onResume();
+        LinearLayout item_ll = findViewById(R.id.item_ll);
+        item_ll.setBackgroundColor(Color.WHITE);
+        RelativeLayout item_rl = findViewById(R.id.item_rl);
+        item_rl.setVisibility(View.INVISIBLE);
+    }
+    @Override
+    public void onPause(){
+        super.onPause();
+        LinearLayout item_ll = findViewById(R.id.item_ll);
+        item_ll.setBackgroundColor(Color.WHITE);
+        RelativeLayout item_rl = findViewById(R.id.item_rl);
+        item_rl.setVisibility(View.INVISIBLE);
+    }
+
     private void init() {
         //MainActivity.getCount()用来判断数据库总条数
 
         List<Map<String, Object>> listitem = new ArrayList<Map<String, Object>>();
-        for (int i = 0; i < item_name.length; i++) {
+        for (int i = 0; i < MainActivity.getCount(); i++) {
             Map<String, Object> showitem = new HashMap<String, Object>();
             if(checked[i] == 0){
                 showitem.put("item_img", imgIds);
@@ -84,15 +130,13 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
                 showitem.put("item_img",seleted_img);
             }
 
-            //showitem.put("item_name", item_name[i]);
-            //改成从数据库获取
-            showitem.put("item_name", "事项："+MainActivity.ShowLineID(i)+"(查看详细信息请长按)");
+            showitem.put("item_name", MainActivity.ShowLineTitle(i));
 
             listitem.add(showitem);
         }
+        final Integer number = listitem.size();
         //最后加一个添加item
         Map<String, Object> showitem = new HashMap<String, Object>();
-
         showitem.put("item_img", imgAdd);
         showitem.put("item_name", "添加新事项");
         listitem.add(showitem);
@@ -119,6 +163,7 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
                     //弹出新建
                     //Intent intent = new Intent(getActivity(), ADD_DATA_Activity.class);
                     Intent intent = new Intent(context, ADD_DATA_Activity.class);
+                    intent.putExtra("number",number);
                     startActivity(intent);
                 } else if(sel_img.getTag().toString().equals("1") || checked[i] == 1){
                     sel_img.setImageResource(imgIds);
@@ -204,4 +249,14 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
         Activity activity = this;
         mCurrentPosition = position;
     }
+
+@Override
+    public void onDestroy(){
+    super.onDestroy();
+    LinearLayout item_ll = findViewById(R.id.item_ll);
+    item_ll.setBackgroundColor(Color.WHITE);
+    RelativeLayout item_rl = findViewById(R.id.item_rl);
+    item_rl.setVisibility(View.INVISIBLE);
+}
+
 }

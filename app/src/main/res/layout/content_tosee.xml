@@ -129,22 +129,19 @@
         </LinearLayout>
 
 
-
-
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/Delete"
             android:layout_width="50dp"
             android:layout_height="50dp"
 
-            android:layout_marginTop="200dp"
             android:layout_marginLeft="300dp"
+            android:layout_marginTop="200dp"
+            android:onClick="Delete"
             android:scaleType="center"
             android:src="@drawable/delete"
             app:backgroundTint="#FFC0CB"
-            android:onClick="Delete"
             app:borderWidth="0.0dip"
-            app:fabSize="normal"
-            />
+            app:fabSize="normal" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/Edit"

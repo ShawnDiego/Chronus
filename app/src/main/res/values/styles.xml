@@ -22,8 +22,9 @@
     <!--卡片动画-->
     <style name="FragmentCardAnimation" >
         <!-- 进入动画 -->
-        <item name="android:windowAnimationStyle">@style/ActionSheetDialogAnimation</item>
+        <item name="android:windowEnterAnimation">@transition/slide</item>
     </style>
+
     <!-- ActionSheet进出动画 -->
     <style name="ActionSheetDialogAnimation" parent="@android:style/Animation.Dialog">
         <item name="android:windowEnterAnimation">@anim/fragment_open</item>

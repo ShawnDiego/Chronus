@@ -13,7 +13,7 @@
         <activity android:name=".Item_tosee"></activity>
         <activity android:name=".Update_DATA_Activity" />
         <activity android:name=".ADD_DATA_Activity" />
-        <activity android:name=".ReminderItemsActivity"/>
+        <activity android:name=".Reminders.ReminderItemsActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

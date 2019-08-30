@@ -1,26 +1,15 @@
-package com.example.chronus;
+package com.example.chronus.Reminders;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.util.Printer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
@@ -28,7 +17,8 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import android.widget.AdapterView.OnItemClickListener;
+import com.example.chronus.R;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -282,6 +272,16 @@ public class RemindersFragment extends Fragment {
 
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //解决返回activity弹出键盘
+        RelativeLayout searcg_ll = view.findViewById(R.id.search_ll);
+        searcg_ll.setFocusable(true);
+        searcg_ll.setFocusableInTouchMode(true);
+        searcg_ll.requestFocus();
+    }
 
 
 

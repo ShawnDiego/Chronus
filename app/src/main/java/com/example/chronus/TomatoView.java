@@ -1,6 +1,7 @@
 package com.example.chronus;
 
 import android.animation.ValueAnimator;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -22,6 +23,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -181,12 +183,12 @@ public class TomatoView extends View {
     CountDownTimer countDownTimer;
     int timeHistory;
     ValueAnimator valueAnimator;
-    public void start(){
+    public void start() {
         if (countdownTime <= 0 || isStarted) {
             return;
         }
         isStarted = true;
-        timeHistory=countdownTime;
+        timeHistory = countdownTime;
         valueAnimator = ValueAnimator.ofFloat(0, 1.0f);
         valueAnimator.setDuration(countdownTime * 1000);
         valueAnimator.setInterpolator(new LinearInterpolator());
@@ -200,10 +202,10 @@ public class TomatoView extends View {
         });
         valueAnimator.start();
 
-        countDownTimer=new CountDownTimer(countdownTime * 1000 , 1000) {
+        countDownTimer = new CountDownTimer(countdownTime * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                countdownTime = (countdownTime * 1000 - 1000 ) / 1000;
+                countdownTime = (countdownTime * 1000 - 1000) / 1000;
                 textTime = formatCountdownTime(countdownTime);
                 invalidate();
             }
@@ -215,7 +217,7 @@ public class TomatoView extends View {
                 mColor = Color.parseColor("#AAE3170D");
                 sweepVelocity = 0;
                 isStarted = false;
-                countdownTime=timeHistory;
+                countdownTime = timeHistory;
                 textTime = formatCountdownTime(countdownTime);
                 invalidate();
                 TextView tx = getRootView().findViewById(R.id.tv_start);
@@ -225,39 +227,16 @@ public class TomatoView extends View {
                 tv_exp.setVisibility(View.VISIBLE);
                 Toast.makeText(getContext(), "完成番茄钟！", Toast.LENGTH_SHORT).show();
                 mContext = getContext();
- //               mNM = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                //Notificaitons.getInstance().sendSimpleNotification(mContext,mNM);
+                Notify nm = new Notify(getContext());
+                nm.setNotification("完成番茄钟！", "完成一个番茄，快去休息一下吧！");
 
-//                Intent intent = new Intent(this, AlertDetails.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-//                NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-//                        .setSmallIcon(R.mipmap.ic_notification)
-//                        .setContentTitle("番茄钟")
-//                        .setContentText("完成！")
-//                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-//                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(getContext());
-//                notificationManager.notify(notificationId, builder.build());
+
             }
 
 
         }.start();
     }
-//    private void createNotificationChannel() {
-//        // Create the NotificationChannel, but only on API 26+ because
-//        // the NotificationChannel class is new and not in the support library
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            CharSequence name = "abc";
-//            String description = "abcd";
-//            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-//            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
-//            channel.setDescription(description);
-//            // Register the channel with the system; you can't change the importance
-//            // or other notification behaviors after this
-//            NotificationManager notificationManager = getContext().getSystemService(NotificationManager.class);
-//            notificationManager.createNotificationChannel(channel);
-//        }
-//    }
+
     public void stop(){
         countDownTimer.cancel();
         valueAnimator.cancel();
