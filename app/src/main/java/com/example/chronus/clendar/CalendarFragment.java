@@ -1,17 +1,23 @@
 package com.example.chronus.clendar;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import com.example.chronus.MainActivity;
 import com.example.chronus.R;
 import com.example.chronus.ViewFragment;
 import com.haibin.calendarview.Calendar;
@@ -20,6 +26,8 @@ import com.haibin.calendarview.CalendarView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 
 public class CalendarFragment extends Fragment implements CalendarView.OnDateSelectedListener, CalendarView.OnYearChangeListener{
@@ -31,7 +39,13 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
     TextView mTextCurrentDay;
     CalendarView mCalendarView;
     RelativeLayout mRelativeTool;
-    private int mYear;
+    static Activity activity;
+    private int mYear,mMonth,mDay;
+    private static int first,last;
+    private int mHour;
+    //声明Add_General_Activity回调的数据
+    private String title,item,update;
+    public int start,end;
     CalendarLayout mCalendarLayout;
     Button btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9,btn10,btn11,btn12,btn13,btn14,
             btn15,btn16,btn17,btn18,btn19,btn20,btn21,btn22,btn23,btn24;
@@ -56,6 +70,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_calendar,container,false);
+
         mTextMonthDay = view.findViewById(R.id.tv_month_day);
         mTextYear = view. findViewById(R.id.tv_year);
         mTextLunar =  view.findViewById(R.id.tv_lunar);
@@ -123,58 +138,58 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus){
                    switch (v.getId()){
-                       case R.id.btn_1:    btn1.setText("+新建日程");return;
-                       case R.id.btn_2:    btn2.setText("+新建日程");return;
-                       case R.id.btn_3:    btn3.setText("+新建日程");return;
-                       case R.id.btn_4:    btn4.setText("+新建日程");return;
-                       case R.id.btn_5:    btn5.setText("+新建日程");return;
-                       case R.id.btn_6:    btn6.setText("+新建日程");return;
-                       case R.id.btn_7:    btn7.setText("+新建日程");return;
-                       case R.id.btn_8:    btn8.setText("+新建日程");return;
-                       case R.id.btn_9:    btn9.setText("+新建日程");return;
-                       case R.id.btn_10:    btn10.setText("+新建日程");return;
-                       case R.id.btn_11:    btn11.setText("+新建日程");return;
-                       case R.id.btn_12:    btn12.setText("+新建日程");return;
-                       case R.id.btn_13:    btn13.setText("+新建日程");return;
-                       case R.id.btn_14:    btn14.setText("+新建日程");return;
-                       case R.id.btn_15:    btn15.setText("+新建日程");return;
-                       case R.id.btn_16:    btn16.setText("+新建日程");return;
-                       case R.id.btn_17:    btn17.setText("+新建日程");return;
-                       case R.id.btn_18:    btn18.setText("+新建日程");return;
-                       case R.id.btn_19:    btn19.setText("+新建日程");return;
-                       case R.id.btn_20:    btn20.setText("+新建日程");return;
-                       case R.id.btn_21:    btn21.setText("+新建日程");return;
-                       case R.id.btn_22:    btn22.setText("+新建日程");return;
-                       case R.id.btn_23:    btn23.setText("+新建日程");return;
-                       case R.id.btn_24:    btn24.setText("+新建日程");return;
+                       case R.id.btn_1:    btn1.setText("+新建日程");mHour=0;return;
+                       case R.id.btn_2:    btn2.setText("+新建日程");mHour=1;return;
+                       case R.id.btn_3:    btn3.setText("+新建日程");mHour=2;return;
+                       case R.id.btn_4:    btn4.setText("+新建日程");mHour=3;return;
+                       case R.id.btn_5:    btn5.setText("+新建日程");mHour=4;return;
+                       case R.id.btn_6:    btn6.setText("+新建日程");mHour=5;return;
+                       case R.id.btn_7:    btn7.setText("+新建日程");mHour=6;return;
+                       case R.id.btn_8:    btn8.setText("+新建日程");mHour=7;return;
+                       case R.id.btn_9:    btn9.setText("+新建日程");mHour=8;return;
+                       case R.id.btn_10:    btn10.setText("+新建日程");mHour=9;return;
+                       case R.id.btn_11:    btn11.setText("+新建日程");mHour=10;return;
+                       case R.id.btn_12:    btn12.setText("+新建日程");mHour=11;return;
+                       case R.id.btn_13:    btn13.setText("+新建日程");mHour=12;return;
+                       case R.id.btn_14:    btn14.setText("+新建日程");mHour=13;return;
+                       case R.id.btn_15:    btn15.setText("+新建日程");mHour=14;return;
+                       case R.id.btn_16:    btn16.setText("+新建日程");mHour=15;return;
+                       case R.id.btn_17:    btn17.setText("+新建日程");mHour=16;return;
+                       case R.id.btn_18:    btn18.setText("+新建日程");mHour=17;return;
+                       case R.id.btn_19:    btn19.setText("+新建日程");mHour=18;return;
+                       case R.id.btn_20:    btn20.setText("+新建日程");mHour=19;return;
+                       case R.id.btn_21:    btn21.setText("+新建日程");mHour=20;return;
+                       case R.id.btn_22:    btn22.setText("+新建日程");mHour=21;return;
+                       case R.id.btn_23:    btn23.setText("+新建日程");mHour=22;return;
+                       case R.id.btn_24:    btn24.setText("+新建日程");mHour=23;return;
                    }
                 }
                 else {
                     switch (v.getId()){
-                        case R.id.btn_1:    btn1.setText(null);return;
-                        case R.id.btn_2:    btn2.setText(null);return;
-                        case R.id.btn_3:    btn3.setText(null);return;
-                        case R.id.btn_4:    btn4.setText(null);return;
-                        case R.id.btn_5:    btn5.setText(null);return;
-                        case R.id.btn_6:    btn6.setText(null);return;
-                        case R.id.btn_7:    btn7.setText(null);return;
-                        case R.id.btn_8:    btn8.setText(null);return;
-                        case R.id.btn_9:    btn9.setText(null);return;
-                        case R.id.btn_10:    btn10.setText(null);return;
-                        case R.id.btn_11:    btn11.setText(null);return;
-                        case R.id.btn_12:    btn12.setText(null);return;
-                        case R.id.btn_13:    btn13.setText(null);return;
-                        case R.id.btn_14:    btn14.setText(null);return;
-                        case R.id.btn_15:    btn15.setText(null);return;
-                        case R.id.btn_16:    btn16.setText(null);return;
-                        case R.id.btn_17:    btn17.setText(null);return;
-                        case R.id.btn_18:    btn18.setText(null);return;
-                        case R.id.btn_19:    btn19.setText(null);return;
-                        case R.id.btn_20:    btn20.setText(null);return;
-                        case R.id.btn_21:    btn21.setText(null);return;
-                        case R.id.btn_22:    btn22.setText(null);return;
-                        case R.id.btn_23:    btn23.setText(null);return;
-                        case R.id.btn_24:    btn24.setText(null);return;
+                        case R.id.btn_1:    if(isAdd( btn1 )) btn1.setText(null);return;
+                        case R.id.btn_2:    if(isAdd( btn2)) btn2.setText(null);return;
+                        case R.id.btn_3:    if(isAdd( btn3 )) btn3.setText(null);return;
+                        case R.id.btn_4:    if(isAdd( btn4 )) btn4.setText(null);return;
+                        case R.id.btn_5:    if(isAdd( btn5 )) btn5.setText(null);return;
+                        case R.id.btn_6:    if(isAdd( btn6 )) btn6.setText(null);return;
+                        case R.id.btn_7:    if(isAdd( btn7 )) btn7.setText(null);return;
+                        case R.id.btn_8:    if(isAdd( btn8 )) btn8.setText(null);return;
+                        case R.id.btn_9:    if(isAdd( btn9 )) btn9.setText(null);return;
+                        case R.id.btn_10:   if(isAdd( btn10 )) btn10.setText(null);return;
+                        case R.id.btn_11:   if(isAdd( btn11 )) btn11.setText(null);return;
+                        case R.id.btn_12:   if(isAdd( btn12 ))  btn12.setText(null);return;
+                        case R.id.btn_13:   if(isAdd( btn13 )) btn13.setText(null);return;
+                        case R.id.btn_14:   if(isAdd( btn14 ))  btn14.setText(null);return;
+                        case R.id.btn_15:   if(isAdd( btn15 )) btn15.setText(null);return;
+                        case R.id.btn_16:   if(isAdd( btn16 )) btn16.setText(null);return;
+                        case R.id.btn_17:   if(isAdd( btn17 )) btn17.setText(null);return;
+                        case R.id.btn_18:    if(isAdd( btn18 )) btn18.setText(null);return;
+                        case R.id.btn_19:    if(isAdd( btn19 )) btn19.setText(null);return;
+                        case R.id.btn_20:    if(isAdd( btn20 )) btn20.setText(null);return;
+                        case R.id.btn_21:    if(isAdd( btn21 )) btn21.setText(null);return;
+                        case R.id.btn_22:   if(isAdd( btn22 ))  btn22.setText(null);return;
+                        case R.id.btn_23:    if(isAdd( btn23 )) btn23.setText(null);return;
+                        case R.id.btn_24:    if(isAdd( btn24 )) btn24.setText(null);return;
                     }
                 }
             }
@@ -210,7 +225,34 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         listener=new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btn1.setText("我被点击了");
+                //获取触发事件的activity
+                activity=getActivity();
+                //弹出新建事项activity
+                Button btn=(Button) v;
+                if(isAdd( btn )){
+                Intent intent=new Intent(activity,Add_General_Activity.class);
+                Bundle bundle=new Bundle();
+                bundle.putInt("year",mYear);
+                bundle.putInt("month",mMonth);
+                bundle.putInt("day",mDay);
+                bundle.putInt("hour",mHour);
+                intent.putExtras(bundle);
+                startActivityForResult(intent,0);
+                }
+                else{
+                    first=rangFirst( btn );
+                    last=rangeLast( btn );
+                    Intent intent=new Intent(activity,Delete_General_Activity.class);
+                    Bundle bundle=new Bundle();
+                    bundle.putInt("year1",mYear);
+                    bundle.putInt("month1",mMonth);
+                    bundle.putInt("day1",mDay);
+                    bundle.putInt("begin",first);
+                    bundle.putInt("end",last);
+                    bundle.putString( "id",btn.getText().toString() );
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent,1);
+                }
             }
         };
         btn1.setOnClickListener(listener);
@@ -248,7 +290,6 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
 
     @SuppressLint("SetTextI18n")
     protected void initView() {
-//        setStatusBarDarkMode();
 
         mTextMonthDay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -298,13 +339,167 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         schemes.add(getSchemeCalendar(year, month, 6, 0xFFe69138, "事"));
         schemes.add(getSchemeCalendar(year, month, 9, 0xFFdf1356, "议"));
         schemes.add(getSchemeCalendar(year, month, 13, 0xFFedc56d, "记"));
-        schemes.add(getSchemeCalendar(year, month, 14, 0xFFedc56d, "记"));
-        schemes.add(getSchemeCalendar(year, month, 15, 0xFFaacc44, "假"));
+        schemes.add(getSchemeCalendar(year, month, 14, 0xFFedc56d, "阅"));
+        schemes.add(getSchemeCalendar(year, month, 15, 0xFFaacc44, "影"));
         schemes.add(getSchemeCalendar(year, month, 18, 0xFFbc13f0, "记"));
         schemes.add(getSchemeCalendar(year, month, 25, 0xFF13acf0, "假"));
-        schemes.add(getSchemeCalendar(year, month, 27, 0xFF13acf0, "多"));
+
         mCalendarView.setSchemeDate(schemes);
     }
+
+
+
+    @Override
+    public void onYearChange(int year) {
+        mTextMonthDay.setText(String.valueOf(year));
+    }
+
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //Add_General_activity回调
+        if(requestCode==0){
+          if(resultCode==0){
+            //初始化时间表
+            Toast.makeText( activity,"关闭",Toast.LENGTH_SHORT).show();
+           }
+           //新建事项
+           if(resultCode==-1){
+             new Bundle();
+             Bundle bundle1=data.getExtras();
+             title=bundle1.getString("title");
+             item=bundle1.getString("scheme");
+             start=bundle1.getInt("begin");
+             end=bundle1.getInt("end");
+
+              //将建立好的事项在btn上显示
+              Log.w(ARG_SHOW_TEXT,"警告信息");
+              getBtn(start).setText( title );
+              for(int i=start;i<end;i++){
+                  getBtn( i ).setBackgroundResource( R.drawable.bg_general);
+                  getBtn( i ).setEnabled( false );
+               }
+               getBtn( start ).setEnabled( true );
+               getBtn( start ).setFocusable( false );
+//               addSchme( item );
+               Toast.makeText( activity,"建立成功",Toast.LENGTH_SHORT).show();
+        }}
+
+       if(requestCode==1){
+
+           if(resultCode==1){
+               getBtn( first ).setText( null );
+                getBtn( first ).setFocusableInTouchMode( true );
+               getBtn( first ).setFocusable( true );
+               for(int i=first;i<last;i++){
+                   getBtn( i ).setEnabled( true );
+                   getBtn( i ).setBackgroundResource( R.drawable.bg_btn );
+               }
+           }
+
+           if(resultCode==-1){
+               new Bundle();
+               Bundle bundle2=data.getExtras();
+               update=bundle2.getString( "isUpdate" );
+               getBtn( first ).setText( update );
+
+           }
+
+           if(resultCode==0){
+
+           }
+       }
+    }
+    //获取btn的引用
+    private Button getBtn(int a) {
+        switch (a) {
+            case 0: return btn1;
+            case 1: return btn2;
+            case 2: return btn3;
+            case 3: return btn4;
+            case 4: return btn5;
+            case 5: return btn6;
+            case 6: return btn7;
+            case 7: return btn8;
+            case 8: return btn9;
+            case 9: return btn10;
+            case 10: return btn11;
+            case 11: return btn12;
+            case 12: return btn13;
+            case 13: return btn14;
+            case 14: return btn15;
+            case 15: return btn16;
+            case 16: return btn17;
+            case 17: return btn18;
+            case 18: return btn19;
+            case 19: return btn20;
+            case 20: return btn21;
+            case 21: return btn22;
+            case 22: return btn23;
+            case 23: return btn24;
+        }
+        return null;
+    }
+
+    public boolean isAdd(Button btn){
+        if(btn.getText().toString().equals( "+新建日程" )) return  true;
+        else  return false;
+    }
+
+    public int rangFirst(Button btn){
+        switch (btn.getId()){
+            case R.id.btn_1:    return 0;
+            case R.id.btn_2:   return 1;
+            case R.id.btn_3:    return 2;
+            case R.id.btn_4:    return 3;
+            case R.id.btn_5:    return 4;
+            case R.id.btn_6:    return 5;
+            case R.id.btn_7:    return 6;
+            case R.id.btn_8:    return 7;
+            case R.id.btn_9:    return 8;
+            case R.id.btn_10:   return 9;
+            case R.id.btn_11:   return 10;
+            case R.id.btn_12:   return 11;
+            case R.id.btn_13:   return 12;
+            case R.id.btn_14:   return 13;
+            case R.id.btn_15:   return 14;
+            case R.id.btn_16:   return 15;
+            case R.id.btn_17:   return 16;
+            case R.id.btn_18:    return 17;
+            case R.id.btn_19:    return 18;
+            case R.id.btn_20:    return 19;
+            case R.id.btn_21:    return 20;
+            case R.id.btn_22:   return 21;
+            case R.id.btn_23:    return 22;
+            case R.id.btn_24:    return 23;
+        }
+        return 0;
+    }
+    public int rangeLast(Button btn){
+        int first=rangFirst( btn );
+        int last=first+1;
+        while(!getBtn( last ).isEnabled()){
+            last++;
+        }
+
+        return last;
+    }
+
+    //为事项增添标记
+//    protected void addSchme(String str) {
+//        List<Calendar> scheme = new ArrayList<>();
+//        switch (str){
+//            case "会议": scheme.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFF40db25, "议"));break;
+//            case "节假": scheme.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFFe69138, "假"));break;
+//            case "事项": scheme.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFFdf1356, "事"));break;
+//            case "日记": scheme.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFFaacc44, "记"));break;
+//            case "电影": scheme.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFFbc13f0, "影"));break;
+//            case "阅读": scheme.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFF13acf0, "阅"));break;
+//        }
+//        mCalendarView.setSchemeDate(scheme);
+//    }
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -314,16 +509,15 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         mTextMonthDay.setText(calendar.getMonth() + "月" + calendar.getDay() + "日");
         mTextYear.setText(String.valueOf(calendar.getYear()));
         mTextLunar.setText(calendar.getLunar());
+        //获取被选中的日期：年、月、日
         mYear = calendar.getYear();
+        mMonth=calendar.getMonth();
+        mDay=calendar.getDay();
+
+        //连接数据库的接口//
+        // 日期被点击从数据库获取事项信息刷新时间表//
+        if(isClick){
+
+        }
     }
-
-    @Override
-    public void onYearChange(int year) {
-        mTextMonthDay.setText(String.valueOf(year));
-    }
-
-
-
-
-
 }

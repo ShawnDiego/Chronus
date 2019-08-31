@@ -8,6 +8,12 @@
     <string name="test1">test1</string>
     <string name="test2">test2</string>
 
+    <string name="channel_critical">Critical events</string>
+    <string name="channel_importance">Importance events</string>
+
+    <string name="channel_default">Default events</string>
+    <string name="channel_low">Low events</string>
+    <string name="channel_media">Media events</string>
     <string-array name="addType">
         <item name="l">提醒事项</item>
         <item name="a">购物单</item>
@@ -16,10 +22,38 @@
         <item name="d">电影</item>
         <item name="d">书单</item>
     </string-array>
-
-    <string name="channel_critical">Critical events</string>
-    <string name="channel_importance">Importance events</string>
-    <string name="channel_default">Default events</string>
-    <string name="channel_low">Low events</string>
-    <string name="channel_media">Media events</string>
+    <string-array name="addGeneral">
+        <item name="l">会议</item>
+        <item name="a">节假</item>
+        <item name="b">事项</item>
+        <item name="d">日记</item>
+        <item name="d">电影</item>
+        <item name="d">阅读</item>
+    </string-array>
+    <string-array name="hour">
+        <item>00:00</item>
+        <item>01:00</item>
+        <item>02:00</item>
+        <item>03:00</item>
+        <item>04:00</item>
+        <item>05:00</item>
+        <item>06:00</item>
+        <item>07:00</item>
+        <item>08:00</item>
+        <item>09:00</item>
+        <item>10:00</item>
+        <item>11:00</item>
+        <item>12:00</item>
+        <item>13:00</item>
+        <item>14:00</item>
+        <item>15:00</item>
+        <item>16:00</item>
+        <item>17:00</item>
+        <item>18:00</item>
+        <item>19:00</item>
+        <item>20:00</item>
+        <item>21:00</item>
+        <item>22:00</item>
+        <item>23:00</item>
+    </string-array>
 </resources>

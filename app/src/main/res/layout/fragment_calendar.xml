@@ -95,9 +95,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="#fff"
-        app:default_status="shrink">
-        <!--app:calendar_content_view_id="@+id/recyclerView"-->
-        >
+        app:default_status="shrink"
+        app:calendar_content_view_id="@+id/ScrollView">
+
 
         <com.haibin.calendarview.CalendarView
             android:id="@+id/calendarView"
@@ -130,8 +130,8 @@
             app:month_view_show_mode="mode_only_current"
             app:year_view_scheme_color="#f17706"/>
 
-        <android.support.v4.widget.NestedScrollView
-            android:id="@+id/nestedScrollView"
+        <ScrollView
+            android:id="@+id/ScrollView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         <LinearLayout
@@ -147,7 +147,9 @@
            <LinearLayout
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:orientation="horizontal">
+               android:orientation="horizontal"
+               android:focusable="true"
+               android:focusableInTouchMode="true" >
                <TextView
                    android:layout_width="40dp"
                    android:layout_height="match_parent"
@@ -695,7 +697,7 @@
 
 
         </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
+        </ScrollView>
     </com.haibin.calendarview.CalendarLayout>
 
 

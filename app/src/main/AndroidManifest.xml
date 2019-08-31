@@ -10,10 +10,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".Item_tosee"></activity>
+        <activity android:name=".clendar.Delete_General_Activity"></activity>
+        <activity android:name=".clendar.Add_General_Activity" />
+        <activity android:name=".Item_tosee" />
         <activity android:name=".Update_DATA_Activity" />
         <activity android:name=".ADD_DATA_Activity" />
-        <activity android:name=".Reminders.ReminderItemsActivity"/>
+        <activity android:name=".ReminderItemsActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
