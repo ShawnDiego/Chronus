@@ -21,7 +21,7 @@ public class Add_General_Activity extends AppCompatActivity implements View.OnCl
     private TextView close,sumbit,begin,end;
     private  Spinner spinner,spinner1;
     private int hour,hour1;
-    private String item;
+    private int item;
     private static final String tag="TAG";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +96,7 @@ public class Add_General_Activity extends AppCompatActivity implements View.OnCl
                 bundle.putString("title",title.getText().toString());
                 bundle.putInt("begin",hour);
                 bundle.putInt("end",hour1);
-                bundle.putString("scheme",item);
+                bundle.putInt("scheme",item);
                 intent.putExtras(bundle);
                 setResult(Activity.RESULT_OK,intent);
                 Log.d( tag,"check结束" );
@@ -114,7 +114,7 @@ public class Add_General_Activity extends AppCompatActivity implements View.OnCl
                else hour1=i;
             }
              if(adapterView.getId()==R.id.sp_general){
-                 item=spinner1.toString();
+                 item=i;
             }
     }
 

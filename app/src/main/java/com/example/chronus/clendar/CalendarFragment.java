@@ -40,15 +40,20 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
     CalendarView mCalendarView;
     RelativeLayout mRelativeTool;
     static Activity activity;
-    private int mYear,mMonth,mDay;
+    private static int mYear,mMonth,mDay;
+    static  List<Calendar> schemes= new ArrayList<>();;
+    //删除日程的起止范围
     private static int first,last;
     private int mHour;
     //声明Add_General_Activity回调的数据
-    private String title,item,update;
-    public int start,end;
+    private static String title,update;
+    //建立日程的起止范围
+    public static int start,end,item;
     CalendarLayout mCalendarLayout;
     Button btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9,btn10,btn11,btn12,btn13,btn14,
             btn15,btn16,btn17,btn18,btn19,btn20,btn21,btn22,btn23,btn24;
+    View line1,line2,line3,line4,line5,line6,line7,line8,line9,line10,line11,line12,line13,line14,line15,line16,
+         line17,line18,line19,line20,line21,line22,line23;
     View.OnClickListener listener;
     View.OnFocusChangeListener listener1;
     private static final String ARG_SHOW_TEXT = "text";
@@ -280,6 +285,32 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         btn23.setOnClickListener(listener);
         btn24.setOnClickListener(listener);
 
+        //获取下划线ID
+        line1=view.findViewById( R.id.ul_1 );
+        line2=view.findViewById( R.id.ul_2 );
+        line3=view.findViewById( R.id.ul_3);
+        line4=view.findViewById( R.id.ul_4 );
+        line5=view.findViewById( R.id.ul_5 );
+        line6=view.findViewById( R.id.ul_6 );
+        line7=view.findViewById( R.id.ul_7 );
+        line8=view.findViewById( R.id.ul_8);
+        line9=view.findViewById( R.id.ul_9 );
+        line10=view.findViewById( R.id.ul_10 );
+        line11=view.findViewById( R.id.ul_11);
+        line12=view.findViewById( R.id.ul_12 );
+        line13=view.findViewById( R.id.ul_13 );
+        line14=view.findViewById( R.id.ul_14 );
+        line15=view.findViewById( R.id.ul_15 );
+        line16=view.findViewById( R.id.ul_16 );
+        line17=view.findViewById( R.id.ul_17 );
+        line18=view.findViewById( R.id.ul_18);
+        line19=view.findViewById( R.id.ul_19 );
+        line20=view.findViewById( R.id.ul_20 );
+        line21=view.findViewById( R.id.ul_21 );
+        line22=view.findViewById( R.id.ul_22 );
+        line23=view.findViewById( R.id.ul_23 );
+
+
         initView();
         initData();
         return view;
@@ -331,7 +362,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
 
 
     protected void initData() {
-        List<Calendar> schemes = new ArrayList<>();
+
         int year = mCalendarView.getCurYear();
         int month = mCalendarView.getCurMonth();
 
@@ -370,7 +401,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
              new Bundle();
              Bundle bundle1=data.getExtras();
              title=bundle1.getString("title");
-             item=bundle1.getString("scheme");
+             item=bundle1.getInt("scheme");
              start=bundle1.getInt("begin");
              end=bundle1.getInt("end");
 
@@ -383,12 +414,13 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
                }
                getBtn( start ).setEnabled( true );
                getBtn( start ).setFocusable( false );
-//               addSchme( item );
+               setUnderLine();
+               addMark( item );
                Toast.makeText( activity,"建立成功",Toast.LENGTH_SHORT).show();
         }}
 
        if(requestCode==1){
-
+           //删除日程
            if(resultCode==1){
                getBtn( first ).setText( null );
                 getBtn( first ).setFocusableInTouchMode( true );
@@ -397,8 +429,10 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
                    getBtn( i ).setEnabled( true );
                    getBtn( i ).setBackgroundResource( R.drawable.bg_btn );
                }
+               deleteUnderLine();
+               deleteMark();
            }
-
+            //更新日程
            if(resultCode==-1){
                new Bundle();
                Bundle bundle2=data.getExtras();
@@ -406,7 +440,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
                getBtn( first ).setText( update );
 
            }
-
+           //仅返回
            if(resultCode==0){
 
            }
@@ -442,7 +476,35 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         }
         return null;
     }
-
+      //获取View（下划线）的引用
+      private View getView(int a) {
+          switch (a) {
+              case 0: return line1;
+              case 1: return line2;
+              case 2: return line3;
+              case 3: return line4;
+              case 4: return line5;
+              case 5: return line6;
+              case 6: return line7;
+              case 7: return line8;
+              case 8: return line9;
+              case 9: return line10;
+              case 10: return line11;
+              case 11: return line12;
+              case 12: return line13;
+              case 13: return line14;
+              case 14: return line15;
+              case 15: return line16;
+              case 16: return line17;
+              case 17: return line18;
+              case 18: return line19;
+              case 19: return line20;
+              case 20: return line21;
+              case 21: return line22;
+              case 22: return line23;
+          }
+          return null;
+      }
     public boolean isAdd(Button btn){
         if(btn.getText().toString().equals( "+新建日程" )) return  true;
         else  return false;
@@ -488,18 +550,61 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
     }
 
     //为事项增添标记
-//    protected void addSchme(String str) {
-//        List<Calendar> scheme = new ArrayList<>();
-//        switch (str){
-//            case "会议": scheme.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFF40db25, "议"));break;
-//            case "节假": scheme.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFFe69138, "假"));break;
-//            case "事项": scheme.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFFdf1356, "事"));break;
-//            case "日记": scheme.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFFaacc44, "记"));break;
-//            case "电影": scheme.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFFbc13f0, "影"));break;
-//            case "阅读": scheme.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFF13acf0, "阅"));break;
-//        }
-//        mCalendarView.setSchemeDate(scheme);
-//    }
+    protected void addMark(int str) {
+
+        switch (str){
+            case 0: schemes.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFF40db25, "议"));break;
+            case 1: schemes.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFFe69138, "假"));break;
+            case 2: schemes.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFFdf1356, "事"));break;
+            case 3: schemes.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFFaacc44, "记"));break;
+            case 4: schemes.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFFbc13f0, "影"));break;
+            case 5: schemes.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFF13acf0, "阅"));break;
+        }
+        mCalendarView.setSchemeDate(schemes);
+    }
+
+    //事项消失标记消失
+    protected void deleteMark() {
+           schemes.remove(getSchemeCalendar(mYear, mMonth, mDay, 0xFF40db25, "议"));
+           mCalendarView.setSchemeDate(schemes);
+    }
+
+    //建立新日程时判断上下是否存在已有日程，设置相应下划线
+     private  void setUnderLine(){
+        Button bt1,bt2;
+        bt1=getBtn( start -1);
+        bt2=getBtn( end );
+        //在该日程的上部分是否存在旧事项
+        if(!bt1.isEnabled()){
+           getView( start-1 ).setBackgroundResource( R.drawable.bg_underline1 );
+        }
+        else if(!isAdd( bt1 )&&!bt1.getText().toString().equals( null )) {
+            getView( start-1 ).setBackgroundResource( R.drawable.bg_underline1 );
+        }
+        //在该日程的下部分是否存在旧事项
+        if(!isAdd( bt2 )&&!bt2.getText().toString().equals( null )){
+            getView( end-1 ).setBackgroundResource( R.drawable.bg_underline1 );
+        }
+     }
+
+
+     //删除日程时判断上下是否存在已有日程，删除相应下划线
+     private void deleteUnderLine(){
+         Button bt1,bt2;
+         bt1=getBtn( first -1);
+         bt2=getBtn( last );
+         if(!bt1.isEnabled()){
+             getView( first-1 ).setBackgroundResource( R.drawable.bg_underline );
+         }
+         else if(!isAdd( bt1 )&&!bt1.getText().toString().equals( null )) {
+             getView( first-1 ).setBackgroundResource( R.drawable.bg_underline );
+         }
+
+         if(!isAdd( bt2 )&&!bt2.getText().toString().equals( null )){
+             getView( last-1 ).setBackgroundResource( R.drawable.bg_underline );
+         }
+     }
+
 
     @SuppressLint("SetTextI18n")
     @Override
