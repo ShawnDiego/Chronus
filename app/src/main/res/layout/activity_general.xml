@@ -23,7 +23,7 @@
         android:background="@drawable/shape_rectangle_with_radius"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal">
@@ -32,17 +32,16 @@
                 android:id="@+id/tv_close"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
                 android:background="@mipmap/close" />
 
             <TextView
                 android:id="@+id/add_name"
                 android:layout_width="wrap_content"
-                android:layout_height="37dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:text="新建事项"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="新建日程"
                 android:textColor="#000000"
                 android:textSize="20sp" />
 
@@ -50,9 +49,11 @@
                 android:id="@+id/tv_submit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="170dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
                 android:background="@mipmap/check" />
-        </LinearLayout>
+        </RelativeLayout>
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -135,7 +136,7 @@
 
 
 
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/ll_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -149,6 +150,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="12dp"
                         android:text="开始:"
+                        android:layout_centerVertical="true"
                         android:textColor="#000000"
                         android:textSize="18sp" />
 
@@ -158,10 +160,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:gravity="right"
+                        android:layout_centerVertical="true"
                         android:text="00:00"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="70dp"/>
 
-                </LinearLayout>
+                </RelativeLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -169,7 +174,7 @@
                     android:background="@color/grey"
                     android:layout_marginLeft="12dp"
                     android:padding="12dp" />
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/ll_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -183,6 +188,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="12dp"
                         android:text="结束:"
+                        android:layout_centerVertical="true"
                         android:textColor="#000000"
                         android:textSize="18sp" />
 
@@ -191,13 +197,12 @@
                         android:id="@+id/sp_end"
                         android:layout_width="wrap_content"
                         android:layout_height="45dp"
-                        android:layout_marginLeft="180dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="12dp"
+                        android:layout_centerVertical="true"
+                        android:entries="@array/hour" />
 
-                        android:entries="@array/hour"
-                         />
-
-                </LinearLayout>
+                </RelativeLayout>
 
 
                 <RelativeLayout
@@ -220,19 +225,7 @@
 
                 </RelativeLayout>
 
-           <!--     <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/add22"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
 
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginLeft="300dp"
-                    android:layout_marginTop="160dp"
-                    android:onClick="Store"
-                    android:src="@drawable/done"
-                    app:backgroundTint="#FFC0CB"
-                    app:borderWidth="0dp"
-                    app:elevation="0dp" />-->
 
             </LinearLayout>
         </ScrollView>

@@ -7,12 +7,12 @@
     style="@style/FragmentCardAnimation"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="#00FFFFFF"
     android:orientation="vertical">
-
     <RelativeLayout
         android:id="@+id/item_rl"
         android:layout_width="match_parent"
-        android:layout_height="5dp"
+        android:layout_height="8dp"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="5dp"
         android:layout_marginRight="15dp"
@@ -21,14 +21,13 @@
         android:orientation="horizontal"
         android:visibility="invisible"
         tools:visibility="visible">
-
     </RelativeLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/shape_rectangle_with_radius"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/top_ll">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -96,5 +95,7 @@
         </ScrollView>
 
     </LinearLayout>
+
+
 
 </LinearLayout>

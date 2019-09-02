@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -25,12 +26,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
+import com.example.chronus.AlarmNotification.AlarmService;
+import com.example.chronus.AlarmNotification.DateTimeUtil;
 import com.example.chronus.Reminders.ReminderItemsActivity;
 import com.example.chronus.Reminders.RemindersFragment;
 import com.example.chronus.clendar.CalendarFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -362,28 +366,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onEventsSelected(int position){
 
-        TextView edit_tv = findViewById(R.id.edit_tv);
-        ListView listView = findViewById(R.id.reminder_list);
-        if(edit_tv.getText().equals("编辑")){
-            //mViewPager.setCurrentItem(5,false);
 
-            Intent intent = new Intent(this, ReminderItemsActivity.class);
-
-            startActivity(intent,ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-            TextView tv_back = findViewById(R.id.item_back);
-//            tv_back.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    mViewPager.setCurrentItem(1,false);
-//                    System.out.println("Click Success");
-//                }
-//            });
-        }else{
-           // ImageView choose_img = listView.getSelectedView().findViewById(R.id.choose_img);
-//            ImageView choose_img = findViewById(R.id.choose_img);
-//            choose_img.setImageAlpha(R.drawable.radio_selected);
-        }
 
 
     }

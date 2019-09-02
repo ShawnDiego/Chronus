@@ -3,6 +3,7 @@ package com.example.chronus.Reminders;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
@@ -36,16 +38,18 @@ public class RemindersFragment extends Fragment {
     private String[] list_num = new String[]{"2","3","0","2","1","6","9"};
     private int[] imgIds = new int[]{R.mipmap.lise_icon1, R.mipmap.lise_icon2, R.mipmap.lise_icon3,
             R.mipmap.lise_icon4, R.mipmap.lise_icon5, R.mipmap.lise_icon6,R.mipmap.lise_icon1, R.mipmap.lise_icon2, R.mipmap.lise_icon3};
-    //private int imgIds =  R.mipmap.listico;
+
     private int choose_img = R.drawable.radio_unselected;
     private int inf = R.drawable.ino_img;
     private String[] but_name = new String[]{"今天","计划","全部","星标"};
     private String[] but_num = new String[]{"2","3","0","2"};
     public ListView listView;
+    public ArrayList<String> selseted_num = new ArrayList<String>();
+
     public RemindersFragment() {
         // Required empty public constructor
     }
-    public ArrayList<String> selseted_num = new ArrayList<String>();
+
     public static RemindersFragment newInstance(String param1){
         RemindersFragment fragment = new RemindersFragment();
         Bundle args = new Bundle();
@@ -58,8 +62,6 @@ public class RemindersFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //mContentText = getArguments().getString(ARG_SHOW_TEXT);
-
-
     }
 
     @Override
@@ -77,9 +79,8 @@ public class RemindersFragment extends Fragment {
     }
 
     public void init(){
-        final RelativeLayout.LayoutParams params;
-
-        List<Map<String, Object>> listitem = new ArrayList<Map<String, Object>>();
+        //列表获取数据
+        final List<Map<String, Object>> listitem = new ArrayList<Map<String, Object>>();
         for (int i = 0; i < list_name.length; i++) {
             Map<String, Object> showitem = new HashMap<String, Object>();
             showitem.put("list_choose",choose_img);
@@ -88,28 +89,16 @@ public class RemindersFragment extends Fragment {
             showitem.put("list_num", list_num[i]);
             listitem.add(showitem);
         }
-        //创建一个simpleAdapter
         SimpleAdapter myAdapter = new SimpleAdapter(getContext(), listitem, R.layout.layout_listview_a, new String[]{"list_choose","list_img", "list_name", "list_num"},
                 new int[]{R.id.choose_img,R.id.list_img, R.id.list_name, R.id.list_num});
         listView = (ListView) view.findViewById(R.id.reminder_list);
         listView.setAdapter(myAdapter);
-
+        //设置列表大小
         RelativeLayout.LayoutParams params_lv;
         params_lv = (RelativeLayout.LayoutParams) listView.getLayoutParams();
         params_lv.height = (int) list_name.length * params_lv.height + 5;
         listView.setLayoutParams(params_lv);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                mCallback.onEventsSelected(position);
-                switch (view.getId()){
-                    case R.id.inf:
-                        System.out.println("inf");
-                }
-
-            }
-        });
+        onClickListView();
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -153,15 +142,18 @@ public class RemindersFragment extends Fragment {
                 //询问确认对话框
             }
         });
-         edit_tv = view.findViewById(R.id.edit_tv);
-         edit_tv.setClickable(true);
-         edit_tv.setOnClickListener(new View.OnClickListener() {
+        edit_tv = view.findViewById(R.id.edit_tv);//编辑 标签
+        edit_tv.setClickable(true);
+        edit_tv.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
                  if(edit_tv.getText().equals("编辑")){
                      edit_tv.setText("完成");
                      delete_tv.setVisibility(View.VISIBLE);
                      edit_tv.getPaint().setFakeBoldText(true);
+                     SearchView searchView = view.findViewById(R.id.edit_search);
+                     searchView.clearFocus();
+                     searchView.setClickable(false);
                      final List<Map<String, Object>> listitem = new ArrayList<Map<String, Object>>();
                      for (int i = 0; i < list_name.length; i++) {
                          Map<String, Object> showitem = new HashMap<String, Object>();
@@ -179,42 +171,20 @@ public class RemindersFragment extends Fragment {
                      listView.setAdapter(myAdapter);
 
                      listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
                          @Override
                          public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                              mCallback.onEventsSelected(position);
-
-                             int seleted_img = R.drawable.radio_selected;
-                             Object img1 = R.drawable.radio_unselected;
-                                if(!selseted_num.contains(String.valueOf(position))){
-                                    selseted_num.add(String.valueOf(position));
-
-                                    Map<String, Object> showitem = new HashMap<String, Object>();
-                                    showitem.put("list_choose",seleted_img);
-                                    showitem.put("list_img", imgIds[position]);
-                                    showitem.put("list_name", list_name[position]);
-                                    showitem.put("list_num", list_num[position]);
-                                    listitem.set(position,showitem);
-                                    SimpleAdapter myAdapter = new SimpleAdapter(getContext(), listitem, R.layout.layout_listview, new String[]{"list_choose","list_img", "list_name", "list_num"},
-                                            new int[]{R.id.choose_img,R.id.list_img, R.id.list_name, R.id.list_num});
-                                    listView.setAdapter(myAdapter);
-                                }else {
-                                    selseted_num.remove(String.valueOf(position));
-                                    Map<String, Object> showitem = new HashMap<String, Object>();
-                                    showitem.put("list_choose",choose_img);
-                                    showitem.put("list_img", imgIds[position]);
-                                    showitem.put("list_name", list_name[position]);
-                                    showitem.put("list_num", list_num[position]);
-                                    listitem.set(position,showitem);
-                                    SimpleAdapter myAdapter = new SimpleAdapter(getContext(), listitem, R.layout.layout_listview, new String[]{"list_choose","list_img", "list_name", "list_num"},
-                                            new int[]{R.id.choose_img,R.id.list_img, R.id.list_name, R.id.list_num});
-                                    listView.setAdapter(myAdapter);
-                                }
-
-
-
-
-
+                             if(edit_tv.getText().equals("完成")){
+                                 if(!selseted_num.contains(String.valueOf(position))){
+                                     selseted_num.add(String.valueOf(position));//选中后把当前项加入到队列中
+                                     ImageView choose_img = view.findViewById(R.id.choose_img);
+                                     choose_img.setImageResource(R.drawable.radio_selected);
+                                 }else {
+                                     selseted_num.remove(String.valueOf(position));//从队列中移除
+                                     ImageView choose_img = view.findViewById(R.id.choose_img);
+                                     choose_img.setImageResource(R.drawable.radio_unselected);
+                                 }
+                             }
                          }
                      });
                  }else{
@@ -222,6 +192,7 @@ public class RemindersFragment extends Fragment {
                      delete_tv.setVisibility(View.INVISIBLE);
                      edit_tv.getPaint().setFakeBoldText(false);
                      selseted_num.clear();
+                     onClickListView();
                      List<Map<String, Object>> listitem = new ArrayList<Map<String, Object>>();
                      for (int i = 0; i < list_name.length; i++) {
                          Map<String, Object> showitem = new HashMap<String, Object>();
@@ -299,6 +270,22 @@ public class RemindersFragment extends Fragment {
             throw new ClassCastException(context.toString() + "必须实现OnTitleSelectedListener接口");
         }
     }
+    public void onClickListView(){
+        //列表中的项目被点击
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View v, int position, long l) {
+                mCallback.onEventsSelected(position);
+                TextView edit_tv = view.findViewById(R.id.edit_tv);
+                if(edit_tv.getText().equals("编辑")){
+                    Intent intent = new Intent(getContext(), ReminderItemsActivity.class);
+                    startActivity(intent);
 
+                    TextView tv_back = view.findViewById(R.id.item_back);
+                }
+
+            }
+        });
+    }
 
 }

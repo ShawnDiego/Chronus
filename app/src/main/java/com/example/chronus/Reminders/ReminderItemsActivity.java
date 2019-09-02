@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.util.Log;
@@ -26,13 +25,11 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.chronus.ADD_DATA_Activity;
 import com.example.chronus.Item_tosee;
 import com.example.chronus.MainActivity;
 import com.example.chronus.R;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -179,15 +176,20 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                TextView sel_tv = view.findViewById(R.id.item_name);
+                if(sel_tv.getText().equals("添加新事项")){
+                    //不操作
+                }else{
+                    //弹出事件详情
+                    Log.d("Scroll", "当前长按" + i);
+                    //跳转到事件详情activity
+                    Intent intent = new Intent(context, Item_tosee.class);
+                    //根据所长按的索引的序列号也就是数据库中的第几行，找到对应的ID
+                    MainActivity.Line = i;
+                    //intent.putExtra("Number", i);
+                    startActivity(intent);
+                }
 
-                //弹出事件详情
-                Log.d("Scroll", "当前长按" + i);
-                //跳转到事件详情activity
-                Intent intent = new Intent(context, Item_tosee.class);
-                //根据所长按的索引的序列号也就是数据库中的第几行，找到对应的ID
-                MainActivity.Line = i;
-                //intent.putExtra("Number", i);
-                startActivity(intent);
 
                 return true;
             }

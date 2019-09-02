@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ADD_DATA_Activity"
+    tools:context=".Reminders.ADD_DATA_Activity"
     android:paddingBottom="20dp"
     android:background="@drawable/backing">
 
