@@ -159,7 +159,7 @@
                <Button
                    android:id="@+id/btn_1"
                    android:layout_width="match_parent"
-                   android:layout_height="35dp"
+                   android:layout_height="42dp"
                    android:background="@drawable/bg_btn"
                    android:focusableInTouchMode="true"
                    />
@@ -183,7 +183,7 @@
                 <Button
                     android:id="@+id/btn_2"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="42dp"
                     android:background="@drawable/bg_btn"
                     android:focusableInTouchMode="true"
                     android:onClick="setGeneral"
@@ -208,7 +208,7 @@
                 <Button
                     android:id="@+id/btn_3"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="42dp"
                     android:background="@drawable/bg_btn"
                     android:focusableInTouchMode="true"
                     />
@@ -232,7 +232,7 @@
                 <Button
                     android:id="@+id/btn_4"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="42dp"
                     android:background="@drawable/bg_btn"
                     android:focusableInTouchMode="true"
                     />
@@ -256,7 +256,7 @@
                 <Button
                     android:id="@+id/btn_5"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="42dp"
                     android:background="@drawable/bg_btn"
                     android:focusableInTouchMode="true"
                     />
@@ -280,7 +280,7 @@
                 <Button
                     android:id="@+id/btn_6"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="42dp"
                     android:background="@drawable/bg_btn"
                     android:focusableInTouchMode="true"
                     />
@@ -304,7 +304,7 @@
                 <Button
                     android:id="@+id/btn_7"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="42dp"
                     android:background="@drawable/bg_btn"
                     android:focusableInTouchMode="true"
                     />
@@ -328,7 +328,7 @@
                 <Button
                     android:id="@+id/btn_8"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="42dp"
                     android:background="@drawable/bg_btn"
                     android:focusableInTouchMode="true"
                     />
@@ -352,7 +352,7 @@
                 <Button
                     android:id="@+id/btn_9"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="42dp"
                     android:background="@drawable/bg_btn"
                     android:focusableInTouchMode="true"
                     />
@@ -376,7 +376,7 @@
                 <Button
                     android:id="@+id/btn_10"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="42dp"
                     android:background="@drawable/bg_btn"
                     android:focusableInTouchMode="true"
                     />
@@ -400,7 +400,7 @@
                 <Button
                     android:id="@+id/btn_11"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="42dp"
                     android:background="@drawable/bg_btn"
                     android:focusableInTouchMode="true"
                     />
@@ -424,7 +424,7 @@
                 <Button
                     android:id="@+id/btn_12"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="42dp"
                     android:background="@drawable/bg_btn"
                     android:focusableInTouchMode="true"
                     />
@@ -448,7 +448,7 @@
                 <Button
                     android:id="@+id/btn_13"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="42dp"
                     android:background="@drawable/bg_btn"
                     android:focusableInTouchMode="true"
                     />
@@ -472,7 +472,7 @@
                 <Button
                     android:id="@+id/btn_14"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="42dp"
                     android:background="@drawable/bg_btn"
                     android:focusableInTouchMode="true"
                     />
@@ -496,7 +496,7 @@
                 <Button
                     android:id="@+id/btn_15"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="42dp"
                     android:background="@drawable/bg_btn"
                     android:focusableInTouchMode="true"
                     />
@@ -520,7 +520,7 @@
                 <Button
                     android:id="@+id/btn_16"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="42dp"
                     android:background="@drawable/bg_btn"
                     android:focusableInTouchMode="true"
                     />
@@ -544,7 +544,7 @@
                 <Button
                     android:id="@+id/btn_17"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="42dp"
                     android:background="@drawable/bg_btn"
                     android:focusableInTouchMode="true"
                     />
@@ -568,7 +568,7 @@
                 <Button
                     android:id="@+id/btn_18"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="42dp"
                     android:background="@drawable/bg_btn"
                     android:focusableInTouchMode="true"
                     />
@@ -592,7 +592,7 @@
                 <Button
                     android:id="@+id/btn_19"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="42dp"
                     android:background="@drawable/bg_btn"
                     android:focusableInTouchMode="true"
                     />
@@ -616,7 +616,7 @@
                 <Button
                     android:id="@+id/btn_20"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="42dp"
                     android:background="@drawable/bg_btn"
                     android:focusableInTouchMode="true"
                     />
@@ -640,7 +640,7 @@
                 <Button
                     android:id="@+id/btn_21"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="42dp"
                     android:background="@drawable/bg_btn"
                     android:focusableInTouchMode="true"
                     />
@@ -664,7 +664,7 @@
                 <Button
                     android:id="@+id/btn_22"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="42dp"
                     android:background="@drawable/bg_btn"
                     android:focusableInTouchMode="true"
                     />
@@ -688,7 +688,7 @@
                 <Button
                     android:id="@+id/btn_23"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="42dp"
                     android:background="@drawable/bg_btn"
                     android:focusableInTouchMode="true"
                     />
@@ -712,7 +712,7 @@
                 <Button
                     android:id="@+id/btn_24"
                     android:layout_width="match_parent"
-                    android:layout_height="35dp"
+                    android:layout_height="42dp"
                     android:background="@drawable/bg_btn"
                     android:focusableInTouchMode="true"
                     />
