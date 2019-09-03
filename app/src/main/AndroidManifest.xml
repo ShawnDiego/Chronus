@@ -14,8 +14,8 @@
         <activity android:name=".clendar.Add_General_Activity" />
         <activity android:name=".Item_tosee" />
         <activity android:name=".Update_DATA_Activity" />
-        <activity android:name=".ADD_DATA_Activity" />
-        <activity android:name=".ReminderItemsActivity" />
+        <activity android:name=".Reminders.ADD_DATA_Activity" />
+        <activity android:name=".Reminders.ReminderItemsActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,6 +23,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service android:name=".AlarmNotification.AlarmService" >
+        </service>
+        <receiver android:name=".AlarmNotification.AlarmReceiver" >
+        </receiver>
+        <receiver android:name=".AlarmNotification.BootCompleteReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

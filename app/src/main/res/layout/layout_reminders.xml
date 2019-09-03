@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:background="#FAFBFC"
+        android:background="@drawable/shape_rectangle_with_radius"
+        android:backgroundTint="#EFEFEF"
         android:gravity="center_vertical"
         android:paddingTop="5dp">
 
@@ -19,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerInParent="true"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="25dp"
             android:layout_weight="1"
             android:text="删除"
             android:textColor="#0B85FB"
@@ -34,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
-            android:layout_marginRight="20dp"
+            android:layout_marginRight="25dp"
             android:layout_weight="1"
             android:text="编辑"
             android:textColor="#0B85FB"
@@ -45,7 +47,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F5F5FF"
+        android:background="#F3F4F5"
         android:clipToPadding="false"
         android:scrollbars="none"
         tools:context=".MainActivity">
@@ -53,7 +55,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#F5F5FF"
+            android:background="#F3F4F5"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -69,7 +71,7 @@
                 <SearchView
                     android:id="@+id/edit_search"
                     android:layout_width="match_parent"
-                    android:layout_height="28dp"
+                    android:layout_height="30dp"
                     android:background="@drawable/shape_seacher"
                     android:iconifiedByDefault="false"
                     android:outlineProvider="background"
@@ -90,6 +92,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
                     android:text="提醒列表"
                     android:textAlignment="center"
                     android:textColor="#000000"
@@ -100,7 +104,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_centerInParent="true"
+                    android:layout_marginTop="17dp"
                     android:layout_marginRight="10dp"
                     android:text="添加列表"
                     android:textAlignment="center"

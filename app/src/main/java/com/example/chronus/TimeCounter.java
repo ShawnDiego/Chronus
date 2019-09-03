@@ -6,7 +6,7 @@ public class TimeCounter {
     //Calender include second minute hour month year;
     //The time of setting will be detected, if old than current time -> to inform the user.
     //
-    public static Long getSecondsOfSetTime(Calendar num) {
+    public static Integer getSecondsOfSetTime(Calendar num) {
 //        Calendar cal = Calendar.getInstance();
 //        if (cal.get(Calendar.HOUR_OF_DAY) - num.get(Calendar.HOUR_OF_DAY) >= 0) {
 //            //如果当前时间大于等于num点 就计算第二天的num点的
@@ -21,6 +21,6 @@ public class TimeCounter {
 //        Long seconds = (cal.getTimeInMillis() - System.currentTimeMillis());
         Long seconds = num.getTimeInMillis() - System.currentTimeMillis();
 
-        return seconds.longValue();
+        return seconds.intValue();
     }
 }
