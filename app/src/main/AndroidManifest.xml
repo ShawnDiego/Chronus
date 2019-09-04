@@ -12,8 +12,8 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".clendar.Delete_General_Activity"></activity>
         <activity android:name=".clendar.Add_General_Activity" />
-        <activity android:name=".Item_tosee" />
-        <activity android:name=".Update_DATA_Activity" />
+        <activity android:name=".Reminders.Item_tosee" />
+        <activity android:name=".Reminders.Update_DATA_Activity" />
         <activity android:name=".Reminders.ADD_DATA_Activity" />
         <activity android:name=".Reminders.ReminderItemsActivity" />
         <activity android:name=".MainActivity">

@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.chronus.Item_tosee">
+    tools:context="com.example.chronus.Reminders.Item_tosee">
     <!--tools:context="com.example.lulin.todolist.Activity.NewTodoActivity">-->
 
 

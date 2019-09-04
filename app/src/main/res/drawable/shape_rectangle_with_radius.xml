@@ -9,7 +9,6 @@ android:shape="rectangle">
      android:bottomLeftRadius="0dp"/>
 
 
-
 <solid android:color="#FEFEFE"/>
 
 </shape>

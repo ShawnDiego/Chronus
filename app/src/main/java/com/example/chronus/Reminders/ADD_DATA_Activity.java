@@ -62,85 +62,109 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
         context = this;
         date = new StringBuffer();
         time = new StringBuffer();
-        initView();
         initDateTime();
+        initView();
+
     }
 
     public void Store(View view){
-
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-        Date date = null;
-
         //找到所有控件
-         EditText editText = (EditText ) findViewById(R.id.ADDContent);
-          //EditText editText1 = (EditText)findViewById(R.id.ADDID) ;
-          EditText editText2 = (EditText) findViewById(R.id.AddTitle);
-          Spinner  spinner = (Spinner) findViewById(R.id.ADDType);
-          //EditText editText2 = (EditText)findViewById(R.id.ADDTime) ;
-
-
+        EditText editText = (EditText ) findViewById(R.id.ADDContent);
+        EditText editText2 = (EditText) findViewById(R.id.AddTitle);
+        Spinner  spinner = (Spinner) findViewById(R.id.ADDType);
         //从控件获取输入信息
-         String type = String.valueOf(spinner.getSelectedItem());
-         String content = editText.getText().toString();
-         if(content == null){
-             content=" ";
-         }
-         //String id = editText1.getText().toString();
+        String type = String.valueOf(spinner.getSelectedItem());
+        String content = editText.getText().toString();
+        if(content == null){
+            content=" ";
+        }
         Integer tem = number+1;
-         String id = tem.toString();
-         final String title = editText2.getText().toString();
-         Integer Infactmonth = month+1;
-         String Alerttime = year.toString()+"-"+(Infactmonth).toString()+"-"+day.toString()+"-"+hour.toString()+"-"+minute.toString();
-
-        if(title != null){
+        String id = tem.toString();
+        final String title = editText2.getText().toString();
+        Integer Infactmonth = month+1;
+        String Alerttime = null;
+        Boolean Notife_or_not = false;
+        //如果没设置日期
+        if(tvDate.getText().equals("点击添加时间")){
+            //没设置日期，不设置提醒，时间为空
+            Alerttime = "未设置时间";
+            Notife_or_not =false;
+        }else if(tvTime.getText().equals("点击添加时间")){
+            //设置了日期没设置时刻，那按照9：00计算
+            Alerttime = year.toString()+"-"+(Infactmonth).toString()+"-"+
+                    day.toString()+"-"+"9"+"-"+"0";
+            Notife_or_not = true;
+        }else if(tvTime.getText() != null){
+            Alerttime = year.toString()+"-"+(Infactmonth).toString()+"-"+
+                    day.toString()+"-"+hour.toString()+"-"+minute.toString();
+            Notife_or_not = true;
+        }
+        //SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+        //Date date = null;
+        if(!title.equals("")){
             //将信息写入数据库
             MainActivity.INSERT(type,id,title,content,Alerttime);
             this.finish();
+        }else{
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+            builder.setTitle("提醒");
+            builder.setMessage("未填写提醒事项名称");
+            builder.create();
+            builder.show();
         }
-        Calendar settingTime = Calendar.getInstance();
-        settingTime.set(Calendar.HOUR_OF_DAY,hour);
-        settingTime.set(Calendar.MINUTE,minute);
-        settingTime.set(Calendar.SECOND,0);
-        settingTime.set(Calendar.MONTH,month+1);
-        settingTime.set(Calendar.MILLISECOND, 0);
-        settingTime.set(Calendar.YEAR,year);
+        if(Notife_or_not){
+            //设置了时间才进行通知
+            Calendar settingTime = Calendar.getInstance();
+            settingTime.set(Calendar.YEAR,year);
+            settingTime.set(Calendar.MONTH,month);
+            settingTime.set(Calendar.DAY_OF_MONTH,day);
+            settingTime.set(Calendar.HOUR_OF_DAY,hour);
+            settingTime.set(Calendar.MINUTE,minute);
+            settingTime.set(Calendar.SECOND,0);
+            settingTime.set(Calendar.MILLISECOND, 0);
+            int day = settingTime.get(Calendar.DAY_OF_YEAR);
+            int day_now = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);//跨两天的时间还没调整好
+            int hour = settingTime.get(Calendar.HOUR_OF_DAY);
+            int hour_now = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+            int min = settingTime.get(Calendar.MINUTE);
+            int min_now = Calendar.getInstance().get(Calendar.MINUTE);
+            int sec = settingTime.get(Calendar.SECOND);
+            int sec_now = Calendar.getInstance().get(Calendar.SECOND);
 
-        System.out.println(TimeCounter.getSecondsOfSetTime(settingTime));
-        String tem1 = null;
-        //Log.d("TimeCoun",);
-        //longToString(settingTime.getTimeInMillis()-System.currentTimeMillis(),tem1);
-        // 模拟的task id
-        int mTaskId = 0;
-        Intent i = new Intent(getBaseContext(), AlarmService.class);
-        // 获取i秒之后的日期时间字符串
-       // i.putExtra("alarm_time", DateTimeUtil.getNLaterDateTimeString(Calendar.SECOND,);
-       // i.putExtra("task_id", mTaskId);
-       // startService(i);
-        Log.d("test:","begin");
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                Notify nm = new Notify(getApplicationContext());
-//                nm.setNotification("提醒事项", title);
-//            }
-//        },TimeCounter.getSecondsOfSetTime(settingTime));
-//        AlarmManager am;
-//        Intent intent = new Intent(INTENT_ALARM_LOG);
-//        PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, 0);
-//        am = (AlarmManager) getSystemService(ALARM_SERVICE);
-//        am.set(AlarmManager.RTC_WAKEUP, settingTime.getTimeInMillis(), pi);
+            int count_time = sec - sec_now + (min - min_now)*60 + (hour - hour_now)*3600 ;
+
+            //通知服务
+            Intent i = new Intent(getBaseContext(), AlarmService.class);
+            // 获取i秒之后的日期时间字符串
+            i.putExtra("alarm_time", DateTimeUtil.getNLaterDateTimeString(Calendar.SECOND,count_time));
+            i.putExtra("task_id", id);
+            i.putExtra("reminder_title",title);
+            startService(i);
+        }
+
     }
         //初始化控件，并为两个LinearLayout设置监听事件：
     private void initView() {
        llDate =  findViewById(R.id.ll_date);
-         tvDate = (TextView) findViewById(R.id.tv_date);
-         llTime =  findViewById(R.id.ll_time);
-         tvTime = (TextView) findViewById(R.id.tv_time);
+       tvDate = (TextView) findViewById(R.id.tv_date);//日期
+        llTime =  findViewById(R.id.ll_time);
+        tvTime = (TextView) findViewById(R.id.tv_time);//时间
         llDate.setOnClickListener(this);
         llTime.setOnClickListener(this);
         EditText editText1 = (EditText)findViewById(R.id.ADDID) ;
         Integer tem = number+1;
         editText1.setText(tem.toString());
+        tvDate.setText("点击添加时间");
+        tvDate.setTextColor(Color.parseColor("#A4A2A4"));
+        tvTime.setText("点击添加时间");
+        tvTime.setTextColor(Color.parseColor("#A4A2A4"));
+        TextView cancel_tv = findViewById(R.id.cancel_tv);
+        cancel_tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
     //使用Calendar类获取当前的日期时间。
     private void initDateTime() {
@@ -217,7 +241,7 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
                 dialog2.setView(dialogView2);
                 dialog2.show();
                 break;
-             case R.id.add_tv:
+            case R.id.add_tv:
                  Store(v);
                  break;
         }
@@ -227,36 +251,7 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
         this.hour = hourOfDay;
         this.minute = minute;
     }
-    public static Date longToDate(long currentTime, String formatType)
-            throws ParseException {
-        Date dateOld = new Date(currentTime); // 根据long类型的毫秒数生命一个date类型的时间
-        String sDateTime = dateToString(dateOld, formatType); // 把date类型的时间转换为string
-        Date date = stringToDate(sDateTime, formatType); // 把String类型转换为Date类型
-        return date;
-    }
-    // formatType格式为yyyy-MM-dd HH:mm:ss//yyyy年MM月dd日 HH时mm分ss秒
-    // data Date类型的时间
-    public static String dateToString(Date data, String formatType) {
-        return new SimpleDateFormat(formatType).format(data);
-    }
-    // strTime要转换的string类型的时间，formatType要转换的格式yyyy-MM-dd HH:mm:ss//yyyy年MM月dd日
-    // HH时mm分ss秒，
-    // strTime的时间格式必须要与formatType的时间格式相同
-    public static Date stringToDate(String strTime, String formatType)
-            throws ParseException {
-        SimpleDateFormat formatter = new SimpleDateFormat(formatType);
-        Date date = null;
-        date = formatter.parse(strTime);
-        return date;
-    }
-    // currentTime要转换的long类型的时间
-    // formatType要转换的string类型的时间格式
-//    public static String longToString(long currentTime, String formatType)
-//           {
-//        Date date = longToDate(currentTime, formatType); // long类型转成Date类型
-//        String strTime = dateToString(date, formatType); // date类型转成String
-//        return strTime;
-//    }
+
 
 
 }

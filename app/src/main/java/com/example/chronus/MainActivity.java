@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ import com.example.chronus.AlarmNotification.AlarmService;
 import com.example.chronus.AlarmNotification.DateTimeUtil;
 import com.example.chronus.Reminders.ReminderItemsActivity;
 import com.example.chronus.Reminders.RemindersFragment;
+import com.example.chronus.Setting.SettingFragment;
 import com.example.chronus.clendar.CalendarFragment;
 
 import java.text.SimpleDateFormat;
@@ -100,11 +102,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // init layout_fragment 一级碎片
         mFragments = new ArrayList<>();
-        mFragments.add(CalendarFragment.newInstance("日历"));//Fragment的名字都要修改
+        mFragments.add(CalendarFragment.newInstance("日历"));
         mFragments.add(RemindersFragment.newInstance("事项"));
         mFragments.add(ViewFragment.newInstance("时间轴"));//Fragment的名字都要修改
-        mFragments.add(TomatoFragment.newInstance("番茄"));//Fragment的名字都要修改
-        mFragments.add(ViewFragment.newInstance("设置"));//Fragment的名字都要修改
+        mFragments.add(TomatoFragment.newInstance("番茄"));
+        mFragments.add(SettingFragment.newInstance("设置"));
 
 
         mAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragments);
@@ -185,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 iv_rem.setImageResource(R.drawable.rem_un);
                 //iv_timeline.setImageResource(R.drawable.setting);
                 iv_tom.setImageResource(R.drawable.tom_un);
-
+               
             }
         });
     }

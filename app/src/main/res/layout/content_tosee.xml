@@ -9,7 +9,7 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context="com.example.chronus.Item_tosee">
+    tools:context="com.example.chronus.Reminders.Item_tosee">
 
   <!-- tools:context="com.example.lulin.todolist.Activity.NewTodoActivity">-->
 

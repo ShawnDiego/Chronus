@@ -6,28 +6,16 @@
 
     style="@style/FragmentCardAnimation"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="#00FFFFFF"
     android:orientation="vertical">
-    <RelativeLayout
-        android:id="@+id/item_rl"
-        android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="15dp"
-        android:background="@drawable/shape_rectangle_with_radius"
-        android:backgroundTint="#BEC3C4"
-        android:orientation="horizontal"
-        android:visibility="invisible"
-        tools:visibility="visible">
-    </RelativeLayout>
+
     <LinearLayout
+        android:id="@+id/top_ll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/shape_rectangle_with_radius"
-        android:orientation="vertical"
-        android:id="@+id/top_ll">
+        android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -69,33 +57,42 @@
 
         </RelativeLayout>
 
-        <ScrollView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:scrollbars="none">
+            android:orientation="horizontal">
 
-            <RelativeLayout
+            <ListView
+                android:id="@+id/item_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="0dp"
+                android:divider="#C6C5C8"
+                android:dividerHeight="1px"
+                android:fadeScrollbars="false"
+                android:fadingEdge="none"
+                android:fastScrollAlwaysVisible="false"
+                android:fastScrollEnabled="false"
+                android:footerDividersEnabled="false"
+                android:headerDividersEnabled="false" />
+        </RelativeLayout>
 
-                <ListView
-                    android:id="@+id/item_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginStart="0dp"
-                    android:divider="#C6C5C8"
-                    android:dividerHeight="1px"
-                    android:fadingEdge="none"
-                    android:footerDividersEnabled="false"
-                    android:headerDividersEnabled="false" />
-            </RelativeLayout>
-        </ScrollView>
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/item_rl"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/shape_rectangle_with_radius"
+        android:backgroundTint="#BEC3C4"
+        android:orientation="horizontal"
+        android:visibility="invisible"
+        tools:visibility="visible"></RelativeLayout>
 
 
 </LinearLayout>

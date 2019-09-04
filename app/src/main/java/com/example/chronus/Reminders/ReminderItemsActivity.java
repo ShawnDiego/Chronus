@@ -25,7 +25,6 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.chronus.Item_tosee;
 import com.example.chronus.MainActivity;
 import com.example.chronus.R;
 
@@ -46,7 +45,7 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
     private String[] item_name = new String[]{"事项1","事项2","事项1","事项1","事项1","事项1","事项1"};
     private int imgIds =  R.drawable.radio_unselected;
     private int imgAdd =  R.drawable.item_add;
-    private int checked[] ={0,1,0,1,0,0,1};
+    private int checked[] ={0,1,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     private int seleted_img = R.drawable.radio_selected;
     private ImageView mPopupMenu;
 
@@ -143,11 +142,10 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
         ListView listView = (ListView) findViewById(R.id.item_list);
         listView.setAdapter(myAdapter);
 
-        RelativeLayout.LayoutParams params_lv;
-        params_lv = (RelativeLayout.LayoutParams) listView.getLayoutParams();
-        params_lv.height = (int) (item_name.length+1) * params_lv.height + 5;
-        System.out.println("params_lv.height"+params_lv.height);
-        listView.setLayoutParams(params_lv);
+//        RelativeLayout.LayoutParams params_lv;
+//        params_lv = (RelativeLayout.LayoutParams) listView.getLayoutParams();
+//        params_lv.height = (int) (item_name.length+1) * params_lv.height + 5;
+//        listView.setLayoutParams(params_lv);
 
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -159,6 +157,7 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
                 if(sel_tv.getText().equals("添加新事项")){
                     //弹出新建
                     //Intent intent = new Intent(getActivity(), ADD_DATA_Activity.class);
+                    Log.d("id",Integer.toString(MainActivity.getCount()));
                     Intent intent = new Intent(context, ADD_DATA_Activity.class);
                     intent.putExtra("number",number);
                     startActivity(intent);
