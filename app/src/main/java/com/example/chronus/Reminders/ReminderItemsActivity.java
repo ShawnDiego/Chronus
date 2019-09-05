@@ -40,14 +40,12 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
     private Context context;
 
     int mCurrentPosition = -1;
-    final static String EVENTS_POSITION = "position";
-    private static final String ARG_SHOW_TEXT = "text";
-    private String[] item_name = new String[]{"事项1","事项2","事项1","事项1","事项1","事项1","事项1"};
     private int imgIds =  R.drawable.radio_unselected;
     private int imgAdd =  R.drawable.item_add;
     private int checked[] ={0,1,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     private int seleted_img = R.drawable.radio_selected;
     private ImageView mPopupMenu;
+    public static String get_Type;
 
     @Override
     public void setContentView(View view) {
@@ -66,7 +64,9 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
         getWindow().setEnterTransition(slide);
         setContentView(R.layout.layout_reminders_item);
         context = this;
-
+        //获取传递过来的事项类型
+        Intent intent = getIntent();
+        get_Type = intent.getStringExtra("Line");
     }
 
     public void onClick(View v){
@@ -104,6 +104,8 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
         item_ll.setBackgroundColor(Color.WHITE);
         RelativeLayout item_rl = findViewById(R.id.item_rl);
         item_rl.setVisibility(View.INVISIBLE);
+        getListView();
+        Log.d("state","onResume");
     }
     @Override
     public void onPause(){
@@ -112,13 +114,11 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
         item_ll.setBackgroundColor(Color.WHITE);
         RelativeLayout item_rl = findViewById(R.id.item_rl);
         item_rl.setVisibility(View.INVISIBLE);
+        Log.d("state","onPause");
     }
-
-    private void init() {
-        //MainActivity.getCount()用来判断数据库总条数
-
+    private void getListView(){
         List<Map<String, Object>> listitem = new ArrayList<Map<String, Object>>();
-        for (int i = 0; i < MainActivity.getCount(); i++) {
+        for (int i = 0; i < MainActivity.getCount_By_Type(get_Type); i++) {
             Map<String, Object> showitem = new HashMap<String, Object>();
             if(checked[i] == 0){
                 showitem.put("item_img", imgIds);
@@ -126,11 +126,38 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
                 showitem.put("item_img",seleted_img);
             }
 
-            showitem.put("item_name", MainActivity.ShowLineTitle(i));
+            showitem.put("item_name", MainActivity.ShowLineTitle_In_Type(i,get_Type));
 
             listitem.add(showitem);
         }
-        final Integer number = listitem.size();
+
+        //最后加一个添加item
+        Map<String, Object> showitem = new HashMap<String, Object>();
+        showitem.put("item_img", imgAdd);
+        showitem.put("item_name", "添加新事项");
+        listitem.add(showitem);
+        //创建一个simpleAdapter
+        SimpleAdapter myAdapter = new SimpleAdapter(context, listitem, R.layout.layout_item_view, new String[]{"item_img", "item_name"},
+                new int[]{R.id.choose_img, R.id.item_name});
+        ListView listView = (ListView) findViewById(R.id.item_list);
+        listView.setAdapter(myAdapter);
+    }
+    private void init() {
+        List<Map<String, Object>> listitem = new ArrayList<Map<String, Object>>();
+        for (int i = 0; i < MainActivity.getCount_By_Type(get_Type); i++) {
+            Map<String, Object> showitem = new HashMap<String, Object>();
+            if(checked[i] == 0){
+                showitem.put("item_img", imgIds);
+            }else{
+                showitem.put("item_img",seleted_img);
+            }
+
+            showitem.put("item_name", MainActivity.ShowLineTitle_In_Type(i,get_Type));
+
+            listitem.add(showitem);
+        }
+        //final Integer number = listitem.size();
+        final Integer number = MainActivity.getCount();
         //最后加一个添加item
         Map<String, Object> showitem = new HashMap<String, Object>();
         showitem.put("item_img", imgAdd);
@@ -185,6 +212,7 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
                     Intent intent = new Intent(context, Item_tosee.class);
                     //根据所长按的索引的序列号也就是数据库中的第几行，找到对应的ID
                     MainActivity.Line = i;
+                    MainActivity.type = get_Type;
                     //intent.putExtra("Number", i);
                     startActivity(intent);
                 }

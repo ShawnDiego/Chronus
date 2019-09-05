@@ -27,6 +27,7 @@ public class Item_tosee extends AppCompatActivity {
 
 
                 String id = MainActivity.ShowLineID(MainActivity.Line);
+                String title = MainActivity.ShowLineTitle_In_Type(MainActivity.Line,MainActivity.type);
                 String content = MainActivity.FIND(id);
                 String date = MainActivity.ShowDate(id);
 

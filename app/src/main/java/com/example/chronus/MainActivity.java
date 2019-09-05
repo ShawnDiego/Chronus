@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Build;
+import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,11 +21,13 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -51,6 +55,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static SQDB mDBHelper;
     //事项列表行数，用来跳转到详细信息页
     public static int Line;
+    //事项类型，用来跳转到详细信息页
+    public static String type;
     //用来确定所要修改的数据库条目
     public  static String Edit_ID;
     private static Context context;
@@ -120,16 +126,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         iv_tom = findViewById(R.id.tomato_tab);
         iv_set = findViewById(R.id.settings_tab);
 
+        findViewById(R.id.calendar_tab).setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onClick(View v) {
+                chooseTab=1;
+                mViewPager.setCurrentItem(0,false);
+                iv_set.setImageResource(R.drawable.set);
+                iv_cal.setImageResource(R.drawable.calendar_fill);
+                iv_rem.setImageResource(R.drawable.lightbulb);
+                //iv_timeline.setImageResource(R.drawable.setting);
+                iv_tom.setImageResource(R.drawable.clock);
+
+            }
+        });
+
         findViewById(R.id.timeline_tab).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 mViewPager.setCurrentItem(2,false);
                 chooseTab=3;
-                iv_set.setImageResource(R.drawable.setting_un);
-                iv_cal.setImageResource(R.drawable.cal_un);
-                iv_rem.setImageResource(R.drawable.rem_un);
+                iv_set.setImageResource(R.drawable.set);
+                iv_cal.setImageResource(R.drawable.calendar);
+                iv_rem.setImageResource(R.drawable.lightbulb);
                 //iv_timeline.setImageResource(R.drawable.setting);
-                iv_tom.setImageResource(R.drawable.tom_un);
+                iv_tom.setImageResource(R.drawable.clock);
                 return;
             }
         });
@@ -139,11 +160,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(View v) {
                 chooseTab=2;
                 mViewPager.setCurrentItem(1,false);
-                iv_set.setImageResource(R.drawable.setting_un);
-                iv_cal.setImageResource(R.drawable.cal_un);
-                iv_rem.setImageResource(R.drawable.rem);
+                iv_set.setImageResource(R.drawable.set);
+                iv_cal.setImageResource(R.drawable.calendar);
+                iv_rem.setImageResource(R.drawable.lightbulb_fill);
                 //iv_timeline.setImageResource(R.drawable.setting);
-                iv_tom.setImageResource(R.drawable.tom_un);
+                iv_tom.setImageResource(R.drawable.clock);
 
             }
         });
@@ -152,11 +173,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(View v) {
                 chooseTab=4;
                 mViewPager.setCurrentItem(3,false);
-                iv_set.setImageResource(R.drawable.setting_un);
-                iv_cal.setImageResource(R.drawable.cal_un);
-                iv_rem.setImageResource(R.drawable.rem_un);
+                iv_set.setImageResource(R.drawable.set);
+                iv_cal.setImageResource(R.drawable.calendar);
+                iv_rem.setImageResource(R.drawable.lightbulb);
                 //iv_timeline.setImageResource(R.drawable.setting);
-                iv_tom.setImageResource(R.drawable.tom);
+                iv_tom.setImageResource(R.drawable.clock_fill);
 
 
             }
@@ -166,30 +187,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClick(View v) {
                 chooseTab=5;
                 mViewPager.setCurrentItem(4,false);
-                iv_set.setImageResource(R.drawable.setting);
-                iv_cal.setImageResource(R.drawable.cal_un);
-               iv_rem.setImageResource(R.drawable.rem_un);
+                iv_set.setImageResource(R.drawable.set_fill);
+                iv_cal.setImageResource(R.drawable.calendar);
+               iv_rem.setImageResource(R.drawable.lightbulb);
                 //iv_timeline.setImageResource(R.drawable.setting);
-               iv_tom.setImageResource(R.drawable.tom_un);
+               iv_tom.setImageResource(R.drawable.clock);
                
                
 
             }
         });
-        findViewById(R.id.calendar_tab).setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onClick(View v) {
-                chooseTab=1;
-                mViewPager.setCurrentItem(0,false);
-                iv_set.setImageResource(R.drawable.setting_un);
-                iv_cal.setImageResource(R.drawable.cal);
-                iv_rem.setImageResource(R.drawable.rem_un);
-                //iv_timeline.setImageResource(R.drawable.setting);
-                iv_tom.setImageResource(R.drawable.tom_un);
-               
-            }
-        });
+
+
     }
 
 
@@ -394,6 +403,14 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
         SQLiteDatabase db = mDBHelper.getWritableDatabase();
         db.execSQL("DELETE FROM Remind_List WHERE ID = ?", new String[]{id});
     }
+    //删除数据
+    public static void DELETE_LIST(String id) {
+        //删除列表和列表里面的值
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        db.execSQL("DELETE FROM List WHERE ID = ?", new String[]{id});
+        //值
+        db.execSQL("DELETE FROM Remind_List WHERE Type = ?", new String[]{Show_List_name(id)});
+    }
 
     //修改数据
     public static void update(String type, String  id,String content) {
@@ -401,14 +418,13 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
         db.execSQL("UPDATE Remind_List SET Content =?,Type =? WHERE ID = ?",
                 new String[]{content,type,id});
     }
-
-    //根据ID查询数据
-    public static String FIND(String id) {
+    //根据TITLE查询事项内容
+    public static String FIND_Content_By_Title(String title) {
 
         StringBuilder result = new StringBuilder();
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM Remind_List WHERE ID = ?",
-                new String[]{id});
+        Cursor cursor = db.rawQuery("SELECT * FROM Remind_List WHERE TITLE = ?",
+                new String[]{title});
         //存在数据才返回
         if (cursor.moveToFirst()) {
             String content = cursor.getString(cursor.getColumnIndex("Content"));
@@ -474,12 +490,32 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
         }
 
     }
+    //在类型中根据行数查询每一条的TITLE
+    public  static String ShowLineTitle_In_Type(int i,String type) {
+        StringBuilder title = new StringBuilder();
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM Remind_List WHERE Type = ?", new String[]{type});
 
-    //根据ID查询时间
-    public static String ShowDate(String id) {
+
+        if (cursor.getCount() <= 0) {
+            title.append("无信息");
+            cursor.close();
+            return title.toString();
+        } else {
+            cursor.moveToPosition(i);
+            title.append(cursor.getString(cursor.getColumnIndex("TITLE")));
+
+            cursor.close();
+            return title.toString();
+        }
+    }
+
+
+    //根据TITLE查询时间
+    public static String ShowDate_By_Title(String title) {
         StringBuilder result = new StringBuilder();
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM Remind_List WHERE ID = ?", new String[]{id});
+        Cursor cursor = db.rawQuery("SELECT * FROM Remind_List WHERE TITLE = ?", new String[]{title});
         //存在数据才返回
         if (cursor.moveToFirst()) {
             String data = cursor.getString(cursor.getColumnIndex("DAY"));
@@ -502,5 +538,138 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
         return result;
     }
 
+    //判断数据库里相应类型下的条目数
+    public static int getCount_By_Type(String type)
+    {
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor =  db.rawQuery("SELECT COUNT (*) FROM Remind_List WHERE Type=?",new String[]{type});
+        cursor.moveToFirst();
+        int result = cursor.getInt(0);
+        cursor.close();
+        return result;
+    }
+    //根据ID查询数据
+    public static String FIND(String id) {
+
+        StringBuilder result = new StringBuilder();
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM Remind_List WHERE ID = ?",
+                new String[]{id});
+        //存在数据才返回
+        if (cursor.moveToFirst()) {
+            String content = cursor.getString(cursor.getColumnIndex("Content"));
+
+
+            cursor.close();
+            return  result.append(content).toString();
+        } else {
+            cursor.close();
+            return result.append("该ID下没有信息，出现未知错误").toString();
+        }
+    }
+
+
+    //根据ID查询时间
+    public static String ShowDate(String id) {
+        StringBuilder result = new StringBuilder();
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM Remind_List WHERE ID = ?", new String[]{id});
+        //存在数据才返回
+        if (cursor.moveToFirst()) {
+            String data = cursor.getString(cursor.getColumnIndex("DAY"));
+
+            cursor.close();
+            return result.append(data).toString();
+        } else {
+            cursor.close();
+            return result.append("该ID下没有信息，出现未知错误").toString();
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////分界线
+    //判断列表类别数量
+    public static int get_ListCount( ){
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor =  db.rawQuery("SELECT COUNT (*) FROM List",null);
+        cursor.moveToFirst();
+        int result = cursor.getInt(0);
+        cursor.close();
+        return result;
+    }
+    //显示列表里指定行的ID
+    public  static String ShowLineID_inList(int i){
+
+        StringBuilder result = new StringBuilder();
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor = db.query("List",null,null,null,null,null,null,null);
+
+        if (cursor.getCount()<=0){
+            result.append("无信息");
+            cursor.close();
+            return result.toString();
+        }
+        else if(i<cursor.getCount())
+        {
+            cursor.moveToPosition(i);
+            String id = cursor.getString(cursor.getColumnIndex("ID"));
+
+            cursor.close();
+            return id;
+        }
+        else{
+            result.append("无信息");
+            cursor.close();
+            return result.toString();
+        }
+    }
+
+    //根据ID查询列表名
+    public static String Show_List_name(String id) {
+        StringBuilder result = new StringBuilder();
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM List WHERE ID = ?",
+                new String[]{id});
+        //存在数据才返回
+        if (cursor.moveToFirst()) {
+            String name = cursor.getString(cursor.getColumnIndex("name"));
+
+            cursor.close();
+            return result.append(name).toString();
+        } else {
+            cursor.close();
+            return result.append("该ID下没有信息，出现未知错误").toString();
+        }
+    }
+    //根据ID查询列表下的事项数量
+    public static String Show_List_number(String id) {
+        StringBuilder result = new StringBuilder();
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM List WHERE ID = ?",
+                new String[]{id});
+        //存在数据才返回
+        if (cursor.moveToFirst()) {
+            String number = cursor.getString(cursor.getColumnIndex("number"));
+
+            cursor.close();
+            return result.append(number).toString();
+        } else {
+            cursor.close();
+            return result.append("该ID下没有信息，出现未知错误").toString();
+        }
+    }
+    //在列表数据表中插入数据
+    public static void INSERT_List(String id, String name,String icon_color, String number) {
+
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();//获取可写数据库实例
+
+        db.execSQL("INSERT INTO List(ID,name,icon_color,number) values(?,?,?,?)",
+                new String[]{id, name,icon_color,number});
+    }
+    //修改数据列表书库对应ID的数据
+    public static void update_List(String name, String  id) {
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        db.execSQL("UPDATE List SET name =?  WHERE ID = ?",
+                new String[]{name,id});
+    }
 
 }
