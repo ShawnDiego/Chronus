@@ -366,16 +366,16 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         int year = mCalendarView.getCurYear();
         int month = mCalendarView.getCurMonth();
 
-        schemes.add(getSchemeCalendar(year, month, 3, 0xFF40db25, "假"));
-        schemes.add(getSchemeCalendar(year, month, 6, 0xFFe69138, "事"));
-        schemes.add(getSchemeCalendar(year, month, 9, 0xFFdf1356, "议"));
-        schemes.add(getSchemeCalendar(year, month, 13, 0xFFedc56d, "记"));
-        schemes.add(getSchemeCalendar(year, month, 14, 0xFFedc56d, "阅"));
-        schemes.add(getSchemeCalendar(year, month, 15, 0xFFaacc44, "影"));
-        schemes.add(getSchemeCalendar(year, month, 18, 0xFFbc13f0, "记"));
-        schemes.add(getSchemeCalendar(year, month, 25, 0xFF13acf0, "假"));
-
-        mCalendarView.setSchemeDate(schemes);
+//        schemes.add(getSchemeCalendar(year, month, 3, 0xFF40db25, "假"));
+//        schemes.add(getSchemeCalendar(year, month, 6, 0xFFe69138, "事"));
+//        schemes.add(getSchemeCalendar(year, month, 9, 0xFFdf1356, "议"));
+//        schemes.add(getSchemeCalendar(year, month, 13, 0xFFedc56d, "记"));
+//        schemes.add(getSchemeCalendar(year, month, 14, 0xFFedc56d, "阅"));
+//        schemes.add(getSchemeCalendar(year, month, 15, 0xFFaacc44, "影"));
+//        schemes.add(getSchemeCalendar(year, month, 18, 0xFFbc13f0, "记"));
+//        schemes.add(getSchemeCalendar(year, month, 25, 0xFF13acf0, "假"));
+//
+//        mCalendarView.setSchemeDate(schemes);
     }
 
 
