@@ -15,7 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#85afafaf"
-        android:layout_alignBottom="@id/fragment_vp"/>
+        android:layout_alignBottom="@id/fragment_vp"
+         />
 
     <LinearLayout
         android:id="@+id/tabs_rg"
@@ -34,7 +35,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="10dp"
-            app:srcCompat="@drawable/calendar" />
+            app:srcCompat="@drawable/calendar"
+            />
 
         <ImageView
             android:id="@+id/remainder_tab"
@@ -71,15 +73,12 @@
         android:id="@+id/timeline_tab"
         android:layout_width="55dp"
         android:layout_height="55dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:srcCompat="@drawable/timeline"
         android:layout_marginBottom="8dp"
-        android:padding="5dp"/>
+        android:src="@drawable/timeline"
+        android:padding="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>

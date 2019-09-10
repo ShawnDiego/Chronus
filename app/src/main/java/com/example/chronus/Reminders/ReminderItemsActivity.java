@@ -1,7 +1,9 @@
 package com.example.chronus.Reminders;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewDebug;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -46,6 +49,7 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
     private int seleted_img = R.drawable.radio_selected;
     private ImageView mPopupMenu;
     public static String get_Type;
+    public int ListId;
 
     @Override
     public void setContentView(View view) {
@@ -67,6 +71,10 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
         //获取传递过来的事项类型
         Intent intent = getIntent();
         get_Type = intent.getStringExtra("Line");
+        ListId = intent.getIntExtra("ListId",0);
+        //将事项类型显示到页面上方
+        TextView textView =(TextView)findViewById(R.id.item_list_name);
+        textView.setText(get_Type);
     }
 
     public void onClick(View v){
@@ -104,7 +112,7 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
         item_ll.setBackgroundColor(Color.WHITE);
         RelativeLayout item_rl = findViewById(R.id.item_rl);
         item_rl.setVisibility(View.INVISIBLE);
-        getListView();
+        getListView("0");
         Log.d("state","onResume");
     }
     @Override
@@ -116,9 +124,9 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
         item_rl.setVisibility(View.INVISIBLE);
         Log.d("state","onPause");
     }
-    private void getListView(){
+    private void getListView(String t){
         List<Map<String, Object>> listitem = new ArrayList<Map<String, Object>>();
-        for (int i = 0; i < MainActivity.getCount_By_Type(get_Type); i++) {
+        for (int i = 0; i < MainActivity.getCount_By_Type(get_Type,t); i++) {
             Map<String, Object> showitem = new HashMap<String, Object>();
             if(checked[i] == 0){
                 showitem.put("item_img", imgIds);
@@ -126,7 +134,7 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
                 showitem.put("item_img",seleted_img);
             }
 
-            showitem.put("item_name", MainActivity.ShowLineTitle_In_Type(i,get_Type));
+            showitem.put("item_name", MainActivity.ShowLineTitle_In_Type(i,get_Type,t));
 
             listitem.add(showitem);
         }
@@ -144,7 +152,7 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
     }
     private void init() {
         List<Map<String, Object>> listitem = new ArrayList<Map<String, Object>>();
-        for (int i = 0; i < MainActivity.getCount_By_Type(get_Type); i++) {
+        for (int i = 0; i < MainActivity.getCount_By_Type(get_Type,"0"); i++) {
             Map<String, Object> showitem = new HashMap<String, Object>();
             if(checked[i] == 0){
                 showitem.put("item_img", imgIds);
@@ -152,7 +160,7 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
                 showitem.put("item_img",seleted_img);
             }
 
-            showitem.put("item_name", MainActivity.ShowLineTitle_In_Type(i,get_Type));
+            showitem.put("item_name", MainActivity.ShowLineTitle_In_Type(i,get_Type,"0"));
 
             listitem.add(showitem);
         }
@@ -168,11 +176,6 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
                 new int[]{R.id.choose_img, R.id.item_name});
         ListView listView = (ListView) findViewById(R.id.item_list);
         listView.setAdapter(myAdapter);
-
-//        RelativeLayout.LayoutParams params_lv;
-//        params_lv = (RelativeLayout.LayoutParams) listView.getLayoutParams();
-//        params_lv.height = (int) (item_name.length+1) * params_lv.height + 5;
-//        listView.setLayoutParams(params_lv);
 
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -253,16 +256,34 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
                 public boolean onMenuItemClick(MenuItem menuItem) {
                     switch (menuItem.getItemId()){
                         case R.id.rem_delete:
-                            Toast.makeText(context,"Option 1",Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(context,"Option 1",Toast.LENGTH_SHORT).show();
                             //是否删除，弹出一个对话框问问
+                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                            AlertDialog alertDialog = builder
+                                    .setTitle("系统提示")
+                                    .setMessage("你确定要删除列表吗？")
+                                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int n) {
+
+                                        }
+                                    })
+                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int n) {
+                                            //获取列表id，准备开始删除
+                                            MainActivity.DELETE_LIST_By_ID(MainActivity.ShowLineID_inList(ListId));
+                                            Log.d("delete list id", Integer.toString(ListId));
+                                            finish();
+                                        }
+                                    }).create();
+                            alertDialog.show();
                             return true;
-                        case R.id.rem_edit:
-                            Toast.makeText(context,"Option 2",Toast.LENGTH_SHORT).show();
-                            //样式改变
-                            return true;
+
                         case R.id.rem_finish:
-                            Toast.makeText(context,"Option 3",Toast.LENGTH_SHORT).show();
                             //显示全部完成的事项
+                            getListView("1");
+                            Toast.makeText(context,"此页面为已完成的项目",Toast.LENGTH_SHORT).show();
                             return true;
                         default:
                             //do nothing

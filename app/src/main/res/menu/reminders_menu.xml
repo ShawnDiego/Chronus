@@ -4,10 +4,7 @@
         android:id="@+id/rem_delete"
         android:icon="@android:drawable/ic_menu_my_calendar"
         android:title="删除列表" />
-    <item
-        android:id="@+id/rem_edit"
-        android:icon="@android:drawable/ic_popup_reminder"
-        android:title="编辑" />
+
     <item
         android:id="@+id/rem_finish"
         android:icon="@android:drawable/presence_away"

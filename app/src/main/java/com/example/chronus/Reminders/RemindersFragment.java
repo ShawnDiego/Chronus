@@ -5,10 +5,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.SimpleAdapter;
@@ -38,10 +41,9 @@ public class RemindersFragment extends Fragment {
     private TextView edit_tv;
     private TextView addlist_tv;
     private TextView delete_tv;
-    private SearchView searchView;
-    private String[] list_name = new String[]{"提醒事项","购物单","任务项","作业","每日提醒计划","电影","书单"};
-    private String[] list_num = new String[]{"2","3","0","2","1","6","9"};
-    private int[] imgIds = new int[]{R.mipmap.lise_icon1, R.mipmap.lise_icon2, R.mipmap.lise_icon3,
+    private ImageView search_iv;
+    private EditText search_et;
+    private Integer[] imgIds = new Integer[]{R.mipmap.lise_icon1, R.mipmap.lise_icon2, R.mipmap.lise_icon3,
             R.mipmap.lise_icon4, R.mipmap.lise_icon5, R.mipmap.lise_icon6,R.mipmap.lise_icon1, R.mipmap.lise_icon2, R.mipmap.lise_icon3};
 
     private int choose_img = R.drawable.radio_unselected;
@@ -52,6 +54,7 @@ public class RemindersFragment extends Fragment {
     public ArrayList<Integer> selseted_num = new ArrayList<Integer>();
     private RelativeLayout.LayoutParams params_lv;//列表高度
     private int lastID = 0;
+    private int Temp_Color;
 
     public RemindersFragment() {
         // Required empty public constructor
@@ -90,9 +93,9 @@ public class RemindersFragment extends Fragment {
         for (int i = 0; i < MainActivity.get_ListCount(); i++) {
             Map<String, Object> showitem = new HashMap<String, Object>();
             showitem.put("list_choose",choose_img);
-            showitem.put("list_img", imgIds[i]);
+            showitem.put("list_img", MainActivity.Show_List_Color_By_ID(MainActivity.ShowLineID_inList(i)));
             showitem.put("list_name", MainActivity.Show_List_name(MainActivity.ShowLineID_inList(i)));
-            showitem.put("list_num", list_num[i]);
+            showitem.put("list_num", MainActivity.Show_List_number(MainActivity.ShowLineID_inList(i)));
             listitem.add(showitem);
         }
         SimpleAdapter myAdapter = new SimpleAdapter(getContext(), listitem, R.layout.layout_listview_a, new String[]{"list_choose","list_img", "list_name", "list_num"},
@@ -106,14 +109,18 @@ public class RemindersFragment extends Fragment {
         listView.setLayoutParams(params_set);
     }
     public void init(){
+        //初始化控件
+        search_iv = view.findViewById(R.id.search_iv);
+        search_et = view.findViewById(R.id.search_et);
+        search_et.clearFocus();
         //列表获取数据
         final List<Map<String, Object>> listitem = new ArrayList<Map<String, Object>>();
         for (int i = 0; i < MainActivity.get_ListCount(); i++) {
             Map<String, Object> showitem = new HashMap<String, Object>();
             showitem.put("list_choose",choose_img);
-            showitem.put("list_img", imgIds[i]);
+            showitem.put("list_img", MainActivity.Show_List_Color_By_ID(MainActivity.ShowLineID_inList(i)));
             showitem.put("list_name", MainActivity.Show_List_name(MainActivity.ShowLineID_inList(i)));
-            showitem.put("list_num", list_num[i]);
+            showitem.put("list_num", MainActivity.Show_List_number(MainActivity.ShowLineID_inList(i)));
             listitem.add(showitem);
         }
         //用来给ID值递增
@@ -135,7 +142,7 @@ public class RemindersFragment extends Fragment {
         lastID = lastID + MainActivity.get_ListCount();
     }
     private void setListener(){
-        searchView = view.findViewById(R.id.edit_search);
+
         //编辑
         edit_tv = view.findViewById(R.id.edit_tv);//编辑 标签
         edit_tv.setOnClickListener(new View.OnClickListener() {
@@ -146,17 +153,15 @@ public class RemindersFragment extends Fragment {
                     delete_tv.setVisibility(View.VISIBLE);
                     edit_tv.getPaint().setFakeBoldText(true);
 
-                    searchView.clearFocus();
-                    searchView.setClickable(false);
-                    searchView.setVisibility(View.INVISIBLE);
+
 
                     final List<Map<String, Object>> listitem = new ArrayList<Map<String, Object>>();
                     for (int i = 0; i < MainActivity.get_ListCount(); i++) {
                         Map<String, Object> showitem = new HashMap<String, Object>();
                         showitem.put("list_choose",choose_img);
-                        showitem.put("list_img", imgIds[i]);
+                        showitem.put("list_img", MainActivity.Show_List_Color_By_ID(MainActivity.ShowLineID_inList(i)));
                         showitem.put("list_name", MainActivity.Show_List_name(MainActivity.ShowLineID_inList(i)));
-                        showitem.put("list_num", list_num[i]);
+                        showitem.put("list_num", MainActivity.Show_List_number(MainActivity.ShowLineID_inList(i)));
                         showitem.put("inf", inf);
                         listitem.add(showitem);
                     }
@@ -174,7 +179,8 @@ public class RemindersFragment extends Fragment {
                                 if(!selseted_num.contains(position)){
                                     selseted_num.add(position);//选中后把当前项加入到队列中
                                     ImageView choose_img = view.findViewById(R.id.choose_img);
-                                    choose_img.setImageResource(R.drawable.radio_selected);
+                                    choose_img.setImageResource(R.drawable.delete);
+                                    Log.d("删除队列",selseted_num.toString());
                                 }else {
                                     selseted_num.remove(position);//从队列中移除
                                     ImageView choose_img = view.findViewById(R.id.choose_img);
@@ -186,7 +192,7 @@ public class RemindersFragment extends Fragment {
                 }else{
                     edit_tv.setText("编辑");
                     delete_tv.setVisibility(View.INVISIBLE);
-                    searchView.setVisibility(View.VISIBLE);
+
                     edit_tv.getPaint().setFakeBoldText(false);
                     selseted_num.clear();
                     onClickListView();
@@ -201,18 +207,37 @@ public class RemindersFragment extends Fragment {
             public void onClick(View v) {
                 //删除列表的数据库
                 //询问确认对话框
-                for(int i=0;i<selseted_num.size();i++){
-                    int id = selseted_num.get(i);
-                    MainActivity.DELETE_LIST(String.valueOf(id));
-                    Log.d("Delete",String.valueOf(id));
-                }
-                edit_tv.setText("编辑");
-                delete_tv.setVisibility(View.INVISIBLE);
-                searchView.setVisibility(View.VISIBLE);
-                edit_tv.getPaint().setFakeBoldText(false);
-                selseted_num.clear();
-                onClickListView();
-                getListView();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                AlertDialog alertDialog = builder
+                        .setTitle("系统提示")
+                        .setMessage("你确定要删除列表吗？")
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int n) {
+
+                            }
+                        })
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int n) {
+                                for(int i=0;i<selseted_num.size();i++){
+                                    int line = selseted_num.get(i);
+                                    MainActivity.DELETE_LIST_By_ID(MainActivity.ShowLineID_inList(line));
+                                    Log.d("Delete",String.valueOf(line));
+                                }
+                                edit_tv.setText("编辑");
+                                delete_tv.setVisibility(View.INVISIBLE);
+
+                                edit_tv.getPaint().setFakeBoldText(false);
+                                selseted_num.clear();
+                                onClickListView();
+                                getListView();
+                            }
+                        }).create();
+                alertDialog.show();
+
+
+
             }
         });
         //添加列表
@@ -221,22 +246,42 @@ public class RemindersFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //弹出添加列表菜单或对话框，对话框里面有写列表名字，选择颜色。
-                final  EditText et = new EditText(getActivity());
+                //final  EditText et = new EditText(getActivity());
+                //final ImageView imageView = new ImageView(getActivity());
 
+                //et.setText("提醒列表");
+                //et.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                //imageView.setImageResource(R.mipmap.lise_icon1);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("新建列表");
-                builder.setView(et);
+
+                final View add_view = LayoutInflater.from(getActivity()).inflate(R.layout.reminder_add_layout,null,false);
+                builder.setView(add_view);
+                final EditText et = add_view.findViewById(R.id.add_et);
+                final ImageView imageView = add_view.findViewById(R.id.add_im);
+                RadioGroup group = add_view.findViewById(R.id.add_rbg);
+                Temp_Color = 0;
+                group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        Integer id_rb[] = new Integer[]{R.id.rb1,R.id.rb2,R.id.rb3,R.id.rb4,R.id.rb5,R.id.rb6};
+                        for(int i = 0;i<id_rb.length;i++){
+                            if(checkedId == id_rb[i]){
+                                Temp_Color = i;
+                                imageView.setImageResource(imgIds[i]);
+
+                            }
+                        }
+                    }
+                });
+                        //builder.setView(imageView);
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
                         //Integer list_id_number = List_ID_number+1;
                         Integer list_id_number = ++lastID;
-                        Log.d("id:",String.valueOf(list_id_number));
-                        //数据获取
-                        Toast.makeText(getActivity(), et.getText().toString(), Toast.LENGTH_LONG).show();
                         //添加列表的数据库
-
-                        MainActivity.INSERT_List(list_id_number.toString(),et.getText().toString(),"0","0" );
+                        MainActivity.INSERT_List(list_id_number.toString(),et.getText().toString(),imgIds[Temp_Color].toString(),"0" );
                         Toast.makeText(getActivity(), "成功新建列表 "+et.getText().toString(), Toast.LENGTH_LONG).show();
                         //列表刷新
                         getListView();
@@ -245,7 +290,7 @@ public class RemindersFragment extends Fragment {
                 builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getActivity(), "取消新建列表", Toast.LENGTH_SHORT).show();
+
                     }
                 });
 
@@ -285,17 +330,50 @@ public class RemindersFragment extends Fragment {
                 return true;
             }
         });
+        //搜索 区域被点击
+        search_et.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                search_et.setText("");
+                search_et.setTextColor(Color.parseColor("#000000"));
+            }
+        });
+        search_et.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                search_et.setText("");
+                search_et.setTextColor(Color.parseColor("#000000"));
+            }
+        });
+        search_et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+
+                if (null != keyEvent && KeyEvent.KEYCODE_ENTER == keyEvent.getKeyCode()) {
+                    switch (keyEvent.getAction()) {
+                        case KeyEvent.ACTION_UP:
+                            //开始搜索
+                            Log.d("key","search");
+                            Intent intent = new Intent(getContext(), ReminderItemsActivity.class);
+                            startActivity(intent);
+                            return true;
+                        default:
+                            return true;
+                    }
+                }
+
+                return false;
+            }
+        });
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //解决返回activity弹出键盘
-        RelativeLayout searcg_ll = view.findViewById(R.id.search_ll);
-        searcg_ll.setFocusable(true);
-        searcg_ll.setFocusableInTouchMode(true);
-        searcg_ll.requestFocus();
+
+        //列表刷新 解决从事项列表添加事项后返回提醒列表时数量统计的刷新问题
+        getListView();
     }
 
 
@@ -320,12 +398,12 @@ public class RemindersFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View v, int position, long l) {
                 mCallback.onEventsSelected(position);
-                TextView edit_tv = view.findViewById(R.id.edit_tv);
+                edit_tv = view.findViewById(R.id.edit_tv);
                 if(edit_tv.getText().equals("编辑")){
                     Intent intent = new Intent(getContext(), ReminderItemsActivity.class);
 
-                    intent.putExtra("Line", MainActivity.Show_List_name(MainActivity.ShowLineID(position)));
-
+                    intent.putExtra("Line", MainActivity.Show_List_name(MainActivity.ShowLineID_inList(position)));
+                    intent.putExtra("ListId",MainActivity.ShowLineID_inList(position));
                     TextView tv_back = view.findViewById(R.id.item_back);
                     startActivity(intent);
                 }

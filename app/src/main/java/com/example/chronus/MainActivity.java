@@ -113,18 +113,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mFragments.add(ViewFragment.newInstance("时间轴"));//Fragment的名字都要修改
         mFragments.add(TomatoFragment.newInstance("番茄"));
         mFragments.add(SettingFragment.newInstance("设置"));
-
-
-        mAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragments);
-        mViewPager.setAdapter(mAdapter);
-
-        // register listener
-        mViewPager.addOnPageChangeListener(mPageChangeListener);
         iv_cal = findViewById(R.id.calendar_tab);
         iv_rem = findViewById(R.id.remainder_tab);
         iv_timeline = findViewById(R.id.timeline_tab);
         iv_tom = findViewById(R.id.tomato_tab);
         iv_set = findViewById(R.id.settings_tab);
+
+        mAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragments);
+        mViewPager.setAdapter(mAdapter);
+        //默认选择 提醒事项
+        mViewPager.setCurrentItem(1);
+        iv_rem.setImageResource(R.drawable.lightbulb_fill);
+        // register listener
+        mViewPager.addOnPageChangeListener(mPageChangeListener);
+
 
         findViewById(R.id.calendar_tab).setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -218,37 +220,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void onPageScrollStateChanged(int state) {
-            if(state == 2){
 
-                switch (mViewPager.getCurrentItem()) {
-                    case 0:
-                        chooseTab=1;
-                        //设置图标高亮
-                        break;
-                    case 1:
-                        chooseTab=2;
-                        //设置图标高亮
-                        break;
-                    case 2:
-                        chooseTab=3;
-                        //设置图标高亮
-                        break;
-                    case 3:
-                        chooseTab=4;
-                        //设置图标高亮
-                        break;
-                    case 4:
-                        chooseTab=5;
-                        //设置图标高亮
-                        iv_set.setImageResource(R.drawable.setting);
-                        iv_cal.setImageResource(R.drawable.cal_1);
-                        // iv_rem.setImageResource(R.drawable.setting);
-                        //iv_timeline.setImageResource(R.drawable.setting);
-                        // iv_tom.setImageResource(R.drawable.setting);
-                       break;
-                }
-
-            }
         }
     };
 
@@ -266,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         private void init() {
             // 最重要的设置，将viewpager翻转
-            setPageTransformer(true, new VerticalPageTransformer());
+            //setPageTransformer(true, new VerticalPageTransformer());
             // 设置去掉滑到最左或最右时的滑动效果
             setOverScrollMode(OVER_SCROLL_NEVER);
         }
@@ -321,9 +293,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public boolean onTouchEvent(MotionEvent ev) {
+
             return super.onTouchEvent(swapXY(ev));
         }
     }
+
 
     private class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -491,10 +465,11 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
 
     }
     //在类型中根据行数查询每一条的TITLE
-    public  static String ShowLineTitle_In_Type(int i,String type) {
+    public  static String ShowLineTitle_In_Type(int i,String type,String T) {
         StringBuilder title = new StringBuilder();
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM Remind_List WHERE Type = ?", new String[]{type});
+        Cursor cursor = db.rawQuery
+                ("SELECT * FROM Remind_List WHERE Type =? AND Checked=?", new String[]{type,T});
 
 
         if (cursor.getCount() <= 0) {
@@ -539,10 +514,10 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
     }
 
     //判断数据库里相应类型下的条目数
-    public static int getCount_By_Type(String type)
+    public static int getCount_By_Type(String type,String T)
     {
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
-        Cursor cursor =  db.rawQuery("SELECT COUNT (*) FROM Remind_List WHERE Type=?",new String[]{type});
+        Cursor cursor =  db.rawQuery("SELECT COUNT (*) FROM Remind_List WHERE Type=? AND Checked=?",new String[]{type,T});
         cursor.moveToFirst();
         int result = cursor.getInt(0);
         cursor.close();
@@ -671,5 +646,55 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
         db.execSQL("UPDATE List SET name =?  WHERE ID = ?",
                 new String[]{name,id});
     }
+    //每当添加新事项时，相应类型的列表数据库中的事项数就会加1
+    public static void Increase_List_Number(String type)
+    {
+        String number_before;
+        SQLiteDatabase db1 = mDBHelper.getReadableDatabase();
+        Cursor cursor = db1.rawQuery("SELECT * FROM List WHERE name = ?",
+                new String[]{type});//先提取之前的数据再递增
+        if (cursor.moveToFirst()) {
+            number_before = cursor.getString(cursor.getColumnIndex("number"));
 
+            cursor.close();
+
+        } else {
+            number_before = "0";
+            cursor.close();
+
+        }
+        db1.close();
+        Integer i = Integer.parseInt(number_before);
+        i++;
+        SQLiteDatabase db2 = mDBHelper.getWritableDatabase();
+        db2.execSQL("UPDATE List SET number =?  WHERE name = ?",
+                new String[]{i.toString(),type});
+    }
+    //根据ID查询列表的条目前面的图标的颜色
+    public static int Show_List_Color_By_ID(String id)
+    {
+        String color;
+        SQLiteDatabase db =mDBHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM List WHERE ID =?", new String[]{id});
+        if (cursor.moveToFirst()) {
+            color = cursor.getString(cursor.getColumnIndex("icon_color"));
+
+            cursor.close();
+            return  Integer.parseInt(color);
+        } else {
+            cursor.close();
+            return 0;
+        }
+    }
+
+    //删除列表和对应的事项数据
+    public static void DELETE_LIST_By_ID(String id) {
+        //删除列表和列表里面的值
+        //注意这里有顺序问题，要先删除事项的数据，再删除列表数据，不然无法从对应的类型名找到对应的事项
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        db.execSQL("DELETE FROM Remind_List WHERE Type = ?", new String[]{Show_List_name(id)});
+
+        db.execSQL("DELETE FROM List WHERE ID = ?", new String[]{id});
+
+    }
 }

@@ -29,10 +29,10 @@ public class SQDB extends SQLiteOpenHelper {
     @Override
     //初始化创建TABLE
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE Remind_List( Type CHAR(10), ID String PRIMARY KEY, TITLE String,DAY String ,Content CHAR(20))");
+        db.execSQL("CREATE TABLE Remind_List( Type CHAR(10), ID String PRIMARY KEY, " +
+                "TITLE String,DAY String ,Content CHAR(20),Checked String)");
         db.execSQL("CREATE TABLE List( ID String PRIMARY KEY ,name String  ,icon_color String ,number String)");
-        // db.execSQL("CREATE TABLE Shopping_List( DAY DATE PRIMARY KEY ,content CHAR(20))");
-
+        // 如果事项已完成，则Checked一项值为“1”，未完成默认为“0”
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

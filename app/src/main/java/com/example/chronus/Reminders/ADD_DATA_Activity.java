@@ -104,6 +104,7 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
         if(!title.equals("")){
             //将信息写入数据库
             MainActivity.INSERT(type,id,title,content,Alerttime);
+            MainActivity.Increase_List_Number(type);//相应类型事项数增加
             this.finish();
         }else{
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
@@ -151,9 +152,6 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
         tvTime = (TextView) findViewById(R.id.tv_time);//时间
         llDate.setOnClickListener(this);
         llTime.setOnClickListener(this);
-        EditText editText1 = (EditText)findViewById(R.id.ADDID) ;
-        Integer tem = number+1;
-        editText1.setText(tem.toString());
         tvDate.setText("点击添加时间");
         tvDate.setTextColor(Color.parseColor("#A4A2A4"));
         tvTime.setText("点击添加时间");
