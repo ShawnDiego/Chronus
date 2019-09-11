@@ -41,7 +41,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
     RelativeLayout mRelativeTool;
     static Activity activity;
     private static int mYear,mMonth,mDay;
-    static  List<Calendar> schemes= new ArrayList<>();;
+    private   List<Calendar> schemes= new ArrayList<>();
     //删除日程的起止范围
     private static int first,last;
     private int mHour;
@@ -68,7 +68,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+         activity=getActivity();
     }
 
     @Nullable
@@ -82,33 +82,19 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         mRelativeTool =  view.findViewById(R.id.rl_tool);
         mCalendarView = view. findViewById(R.id.calendarView);
         mTextCurrentDay = view.findViewById(R.id.tv_current_day);
-        mTextMonthDay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!mCalendarLayout.isExpand()) {
-                    mCalendarView.showYearSelectLayout(mYear);
-                    return;
-                }
-                mCalendarView.showYearSelectLayout(mYear);
-                mTextLunar.setVisibility(View.GONE);
-                mTextYear.setVisibility(View.GONE);
-                mTextMonthDay.setText(String.valueOf(mYear));
-            }
-        });
+        mCalendarLayout =view. findViewById(R.id.calendarLayout);
+
+        //给显示当日图标添加点击事件
         view.findViewById(R.id.fl_current).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mCalendarView.isYearSelectLayoutVisible()) {
+                    mCalendarView.closeYearSelectLayout();
+                    Toast.makeText( activity,"切换到月视图",Toast.LENGTH_SHORT ).show();
+                }
                 mCalendarView.scrollToCurrent();
             }
         });
-        mCalendarLayout =view. findViewById(R.id.calendarLayout);
-        mCalendarView.setOnDateSelectedListener(this);
-        mCalendarView.setOnYearChangeListener(this);
-        mTextYear.setText(String.valueOf(mCalendarView.getCurYear()));
-        mYear = mCalendarView.getCurYear();
-        mTextMonthDay.setText(mCalendarView.getCurMonth() + "月" + mCalendarView.getCurDay() + "日");
-        mTextLunar.setText("今日");
-        mTextCurrentDay.setText(String.valueOf(mCalendarView.getCurDay()));
 
 
        //获取按钮ID
@@ -231,7 +217,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
             @Override
             public void onClick(View v) {
                 //获取触发事件的activity
-                activity=getActivity();
+//                activity=getActivity();
                 //弹出新建事项activity
                 Button btn=(Button) v;
                 if(isAdd( btn )){
@@ -310,7 +296,6 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         line22=view.findViewById( R.id.ul_22 );
         line23=view.findViewById( R.id.ul_23 );
 
-
         initView();
         initData();
         return view;
@@ -325,14 +310,17 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         mTextMonthDay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (!mCalendarLayout.isExpand()) {
-                    mCalendarView.showYearSelectLayout(mYear);
-                    return;
+                    mCalendarView.showYearSelectLayout( mYear );
                 }
-                mCalendarView.showYearSelectLayout(mYear);
-                mTextLunar.setVisibility(View.GONE);
-                mTextYear.setVisibility(View.GONE);
-                mTextMonthDay.setText(String.valueOf(mYear));
+                mCalendarView.showYearSelectLayout( mYear );
+                mTextLunar.setVisibility( View.GONE );
+                mTextYear.setVisibility( View.GONE );
+                mTextMonthDay.setText( String.valueOf( mYear ) );
+                if(!mCalendarView.isYearSelectLayoutVisible()){
+                Toast.makeText( activity, "切换到年视图", Toast.LENGTH_SHORT ).show();
+                }
             }
         });
 
@@ -346,16 +334,16 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         mTextCurrentDay.setText(String.valueOf(mCalendarView.getCurDay()));
     }
 
-    private Calendar getSchemeCalendar(int year, int month, int day, int color, String text) {
+    private Calendar getSchemeCalendar(int year, int month, int day, int color,String text) {
         Calendar calendar = new Calendar();
         calendar.setYear(year);
         calendar.setMonth(month);
         calendar.setDay(day);
         calendar.setSchemeColor(color);//如果单独标记颜色、则会使用这个颜色
-        calendar.setScheme(text);
-        calendar.addScheme(new Calendar.Scheme());
-        calendar.addScheme(0xFF008800, "假");
-        calendar.addScheme(0xFF008800, "节");
+        calendar.setScheme( text );
+//        calendar.addScheme(new Calendar.Scheme());
+//        calendar.addScheme(0xFF008800, null);
+//        calendar.addScheme(0xFF008800, null);
         return calendar;
     }
 
@@ -408,14 +396,21 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
               //将建立好的事项在btn上显示
               Log.w(ARG_SHOW_TEXT,"警告信息");
               getBtn(start).setText( title );
+              //给btn设置背景颜色
               for(int i=start;i<end;i++){
-                  getBtn( i ).setBackgroundResource( R.drawable.bg_general);
+                  setBgColor( getBtn( i ),item );
                   getBtn( i ).setEnabled( false );
                }
+              //若事项包含多个按钮，使内部下划线跟按钮颜色同步
+               for(int i=start;i<end-1;i++)
+               {
+                   setBgColor( getView( i ),item );
+               }
+               //使显示文字的按钮失去聚焦功能
                getBtn( start ).setEnabled( true );
                getBtn( start ).setFocusable( false );
                setUnderLine();
-               addMark( item );
+               addMark(  );
                Toast.makeText( activity,"建立成功",Toast.LENGTH_SHORT).show();
         }}
 
@@ -429,8 +424,12 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
                    getBtn( i ).setEnabled( true );
                    getBtn( i ).setBackgroundResource( R.drawable.bg_btn );
                }
+               for(int i=first;i<last-1;i++){
+                  getView( i ).setBackgroundResource( R.drawable.bg_underline );
+               }
                deleteUnderLine();
                deleteMark();
+               Toast.makeText( activity,"删除成功",Toast.LENGTH_SHORT).show();
            }
             //更新日程
            if(resultCode==-1){
@@ -502,12 +501,12 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
               case 20: return line21;
               case 21: return line22;
               case 22: return line23;
+
           }
           return null;
       }
     public boolean isAdd(Button btn){
-        if(btn.getText().toString().equals( "+新建日程" )) return  true;
-        else  return false;
+        return btn.getText().toString().equals( "+新建日程" );
     }
 
     public int rangFirst(Button btn){
@@ -550,22 +549,22 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
     }
 
     //为事项增添标记
-    protected void addMark(int str) {
-
-        switch (str){
-            case 0: schemes.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFF40db25, "议"));break;
-            case 1: schemes.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFFe69138, "假"));break;
-            case 2: schemes.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFFdf1356, "事"));break;
-            case 3: schemes.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFFaacc44, "记"));break;
-            case 4: schemes.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFFbc13f0, "影"));break;
-            case 5: schemes.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFF13acf0, "阅"));break;
-        }
+    protected void addMark() {
+            schemes.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFFFF7F00," "));
+//        switch (str){
+//            case 0: schemes.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFF40db25, "议"));break;
+//            case 1: schemes.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFFe69138, "假"));break;
+//            case 2: schemes.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFFdf1356, "事"));break;
+//            case 3: schemes.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFFaacc44, "记"));break;
+//            case 4: schemes.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFFbc13f0, "影"));break;
+//            case 5: schemes.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFF13acf0, "阅"));break;
+//        }
         mCalendarView.setSchemeDate(schemes);
     }
 
     //事项消失标记消失
     protected void deleteMark() {
-           schemes.remove(getSchemeCalendar(mYear, mMonth, mDay, 0xFF40db25, "议"));
+           schemes.remove(getSchemeCalendar(mYear, mMonth, mDay, 0xFFFF7F00," "));
            mCalendarView.setSchemeDate(schemes);
     }
 
@@ -604,6 +603,19 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
              getView( last-1 ).setBackgroundResource( R.drawable.bg_underline );
          }
      }
+
+    public void setBgColor(View view,int i){
+        switch (i){
+            case 0: view.setBackgroundResource( R.drawable.bg_red );break;
+            case 1: view.setBackgroundResource( R.drawable.bg_yellow );break;
+            case 2: view.setBackgroundResource( R.drawable.bg_orange );break;
+            case 3: view.setBackgroundResource( R.drawable.bg_green);break;
+            case 4: view.setBackgroundResource( R.drawable.bg_blue );break;
+            case 5: view.setBackgroundResource( R.drawable.bg_purper );break;
+            case 6: view.setBackgroundResource( R.drawable.bg_grey );break;
+        }
+   }
+
 
 
     @SuppressLint("SetTextI18n")

@@ -30,6 +30,15 @@
         <item name="d">电影</item>
         <item name="d">阅读</item>
     </string-array>
+    <string-array name="general_color">
+        <item>红色</item>
+        <item>黄色</item>
+        <item>橙色</item>
+        <item>绿色</item>
+        <item>浅蓝色</item>
+        <item>紫色</item>
+        <item>灰色</item>
+    </string-array>
     <string-array name="hour">
         <item>00:00</item>
         <item>01:00</item>

@@ -44,7 +44,7 @@ public class Add_General_Activity extends AppCompatActivity implements View.OnCl
         begin=findViewById(R.id.tv_begin);
         end=findViewById(R.id.tv_end);
         spinner=findViewById(R.id.sp_end);
-        spinner1=findViewById(R.id.sp_general);
+        spinner1=findViewById(R.id.sp_color);
         spinner.setOnItemSelectedListener(this);
         spinner1.setOnItemSelectedListener(this);
         close.setOnClickListener(this);
@@ -113,13 +113,26 @@ public class Add_General_Activity extends AppCompatActivity implements View.OnCl
                 spinner.setSelection(hour+1);
                else hour1=i;
             }
-             if(adapterView.getId()==R.id.sp_general){
+             if(adapterView.getId()==R.id.sp_color){
                  item=i;
+                 setBgColor( view,i );
             }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    public void setBgColor(View view,int i){
+        switch (i){
+            case 0: view.setBackgroundResource( R.drawable.bg_red );break;
+            case 1: view.setBackgroundResource( R.drawable.bg_yellow );break;
+            case 2: view.setBackgroundResource( R.drawable.bg_orange );break;
+            case 3: view.setBackgroundResource( R.drawable.bg_green);break;
+            case 4: view.setBackgroundResource( R.drawable.bg_blue );break;
+            case 5: view.setBackgroundResource( R.drawable.bg_purper );break;
+            case 6: view.setBackgroundResource( R.drawable.bg_grey );break;
+        }
     }
 }
