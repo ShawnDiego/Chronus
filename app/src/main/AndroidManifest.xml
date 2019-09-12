@@ -16,13 +16,15 @@
         <activity android:name=".Reminders.Update_DATA_Activity" />
         <activity android:name=".Reminders.ADD_DATA_Activity" />
         <activity android:name=".Reminders.ReminderItemsActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"/>
+        <activity android:name=".TransitionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
         <service android:name=".AlarmNotification.AlarmService" >
         </service>
         <receiver android:name=".AlarmNotification.AlarmReceiver" >

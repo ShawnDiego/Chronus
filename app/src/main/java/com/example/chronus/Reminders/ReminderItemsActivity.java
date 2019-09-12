@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -49,7 +50,7 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
     private int seleted_img = R.drawable.radio_selected;
     private ImageView mPopupMenu;
     public static String get_Type;
-    public int ListId;
+    public String ListId;
 
     @Override
     public void setContentView(View view) {
@@ -64,6 +65,8 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
         //进入全屏
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+
         Transition slide = TransitionInflater.from(this).inflateTransition(R.transition.slide);
         getWindow().setEnterTransition(slide);
         setContentView(R.layout.layout_reminders_item);
@@ -71,7 +74,7 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
         //获取传递过来的事项类型
         Intent intent = getIntent();
         get_Type = intent.getStringExtra("Line");
-        ListId = intent.getIntExtra("ListId",0);
+        ListId = intent.getStringExtra("ListId");
         //将事项类型显示到页面上方
         TextView textView =(TextView)findViewById(R.id.item_list_name);
         textView.setText(get_Type);
@@ -150,6 +153,10 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
         ListView listView = (ListView) findViewById(R.id.item_list);
         listView.setAdapter(myAdapter);
     }
+    private void get_Item(){
+        //Type,ID,TITLE,DAY,Content,Checked
+
+    }
     private void init() {
         List<Map<String, Object>> listitem = new ArrayList<Map<String, Object>>();
         for (int i = 0; i < MainActivity.getCount_By_Type(get_Type,"0"); i++) {
@@ -190,6 +197,7 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
                     Log.d("id",Integer.toString(MainActivity.getCount()));
                     Intent intent = new Intent(context, ADD_DATA_Activity.class);
                     intent.putExtra("number",number);
+                    intent.putExtra("type", get_Type);
                     startActivity(intent);
                 } else if(sel_img.getTag().toString().equals("1") || checked[i] == 1){
                     sel_img.setImageResource(imgIds);
@@ -212,11 +220,17 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
                     //弹出事件详情
                     Log.d("Scroll", "当前长按" + i);
                     //跳转到事件详情activity
-                    Intent intent = new Intent(context, Item_tosee.class);
+                    //Intent intent = new Intent(context, Item_tosee.class);
                     //根据所长按的索引的序列号也就是数据库中的第几行，找到对应的ID
-                    MainActivity.Line = i;
-                    MainActivity.type = get_Type;
+                    //MainActivity.Line = i;
+                    //MainActivity.type = get_Type;
                     //intent.putExtra("Number", i);
+                   // startActivity(intent);
+
+                    MainActivity.Edit_ID = MainActivity.ShowLineID(MainActivity.Line);
+                    Intent intent = new Intent(getApplicationContext(), Update_DATA_Activity.class);
+
+
                     startActivity(intent);
                 }
 
@@ -236,7 +250,20 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MediaPlayer mMediaPlayer;
+                mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.confirm_down);
+                mMediaPlayer.start();
                 finish();
+
+            }
+        });
+        ImageView img = findViewById(R.id.imageView);
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                finish();
+
             }
         });
 
@@ -272,8 +299,11 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int n) {
                                             //获取列表id，准备开始删除
-                                            MainActivity.DELETE_LIST_By_ID(MainActivity.ShowLineID_inList(ListId));
-                                            Log.d("delete list id", Integer.toString(ListId));
+                                            MainActivity.DELETE_LIST_By_ID(ListId);
+                                            Log.d("delete list id",ListId);
+                                            MediaPlayer mMediaPlayer;
+                                            mMediaPlayer =  MediaPlayer.create(context,R.raw.delete);
+                                            mMediaPlayer.start();
                                             finish();
                                         }
                                     }).create();

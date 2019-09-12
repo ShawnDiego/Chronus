@@ -9,17 +9,28 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class SQDB extends SQLiteOpenHelper {
+    private static final String DB_NAME = "test_demo.db";//数据库文件名
+    private static SQLiteDatabase INSTANCE;
+    private Context mContext;
 
-
-
-    SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
-    Date date = new Date();
 
     public SQDB(Context context) {
-        super(context, "SQ.db", null, 1);
+        //super(context, "SQ.db", null, 1);
+        super(context, DB_NAME, null, 1);
+        this.mContext=context;
     }
 
+    public SQLiteDatabase getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new SQDB(mContext).getWritableDatabase();
+        }
+        return INSTANCE;
+    }
 
+    /**获取数据库路径**/
+    public String getDBPath(){
+        return mContext.getDatabasePath(DB_NAME).getPath();
+    }
 
 
     // public SQDB(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.RequiresApi;
@@ -123,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mViewPager.setAdapter(mAdapter);
         //默认选择 提醒事项
         mViewPager.setCurrentItem(1);
-        iv_rem.setImageResource(R.drawable.lightbulb_fill);
+        iv_rem.setImageResource(R.drawable.reminderbar_fill);
         // register listener
         mViewPager.addOnPageChangeListener(mPageChangeListener);
 
@@ -136,9 +137,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mViewPager.setCurrentItem(0,false);
                 iv_set.setImageResource(R.drawable.set);
                 iv_cal.setImageResource(R.drawable.calendar_fill);
-                iv_rem.setImageResource(R.drawable.lightbulb);
+                iv_rem.setImageResource(R.drawable.reminderbar);
                 //iv_timeline.setImageResource(R.drawable.setting);
                 iv_tom.setImageResource(R.drawable.clock);
+                iv_cal.setPadding((int)(iv_cal.getPaddingLeft()*0.8),(int)(iv_cal.getPaddingStart()*0.8),(int)(iv_cal.getPaddingRight()*0.8),(int)(iv_cal.getPaddingEnd()*0.8));
+                new Handler().postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        iv_cal.setPadding(iv_rem.getPaddingLeft(),iv_rem.getPaddingTop(),iv_rem.getPaddingRight(),iv_rem.getPaddingBottom());
+                        }
+
+                }, 150);
+
+                MediaPlayer mMediaPlayer;
+                mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.navigation_forward_selection);
+                mMediaPlayer.start();
 
             }
         });
@@ -150,10 +164,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 chooseTab=3;
                 iv_set.setImageResource(R.drawable.set);
                 iv_cal.setImageResource(R.drawable.calendar);
-                iv_rem.setImageResource(R.drawable.lightbulb);
+                iv_rem.setImageResource(R.drawable.reminderbar);
                 //iv_timeline.setImageResource(R.drawable.setting);
                 iv_tom.setImageResource(R.drawable.clock);
-                return;
+                MediaPlayer mMediaPlayer;
+                mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.navigation_forward_selection);
+                mMediaPlayer.start();
             }
         });
 
@@ -164,10 +180,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mViewPager.setCurrentItem(1,false);
                 iv_set.setImageResource(R.drawable.set);
                 iv_cal.setImageResource(R.drawable.calendar);
-                iv_rem.setImageResource(R.drawable.lightbulb_fill);
+                iv_rem.setImageResource(R.drawable.reminderbar_fill);
                 //iv_timeline.setImageResource(R.drawable.setting);
                 iv_tom.setImageResource(R.drawable.clock);
+                iv_rem.setPadding((int)(iv_cal.getPaddingLeft()*0.8),(int)(iv_cal.getPaddingStart()*0.8),(int)(iv_cal.getPaddingRight()*0.8),(int)(iv_cal.getPaddingEnd()*0.8));
+                new Handler().postDelayed(new Runnable() {
 
+                    @Override
+                    public void run() {
+                        iv_rem.setPadding(iv_cal.getPaddingLeft(),iv_cal.getPaddingTop(),iv_cal.getPaddingRight(),iv_cal.getPaddingBottom());
+                    }
+
+                }, 150);
+                MediaPlayer mMediaPlayer;
+                mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.navigation_forward_selection);
+                mMediaPlayer.start();
             }
         });
         findViewById(R.id.tomato_tab).setOnClickListener(new View.OnClickListener() {
@@ -177,10 +204,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mViewPager.setCurrentItem(3,false);
                 iv_set.setImageResource(R.drawable.set);
                 iv_cal.setImageResource(R.drawable.calendar);
-                iv_rem.setImageResource(R.drawable.lightbulb);
+                iv_rem.setImageResource(R.drawable.reminderbar);
                 //iv_timeline.setImageResource(R.drawable.setting);
                 iv_tom.setImageResource(R.drawable.clock_fill);
+                iv_tom.setPadding((int)(iv_cal.getPaddingLeft()*0.8),(int)(iv_cal.getPaddingStart()*0.8),(int)(iv_cal.getPaddingRight()*0.8),(int)(iv_cal.getPaddingEnd()*0.8));
+                new Handler().postDelayed(new Runnable() {
 
+                    @Override
+                    public void run() {
+                        iv_tom.setPadding(iv_cal.getPaddingLeft(),iv_cal.getPaddingTop(),iv_cal.getPaddingRight(),iv_cal.getPaddingBottom());
+                    }
+
+                }, 150);
+                MediaPlayer mMediaPlayer;
+                mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.navigation_forward_selection);
+                mMediaPlayer.start();
 
             }
         });
@@ -191,11 +229,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mViewPager.setCurrentItem(4,false);
                 iv_set.setImageResource(R.drawable.set_fill);
                 iv_cal.setImageResource(R.drawable.calendar);
-               iv_rem.setImageResource(R.drawable.lightbulb);
+               iv_rem.setImageResource(R.drawable.reminderbar);
                 //iv_timeline.setImageResource(R.drawable.setting);
                iv_tom.setImageResource(R.drawable.clock);
-               
-               
+                iv_set.setPadding((int)(iv_cal.getPaddingLeft()*0.8),(int)(iv_cal.getPaddingStart()*0.8),(int)(iv_cal.getPaddingRight()*0.8),(int)(iv_cal.getPaddingEnd()*0.8));
+                new Handler().postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        iv_set.setPadding(iv_cal.getPaddingLeft(),iv_cal.getPaddingTop(),iv_cal.getPaddingRight(),iv_cal.getPaddingBottom());
+                    }
+
+                }, 150);
+                MediaPlayer mMediaPlayer;
+                mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.navigation_forward_selection);
+                mMediaPlayer.start();
 
             }
         });
@@ -367,8 +415,8 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
 
         SQLiteDatabase db = mDBHelper.getWritableDatabase();//获取可写数据库实例
 
-        db.execSQL("INSERT INTO Remind_List(Type,ID,TITLE,DAY,Content) values(?,?,?,?,?)",
-                new String[]{type, id,title,time,m,});
+        db.execSQL("INSERT INTO Remind_List(Type,ID,TITLE,DAY,Content,Checked) values(?,?,?,?,?,?)",
+                new String[]{type, id,title,time,m,"0"});
 
     }
 

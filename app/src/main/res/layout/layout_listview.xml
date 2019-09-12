@@ -16,12 +16,12 @@
 
             <ImageView
                 android:id="@+id/choose_img"
-                android:layout_width="32dp"
-                android:layout_height="35dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
                 android:baselineAlignBottom="true"
-                android:paddingLeft="8dp"
                 android:visibility="visible"
                 app:srcCompat="@drawable/radio_unselected"
                 tools:srcCompat="@drawable/radio_unselected"

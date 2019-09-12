@@ -6,7 +6,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.TypedValue;
@@ -180,11 +183,14 @@ public class RemindersFragment extends Fragment {
                                     selseted_num.add(position);//选中后把当前项加入到队列中
                                     ImageView choose_img = view.findViewById(R.id.choose_img);
                                     choose_img.setImageResource(R.drawable.delete);
+                                    choose_img.setPadding(5,5,5,5);
                                     Log.d("删除队列",selseted_num.toString());
                                 }else {
-                                    selseted_num.remove(position);//从队列中移除
+                                    selseted_num.remove(selseted_num.indexOf(position));
+                                    //从队列中移除
                                     ImageView choose_img = view.findViewById(R.id.choose_img);
                                     choose_img.setImageResource(R.drawable.radio_unselected);
+                                    choose_img.setPadding(0,0,0,0);
                                 }
                             }
                         }
@@ -220,18 +226,37 @@ public class RemindersFragment extends Fragment {
                         .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int n) {
-                                for(int i=0;i<selseted_num.size();i++){
-                                    int line = selseted_num.get(i);
-                                    MainActivity.DELETE_LIST_By_ID(MainActivity.ShowLineID_inList(line));
-                                    Log.d("Delete",String.valueOf(line));
-                                }
-                                edit_tv.setText("编辑");
-                                delete_tv.setVisibility(View.INVISIBLE);
+                                if(selseted_num.isEmpty()){
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                    AlertDialog alertDialog = builder
+                                            .setTitle("系统提示")
+                                            .setMessage("没有选择要删除的列表")
+                                            .setNegativeButton("确认", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int n) {
 
-                                edit_tv.getPaint().setFakeBoldText(false);
-                                selseted_num.clear();
-                                onClickListView();
-                                getListView();
+                                                }
+                                            }).create();
+                                    alertDialog.show();
+                                }else {
+                                    MediaPlayer mMediaPlayer;
+                                    mMediaPlayer =  MediaPlayer.create(getContext(),R.raw.delete);
+                                    mMediaPlayer.start();
+                                    for(int i=(selseted_num.size()-1);i>=0;i--){
+                                        int line = selseted_num.get(i);
+                                        MainActivity.DELETE_LIST_By_ID(MainActivity.ShowLineID_inList(line));
+                                        Log.d("Delete",String.valueOf(line));
+                                    }
+                                    edit_tv.setText("编辑");
+                                    delete_tv.setVisibility(View.INVISIBLE);
+
+                                    edit_tv.getPaint().setFakeBoldText(false);
+                                    selseted_num.clear();
+                                    onClickListView();
+                                    getListView();
+
+                                }
+
                             }
                         }).create();
                 alertDialog.show();
@@ -278,6 +303,9 @@ public class RemindersFragment extends Fragment {
                 builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
+                        MediaPlayer mMediaPlayer;
+                        mMediaPlayer =  MediaPlayer.create(getContext(),R.raw.confirm_up);
+                        mMediaPlayer.start();
                         //Integer list_id_number = List_ID_number+1;
                         Integer list_id_number = ++lastID;
                         //添加列表的数据库
@@ -316,6 +344,9 @@ public class RemindersFragment extends Fragment {
                         Toast.makeText(getActivity(), et.getText().toString(), Toast.LENGTH_LONG).show();
                         //修改列表的数据库
                         Toast.makeText(getActivity(), "成功修改列表 "+et.getText().toString(), Toast.LENGTH_LONG).show();
+                        MediaPlayer mMediaPlayer;
+                        mMediaPlayer =  MediaPlayer.create(getContext(),R.raw.confirm_up);
+                        mMediaPlayer.start();
                     }
                 });
                 builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -401,7 +432,6 @@ public class RemindersFragment extends Fragment {
                 edit_tv = view.findViewById(R.id.edit_tv);
                 if(edit_tv.getText().equals("编辑")){
                     Intent intent = new Intent(getContext(), ReminderItemsActivity.class);
-
                     intent.putExtra("Line", MainActivity.Show_List_name(MainActivity.ShowLineID_inList(position)));
                     intent.putExtra("ListId",MainActivity.ShowLineID_inList(position));
                     TextView tv_back = view.findViewById(R.id.item_back);

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
@@ -41,7 +42,7 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
     private Integer year, month, day, hour, minute;
     //创建两个StringBuffer变量，用于拼接获取到的时间数据。
     private StringBuffer date, time;
-
+    private String pre_type;
     private Context context;
     private RelativeLayout llDate, llTime;
     private TextView tvDate, tvTime;
@@ -56,9 +57,11 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+
         setContentView(R.layout.activity_toadd);
         Intent intent = getIntent();//获取Intent对象
         number = intent.getIntExtra("number",0);
+        pre_type =intent.getStringExtra("type");
         context = this;
         date = new StringBuffer();
         time = new StringBuffer();
@@ -68,12 +71,17 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
     }
 
     public void Store(View view){
+        MediaPlayer mMediaPlayer;
+        mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.confirm_up);
+        mMediaPlayer.start();
+
+
         //找到所有控件
         EditText editText = (EditText ) findViewById(R.id.ADDContent);
         EditText editText2 = (EditText) findViewById(R.id.AddTitle);
-        Spinner  spinner = (Spinner) findViewById(R.id.ADDType);
-        //从控件获取输入信息
-        String type = String.valueOf(spinner.getSelectedItem());
+
+
+
         String content = editText.getText().toString();
         if(content == null){
             content=" ";
@@ -103,8 +111,8 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
         //Date date = null;
         if(!title.equals("")){
             //将信息写入数据库
-            MainActivity.INSERT(type,id,title,content,Alerttime);
-            MainActivity.Increase_List_Number(type);//相应类型事项数增加
+            MainActivity.INSERT(pre_type,id,title,content,Alerttime);
+            MainActivity.Increase_List_Number(pre_type);//相应类型事项数增加
             this.finish();
         }else{
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
@@ -160,9 +168,14 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
         cancel_tv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                MediaPlayer mMediaPlayer;
+                mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.confirm_down);
+                mMediaPlayer.start();
                 finish();
             }
         });
+        TextView list_name_tv = findViewById(R.id.list_name_tv);
+        list_name_tv.setText(pre_type);
     }
     //使用Calendar类获取当前的日期时间。
     private void initDateTime() {
