@@ -9,6 +9,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".clendar.Delete_General_Activity"></activity>
         <activity android:name=".clendar.Add_General_Activity" />
@@ -16,6 +17,7 @@
         <activity android:name=".Reminders.Update_DATA_Activity" />
         <activity android:name=".Reminders.ADD_DATA_Activity" />
         <activity android:name=".Reminders.ReminderItemsActivity" />
+        <activity android:name=".Setting.LoginActivity"/>
         <activity android:name=".MainActivity"/>
         <activity android:name=".TransitionActivity">
             <intent-filter>
@@ -35,5 +37,9 @@
             </intent-filter>
         </receiver>
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="aandroid.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
 </manifest>

@@ -343,7 +343,7 @@ public class RemindersFragment extends Fragment {
                         //数据获取
                         Toast.makeText(getActivity(), et.getText().toString(), Toast.LENGTH_LONG).show();
                         //修改列表的数据库
-                        Toast.makeText(getActivity(), "成功修改列表 "+et.getText().toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "成功修改列表 "+et.getText().toString(), Toast.LENGTH_SHORT).show();
                         MediaPlayer mMediaPlayer;
                         mMediaPlayer =  MediaPlayer.create(getContext(),R.raw.confirm_up);
                         mMediaPlayer.start();
@@ -369,34 +369,57 @@ public class RemindersFragment extends Fragment {
                 search_et.setTextColor(Color.parseColor("#000000"));
             }
         });
-        search_et.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                search_et.setText("");
-                search_et.setTextColor(Color.parseColor("#000000"));
-            }
-        });
+//        search_et.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                search_et.setText("");
+//                search_et.setTextColor(Color.parseColor("#000000"));
+//            }
+//        });
+//        search_et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+//
+//                if (null != keyEvent && KeyEvent.KEYCODE_ENTER == keyEvent.getKeyCode()) {
+//                    switch (keyEvent.getAction()) {
+//                        case KeyEvent.ACTION_UP:
+//                            //开始搜索
+//                            Log.d("key","search");
+//                            Intent intent = new Intent(getContext(), ReminderItemsActivity.class);
+//                            startActivity(intent);
+//                            return true;
+//                        default:
+//                            return true;
+//                    }
+//                }
+//
+//                return false;
+//            }
+//        });
+
         search_et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
             @Override
-            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-
-                if (null != keyEvent && KeyEvent.KEYCODE_ENTER == keyEvent.getKeyCode()) {
-                    switch (keyEvent.getAction()) {
-                        case KeyEvent.ACTION_UP:
-                            //开始搜索
-                            Log.d("key","search");
-                            Intent intent = new Intent(getContext(), ReminderItemsActivity.class);
-                            startActivity(intent);
-                            return true;
-                        default:
-                            return true;
+            public boolean onEditorAction(TextView tv, int actionId,
+                                          KeyEvent event) {
+                if ((actionId == 0 || actionId == 3) && event != null) {
+                    Log.d("tag:",search_et.getText().toString());
+                    if(tv.getText()==null){
+                        Toast.makeText(getActivity(), "未输入查询信息", Toast.LENGTH_LONG).show();
+                    }else{
+                        //在这里加入搜索数据库指令
+                        //Intent intent = new Intent(getContext(), ReminderItemsActivity.class);
+                        //intent.putExtra("Line", );
+                        //intent.putExtra("ListId",);
+                        //startActivity(intent);
                     }
-                }
 
+                    return true;
+                }
                 return false;
+
             }
         });
-
     }
 
     @Override

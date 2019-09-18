@@ -70,6 +70,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView iv_tom;
     private ImageView iv_set;
 
+    public static String host = "106.54.50.182";
+    public static int port = 31247;
+    public static MainActivity mainActivity;
+
 
     private int chooseTab;
     @Override
@@ -91,14 +95,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //数据库
         mDBHelper = new SQDB(this);
-
+        String localFileName = "test_demo.db";
+        String remoteFileName = "test_demo.db";
+        mainActivity =this;
+        // Syn_To_Server Syn =new Syn_To_Server( mDBHelper.getDBPath());
+        //Syn.start();
     }
 
     @Override
     public void setContentView(View view) {
         super.setContentView(view);
-
-
 
     }
 

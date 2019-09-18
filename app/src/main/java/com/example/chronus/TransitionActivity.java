@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Window;
+import android.widget.Toast;
+
 public class TransitionActivity extends Activity {
 
     boolean isFirstIn = false;
@@ -24,7 +26,7 @@ public class TransitionActivity extends Activity {
             @Override
             public void run() {
                 if (isFirstIn) {
-//          Toast.makeText(TransitionActivity.this, "First log", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TransitionActivity.this, "First log", Toast.LENGTH_LONG).show();
                     //初始化示例数据库
                     intent = new Intent(TransitionActivity.this, MainActivity.class);
                     TransitionActivity.this.startActivity(intent);
