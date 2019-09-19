@@ -29,6 +29,9 @@ public class TransitionActivity extends Activity {
                     Toast.makeText(TransitionActivity.this, "First log", Toast.LENGTH_LONG).show();
                     //初始化示例数据库
                     intent = new Intent(TransitionActivity.this, MainActivity.class);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean("isFirstIn",false);
+                    editor.apply();
                     TransitionActivity.this.startActivity(intent);
                     TransitionActivity.this.finish();
                 } else {

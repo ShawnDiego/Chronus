@@ -1,11 +1,8 @@
 package com.example.chronus;
 
-import android.app.ActivityOptions;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Handler;
@@ -19,29 +16,20 @@ import android.os.Bundle;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 
-import com.example.chronus.AlarmNotification.AlarmService;
-import com.example.chronus.AlarmNotification.DateTimeUtil;
-import com.example.chronus.Reminders.ReminderItemsActivity;
 import com.example.chronus.Reminders.RemindersFragment;
 import com.example.chronus.Setting.SettingFragment;
+import com.example.chronus.TimeLine.TimeLineFragment;
 import com.example.chronus.clendar.CalendarFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -117,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mFragments = new ArrayList<>();
         mFragments.add(CalendarFragment.newInstance("日历"));
         mFragments.add(RemindersFragment.newInstance("事项"));
-        mFragments.add(ViewFragment.newInstance("时间轴"));//Fragment的名字都要修改
+        mFragments.add(TimeLineFragment.newInstance("时间轴"));
         mFragments.add(TomatoFragment.newInstance("番茄"));
         mFragments.add(SettingFragment.newInstance("设置"));
         iv_cal = findViewById(R.id.calendar_tab);
@@ -154,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         iv_cal.setPadding(iv_rem.getPaddingLeft(),iv_rem.getPaddingTop(),iv_rem.getPaddingRight(),iv_rem.getPaddingBottom());
                         }
 
-                }, 150);
+                }, 200);
 
                 MediaPlayer mMediaPlayer;
                 mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.navigation_forward_selection);
@@ -197,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         iv_rem.setPadding(iv_cal.getPaddingLeft(),iv_cal.getPaddingTop(),iv_cal.getPaddingRight(),iv_cal.getPaddingBottom());
                     }
 
-                }, 150);
+                }, 200);
                 MediaPlayer mMediaPlayer;
                 mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.navigation_forward_selection);
                 mMediaPlayer.start();
@@ -221,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         iv_tom.setPadding(iv_cal.getPaddingLeft(),iv_cal.getPaddingTop(),iv_cal.getPaddingRight(),iv_cal.getPaddingBottom());
                     }
 
-                }, 150);
+                }, 200);
                 MediaPlayer mMediaPlayer;
                 mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.navigation_forward_selection);
                 mMediaPlayer.start();
@@ -246,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         iv_set.setPadding(iv_cal.getPaddingLeft(),iv_cal.getPaddingTop(),iv_cal.getPaddingRight(),iv_cal.getPaddingBottom());
                     }
 
-                }, 150);
+                }, 200);
                 MediaPlayer mMediaPlayer;
                 mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.navigation_forward_selection);
                 mMediaPlayer.start();
