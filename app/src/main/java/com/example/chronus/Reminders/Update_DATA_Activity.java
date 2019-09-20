@@ -38,7 +38,7 @@ public class Update_DATA_Activity extends AppCompatActivity implements View.OnCl
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-        setContentView(R.layout.activity_toedit1);
+        setContentView(R.layout.reminder_edit_item);
 
         //TextView textView = (TextView) findViewById(R.id.EDITID);
 

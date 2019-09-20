@@ -9,7 +9,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.chronus.R;
 
@@ -23,7 +22,7 @@ public class Delete_General_Activity extends AppCompatActivity implements View.O
         //进入全屏
         requestWindowFeature( Window.FEATURE_NO_TITLE);
         getWindow().setFlags( WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView( R.layout.activity_delete);
+        setContentView( R.layout.calendar_edit_schedule);
         initView();
         initDate();
     }

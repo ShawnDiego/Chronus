@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -135,6 +136,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //iv_timeline.setImageResource(R.drawable.setting);
                 iv_tom.setImageResource(R.drawable.clock);
                 iv_cal.setPadding((int)(iv_cal.getPaddingLeft()*0.8),(int)(iv_cal.getPaddingStart()*0.8),(int)(iv_cal.getPaddingRight()*0.8),(int)(iv_cal.getPaddingEnd()*0.8));
+                MediaPlayer mMediaPlayer;
+                mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.navigation_forward_selection);
+                mMediaPlayer.start();
                 new Handler().postDelayed(new Runnable() {
 
                     @Override
@@ -144,9 +148,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 }, 200);
 
-                MediaPlayer mMediaPlayer;
-                mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.navigation_forward_selection);
-                mMediaPlayer.start();
+
 
             }
         });
@@ -178,6 +180,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //iv_timeline.setImageResource(R.drawable.setting);
                 iv_tom.setImageResource(R.drawable.clock);
                 iv_rem.setPadding((int)(iv_cal.getPaddingLeft()*0.8),(int)(iv_cal.getPaddingStart()*0.8),(int)(iv_cal.getPaddingRight()*0.8),(int)(iv_cal.getPaddingEnd()*0.8));
+                MediaPlayer mMediaPlayer;
+                mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.navigation_forward_selection);
+                mMediaPlayer.start();
                 new Handler().postDelayed(new Runnable() {
 
                     @Override
@@ -186,9 +191,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
 
                 }, 200);
-                MediaPlayer mMediaPlayer;
-                mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.navigation_forward_selection);
-                mMediaPlayer.start();
+
             }
         });
         findViewById(R.id.tomato_tab).setOnClickListener(new View.OnClickListener() {
@@ -202,6 +205,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //iv_timeline.setImageResource(R.drawable.setting);
                 iv_tom.setImageResource(R.drawable.clock_fill);
                 iv_tom.setPadding((int)(iv_cal.getPaddingLeft()*0.8),(int)(iv_cal.getPaddingStart()*0.8),(int)(iv_cal.getPaddingRight()*0.8),(int)(iv_cal.getPaddingEnd()*0.8));
+                MediaPlayer mMediaPlayer;
+                mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.navigation_forward_selection);
+                mMediaPlayer.start();
                 new Handler().postDelayed(new Runnable() {
 
                     @Override
@@ -210,9 +216,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
 
                 }, 200);
-                MediaPlayer mMediaPlayer;
-                mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.navigation_forward_selection);
-                mMediaPlayer.start();
+
 
             }
         });
@@ -227,6 +231,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //iv_timeline.setImageResource(R.drawable.setting);
                iv_tom.setImageResource(R.drawable.clock);
                 iv_set.setPadding((int)(iv_cal.getPaddingLeft()*0.8),(int)(iv_cal.getPaddingStart()*0.8),(int)(iv_cal.getPaddingRight()*0.8),(int)(iv_cal.getPaddingEnd()*0.8));
+                MediaPlayer mMediaPlayer;
+                mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.navigation_forward_selection);
+                mMediaPlayer.start();
                 new Handler().postDelayed(new Runnable() {
 
                     @Override
@@ -235,9 +242,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
 
                 }, 200);
-                MediaPlayer mMediaPlayer;
-                mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.navigation_forward_selection);
-                mMediaPlayer.start();
+
 
             }
         });
@@ -257,7 +262,103 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         @Override
         public void onPageSelected(int position) {
+            MediaPlayer mMediaPlayer;
+            switch (position){
+                case 0 :
+                    chooseTab=1;
+                    iv_set.setImageResource(R.drawable.set);
+                    iv_cal.setImageResource(R.drawable.calendar_fill);
+                    iv_rem.setImageResource(R.drawable.reminderbar);
+                    //iv_timeline.setImageResource(R.drawable.setting);
+                    iv_tom.setImageResource(R.drawable.clock);
+                    iv_cal.setPadding((int)(iv_cal.getPaddingLeft()*0.8),(int)(iv_cal.getPaddingStart()*0.8),(int)(iv_cal.getPaddingRight()*0.8),(int)(iv_cal.getPaddingEnd()*0.8));
 
+                    mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.navigation_forward_selection);
+                    mMediaPlayer.start();
+                    new Handler().postDelayed(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            iv_cal.setPadding(iv_rem.getPaddingLeft(),iv_rem.getPaddingTop(),iv_rem.getPaddingRight(),iv_rem.getPaddingBottom());
+                        }
+
+                    }, 200);
+                    break;
+                case 1 :
+                    chooseTab=2;
+
+                    iv_set.setImageResource(R.drawable.set);
+                    iv_cal.setImageResource(R.drawable.calendar);
+                    iv_rem.setImageResource(R.drawable.reminderbar_fill);
+                    //iv_timeline.setImageResource(R.drawable.setting);
+                    iv_tom.setImageResource(R.drawable.clock);
+                    iv_rem.setPadding((int)(iv_cal.getPaddingLeft()*0.8),(int)(iv_cal.getPaddingStart()*0.8),(int)(iv_cal.getPaddingRight()*0.8),(int)(iv_cal.getPaddingEnd()*0.8));
+
+                    mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.navigation_forward_selection);
+                    mMediaPlayer.start();
+                    new Handler().postDelayed(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            iv_rem.setPadding(iv_cal.getPaddingLeft(),iv_cal.getPaddingTop(),iv_cal.getPaddingRight(),iv_cal.getPaddingBottom());
+                        }
+
+                    }, 200);
+                    break;
+                case 2 :
+                    chooseTab=3;
+                    iv_set.setImageResource(R.drawable.set);
+                    iv_cal.setImageResource(R.drawable.calendar);
+                    iv_rem.setImageResource(R.drawable.reminderbar);
+                    //iv_timeline.setImageResource(R.drawable.setting);
+                    iv_tom.setImageResource(R.drawable.clock);
+
+                    mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.navigation_forward_selection);
+                    mMediaPlayer.start();
+                    break;
+                case 3 :
+                    chooseTab=4;
+
+                    iv_set.setImageResource(R.drawable.set);
+                    iv_cal.setImageResource(R.drawable.calendar);
+                    iv_rem.setImageResource(R.drawable.reminderbar);
+                    //iv_timeline.setImageResource(R.drawable.setting);
+                    iv_tom.setImageResource(R.drawable.clock_fill);
+                    iv_tom.setPadding((int)(iv_cal.getPaddingLeft()*0.8),(int)(iv_cal.getPaddingStart()*0.8),(int)(iv_cal.getPaddingRight()*0.8),(int)(iv_cal.getPaddingEnd()*0.8));
+
+                    mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.navigation_forward_selection);
+                    mMediaPlayer.start();
+                    new Handler().postDelayed(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            iv_tom.setPadding(iv_cal.getPaddingLeft(),iv_cal.getPaddingTop(),iv_cal.getPaddingRight(),iv_cal.getPaddingBottom());
+                        }
+
+                    }, 200);
+                    break;
+                case 4 :
+                    chooseTab=5;
+
+                    iv_set.setImageResource(R.drawable.set_fill);
+                    iv_cal.setImageResource(R.drawable.calendar);
+                    iv_rem.setImageResource(R.drawable.reminderbar);
+                    //iv_timeline.setImageResource(R.drawable.setting);
+                    iv_tom.setImageResource(R.drawable.clock);
+                    iv_set.setPadding((int)(iv_cal.getPaddingLeft()*0.8),(int)(iv_cal.getPaddingStart()*0.8),(int)(iv_cal.getPaddingRight()*0.8),(int)(iv_cal.getPaddingEnd()*0.8));
+
+                    mMediaPlayer =  MediaPlayer.create(getApplication(),R.raw.navigation_forward_selection);
+                    mMediaPlayer.start();
+                    new Handler().postDelayed(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            iv_set.setPadding(iv_cal.getPaddingLeft(),iv_cal.getPaddingTop(),iv_cal.getPaddingRight(),iv_cal.getPaddingBottom());
+                        }
+
+                    }, 200);
+                    break;
+            }
         }
 
         @Override

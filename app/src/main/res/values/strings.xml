@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">时间轴</string>
+    <string name="app_name">时间Box</string>
+
     <string name="nav_calendar">日历</string>
     <string name="nav_reminders">事项</string>
     <string name="nav_tomato">番茄钟</string>

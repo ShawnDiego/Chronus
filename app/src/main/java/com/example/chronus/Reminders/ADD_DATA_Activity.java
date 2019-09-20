@@ -1,40 +1,28 @@
 package com.example.chronus.Reminders;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.example.chronus.AlarmNotification.AlarmService;
 import com.example.chronus.AlarmNotification.DateTimeUtil;
 import com.example.chronus.MainActivity;
-import com.example.chronus.Notify;
 import com.example.chronus.R;
-import com.example.chronus.TimeCounter;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 
 public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClickListener, DatePicker.OnDateChangedListener, TimePicker.OnTimeChangedListener{
@@ -58,7 +46,7 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
 
-        setContentView(R.layout.activity_toadd);
+        setContentView(R.layout.reminder_new_item);
         Intent intent = getIntent();//获取Intent对象
         number = intent.getIntExtra("number",0);
         pre_type =intent.getStringExtra("type");

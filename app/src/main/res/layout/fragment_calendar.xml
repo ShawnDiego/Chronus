@@ -22,10 +22,11 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:paddingLeft="16dp"
-                android:textColor="#000000"
+                android:textColor="#F94038"
                 android:textSize="26sp"
                 android:textStyle="bold"
-                tools:ignore="RtlSymmetry" />
+                tools:ignore="RtlSymmetry"
+                tools:text="9月20日" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -45,7 +46,8 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:textColor="#000000"
-                    android:textSize="10sp" />
+                    android:textSize="10sp"
+                    tools:text="2019" />
 
                 <TextView
                     android:id="@+id/tv_lunar"
@@ -55,7 +57,8 @@
                     android:gravity="center"
                     android:textColor="#000000"
                     android:textSize="10sp"
-                    tools:ignore="SmallSp" />
+                    tools:ignore="SmallSp"
+                    tools:text="十一" />
             </LinearLayout>
 
             <FrameLayout
@@ -71,10 +74,10 @@
                     android:id="@+id/ib_calendar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:tint="#000000"
                     android:contentDescription="@string/app_name"
                     android:scaleType="centerInside"
-                    android:src="@mipmap/menu_action_calendar_mvp" />
+                    android:src="@mipmap/menu_action_calendar_mvp"
+                    android:tint="#FFF" />
 
                 <TextView
                     android:id="@+id/tv_current_day"
@@ -84,8 +87,8 @@
                     android:layout_marginTop="2dp"
                     android:gravity="center"
                     android:text="13"
-                    android:textColor="#000000"
-                    android:textSize="12sp" />
+                    android:textColor="#FFF"
+                    android:textSize="14sp" />
             </FrameLayout>
         </RelativeLayout>
 

@@ -40,7 +40,7 @@ public class TransitionActivity extends Activity {
                     TransitionActivity.this.finish();
                 }
             }
-        }, 2000);
+        }, 1000);
 
     }
 
