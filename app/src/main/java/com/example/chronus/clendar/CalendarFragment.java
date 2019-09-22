@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.example.chronus.R;
 import com.haibin.calendarview.Calendar;
@@ -24,35 +22,53 @@ import com.haibin.calendarview.CalendarView;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
-
 public class CalendarFragment extends Fragment implements CalendarView.OnDateSelectedListener, CalendarView.OnYearChangeListener{
 
-    private static boolean isMiUi = false;
-    TextView mTextMonthDay;
-    TextView mTextYear;
-    TextView mTextLunar;
-    TextView mTextCurrentDay;
-    CalendarView mCalendarView;
-    RelativeLayout mRelativeTool;
-    static Activity activity;
+    //日历布局的控件声明
+    private TextView mTextMonthDay;
+    private TextView mTextYear;
+    private TextView mTextLunar;
+    private TextView mTextCurrentDay;
+    private CalendarView mCalendarView;
+    private RelativeLayout mRelativeTool;
+    private Activity activity;
+    private CalendarLayout mCalendarLayout;
+
+    //选中日期的年、月、日
     private static int mYear,mMonth,mDay;
+
+    //标记日期的数组
     private   List<Calendar> schemes= new ArrayList<>();
+
     //删除日程的起止范围
     private static int first,last;
+
+    //新建日程的起始时间
     private int mHour;
-    //声明Add_General_Activity回调的数据
-    private static String title,update;
+
+    //Add_General_Activity返回的数据：事项名称
+    private static String title;
+
+    //Delete_General_Activity返回的数据：更新后的事项名称
+    private static String update;
+
     //建立日程的起止范围
     public static int start,end,item;
-    CalendarLayout mCalendarLayout;
-    Button btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9,btn10,btn11,btn12,btn13,btn14,
+
+    //24小时所对应的24个button
+     private Button btn1,btn2,btn3,btn4,btn5,btn6,btn7,btn8,btn9,btn10,btn11,btn12,btn13,btn14,
             btn15,btn16,btn17,btn18,btn19,btn20,btn21,btn22,btn23,btn24;
-    View line1,line2,line3,line4,line5,line6,line7,line8,line9,line10,line11,line12,line13,line14,line15,line16,
+
+     //24个按钮之间的23条下划线
+    private View line1,line2,line3,line4,line5,line6,line7,line8,line9,line10,line11,line12,line13,line14,line15,line16,
          line17,line18,line19,line20,line21,line22,line23;
-    View.OnClickListener listener;
-    View.OnFocusChangeListener listener1;
+
+    //按钮点击事件监听器
+    private View.OnClickListener listener;
+
+    //按钮聚焦事件监听器
+    private View.OnFocusChangeListener listener1;
+
     private static final String ARG_SHOW_TEXT = "text";
 
     public static CalendarFragment newInstance(String param1){
@@ -65,6 +81,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //获取当前Fragment的Activity
          activity=getActivity();
     }
 
@@ -72,7 +89,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_calendar,container,false);
-
+        //获取日历布局控件ID
         mTextMonthDay = view.findViewById(R.id.tv_month_day);
         mTextYear = view. findViewById(R.id.tv_year);
         mTextLunar =  view.findViewById(R.id.tv_lunar);
@@ -81,20 +98,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         mTextCurrentDay = view.findViewById(R.id.tv_current_day);
         mCalendarLayout =view. findViewById(R.id.calendarLayout);
 
-        //给显示当日图标添加点击事件
-        view.findViewById(R.id.fl_current).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mCalendarView.isYearSelectLayoutVisible()) {
-                    mCalendarView.closeYearSelectLayout();
-                    Toast.makeText( activity,"切换到月视图",Toast.LENGTH_SHORT ).show();
-                }
-                mCalendarView.scrollToCurrent();
-            }
-        });
-
-
-       //获取按钮ID
+        //获取按钮ID
         btn1=view.findViewById(R.id.btn_1);
         btn2=view.findViewById(R.id.btn_2);
         btn3=view.findViewById(R.id.btn_3);
@@ -119,6 +123,45 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         btn22=view.findViewById(R.id.btn_22);
         btn23=view.findViewById(R.id.btn_23);
         btn24=view.findViewById(R.id.btn_24);
+
+        //获取下划线ID
+        line1=view.findViewById( R.id.ul_1 );
+        line2=view.findViewById( R.id.ul_2 );
+        line3=view.findViewById( R.id.ul_3);
+        line4=view.findViewById( R.id.ul_4 );
+        line5=view.findViewById( R.id.ul_5 );
+        line6=view.findViewById( R.id.ul_6 );
+        line7=view.findViewById( R.id.ul_7 );
+        line8=view.findViewById( R.id.ul_8);
+        line9=view.findViewById( R.id.ul_9 );
+        line10=view.findViewById( R.id.ul_10 );
+        line11=view.findViewById( R.id.ul_11);
+        line12=view.findViewById( R.id.ul_12 );
+        line13=view.findViewById( R.id.ul_13 );
+        line14=view.findViewById( R.id.ul_14 );
+        line15=view.findViewById( R.id.ul_15 );
+        line16=view.findViewById( R.id.ul_16 );
+        line17=view.findViewById( R.id.ul_17 );
+        line18=view.findViewById( R.id.ul_18);
+        line19=view.findViewById( R.id.ul_19 );
+        line20=view.findViewById( R.id.ul_20 );
+        line21=view.findViewById( R.id.ul_21 );
+        line22=view.findViewById( R.id.ul_22 );
+        line23=view.findViewById( R.id.ul_23 );
+
+        //给页面右上角显示日期的图标添加点击事件
+        view.findViewById(R.id.fl_current).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mCalendarView.isYearSelectLayoutVisible()) {
+                    mCalendarView.closeYearSelectLayout();
+                    Toast.makeText( activity,"切换到月视图",Toast.LENGTH_SHORT ).show();
+                }
+                mCalendarView.scrollToCurrent();
+            }
+        });
+
+
 
         //给日历时间段按钮添加聚焦事件
         listener1=new View.OnFocusChangeListener() {
@@ -182,6 +225,8 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
                 }
             }
         };
+
+        //给按钮添加聚焦事件监视器
         btn1.setOnFocusChangeListener(listener1);
         btn2.setOnFocusChangeListener(listener1);
         btn3.setOnFocusChangeListener(listener1);
@@ -209,17 +254,15 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
 
 
         //给日历时间段按钮添加点击事件
-        //新建事项的接口
         listener=new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //获取触发事件的activity
-//                activity=getActivity();
-                //弹出新建事项activity
                 Button btn=(Button) v;
-                if(isAdd( btn )){
+                //判断该按钮是否已有事项
+                if(isAdd( btn )){//未建事项，则进入Add_General_Activity
                 Intent intent=new Intent(activity,Add_General_Activity.class);
                 Bundle bundle=new Bundle();
+                //将年、月、日、开始时间存入Bundle
                 bundle.putInt("year",mYear);
                 bundle.putInt("month",mMonth);
                 bundle.putInt("day",mDay);
@@ -227,11 +270,14 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
                 intent.putExtras(bundle);
                 startActivityForResult(intent,0);
                 }
-                else{
+
+                else{//已建事项，则进入Delete_General_Activity
+                    //获取该已建事项的时间段
                     first=rangFirst( btn );
                     last=rangeLast( btn );
                     Intent intent=new Intent(activity,Delete_General_Activity.class);
                     Bundle bundle=new Bundle();
+                    //将年、月、日、开始时间、结束时间存入Bundle
                     bundle.putInt("year1",mYear);
                     bundle.putInt("month1",mMonth);
                     bundle.putInt("day1",mDay);
@@ -243,6 +289,8 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
                 }
             }
         };
+
+        //给按钮添加点击事件监视器
         btn1.setOnClickListener(listener);
         btn2.setOnClickListener(listener);
         btn3.setOnClickListener(listener);
@@ -268,33 +316,8 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         btn23.setOnClickListener(listener);
         btn24.setOnClickListener(listener);
 
-        //获取下划线ID
-        line1=view.findViewById( R.id.ul_1 );
-        line2=view.findViewById( R.id.ul_2 );
-        line3=view.findViewById( R.id.ul_3);
-        line4=view.findViewById( R.id.ul_4 );
-        line5=view.findViewById( R.id.ul_5 );
-        line6=view.findViewById( R.id.ul_6 );
-        line7=view.findViewById( R.id.ul_7 );
-        line8=view.findViewById( R.id.ul_8);
-        line9=view.findViewById( R.id.ul_9 );
-        line10=view.findViewById( R.id.ul_10 );
-        line11=view.findViewById( R.id.ul_11);
-        line12=view.findViewById( R.id.ul_12 );
-        line13=view.findViewById( R.id.ul_13 );
-        line14=view.findViewById( R.id.ul_14 );
-        line15=view.findViewById( R.id.ul_15 );
-        line16=view.findViewById( R.id.ul_16 );
-        line17=view.findViewById( R.id.ul_17 );
-        line18=view.findViewById( R.id.ul_18);
-        line19=view.findViewById( R.id.ul_19 );
-        line20=view.findViewById( R.id.ul_20 );
-        line21=view.findViewById( R.id.ul_21 );
-        line22=view.findViewById( R.id.ul_22 );
-        line23=view.findViewById( R.id.ul_23 );
 
         initView();
-        initData();
         return view;
     }
 
@@ -303,7 +326,16 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
 
     @SuppressLint("SetTextI18n")
     protected void initView() {
+        //初始化页面日期栏信息
+        mCalendarView.setOnDateSelectedListener(this);
+        mCalendarView.setOnYearChangeListener(this);
+        mTextYear.setText(String.valueOf(mCalendarView.getCurYear()));
+        mYear = mCalendarView.getCurYear();
+        mTextMonthDay.setText(mCalendarView.getCurMonth() + "月" + mCalendarView.getCurDay() + "日");
+        mTextLunar.setText("今日");
+        mTextCurrentDay.setText(String.valueOf(mCalendarView.getCurDay()));
 
+        //左上角月份显示图标点击事件
         mTextMonthDay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -320,16 +352,24 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
                 }
             }
         });
-
-
-        mCalendarView.setOnDateSelectedListener(this);
-        mCalendarView.setOnYearChangeListener(this);
-        mTextYear.setText(String.valueOf(mCalendarView.getCurYear()));
-        mYear = mCalendarView.getCurYear();
-        mTextMonthDay.setText(mCalendarView.getCurMonth() + "月" + mCalendarView.getCurDay() + "日");
-        mTextLunar.setText("今日");
-        mTextCurrentDay.setText(String.valueOf(mCalendarView.getCurDay()));
     }
+
+//    protected void initData() {
+//
+//        int year = mCalendarView.getCurYear();
+//        int month = mCalendarView.getCurMonth();
+//
+//        schemes.add(getSchemeCalendar(year, month, 3, 0xFF40db25, "假"));
+//        schemes.add(getSchemeCalendar(year, month, 6, 0xFFe69138, "事"));
+//        schemes.add(getSchemeCalendar(year, month, 9, 0xFFdf1356, "议"));
+//        schemes.add(getSchemeCalendar(year, month, 13, 0xFFedc56d, "记"));
+//        schemes.add(getSchemeCalendar(year, month, 14, 0xFFedc56d, "阅"));
+//        schemes.add(getSchemeCalendar(year, month, 15, 0xFFaacc44, "影"));
+//        schemes.add(getSchemeCalendar(year, month, 18, 0xFFbc13f0, "记"));
+//        schemes.add(getSchemeCalendar(year, month, 25, 0xFF13acf0, "假"));
+//
+//        mCalendarView.setSchemeDate(schemes);
+//    }
 
     private Calendar getSchemeCalendar(int year, int month, int day, int color,String text) {
         Calendar calendar = new Calendar();
@@ -344,39 +384,20 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         return calendar;
     }
 
-
-
-    protected void initData() {
-
-        int year = mCalendarView.getCurYear();
-        int month = mCalendarView.getCurMonth();
-
-//        schemes.add(getSchemeCalendar(year, month, 3, 0xFF40db25, "假"));
-//        schemes.add(getSchemeCalendar(year, month, 6, 0xFFe69138, "事"));
-//        schemes.add(getSchemeCalendar(year, month, 9, 0xFFdf1356, "议"));
-//        schemes.add(getSchemeCalendar(year, month, 13, 0xFFedc56d, "记"));
-//        schemes.add(getSchemeCalendar(year, month, 14, 0xFFedc56d, "阅"));
-//        schemes.add(getSchemeCalendar(year, month, 15, 0xFFaacc44, "影"));
-//        schemes.add(getSchemeCalendar(year, month, 18, 0xFFbc13f0, "记"));
-//        schemes.add(getSchemeCalendar(year, month, 25, 0xFF13acf0, "假"));
-//
-//        mCalendarView.setSchemeDate(schemes);
-    }
-
-
-
+   //年份改变事件
     @Override
     public void onYearChange(int year) {
         mTextMonthDay.setText(String.valueOf(year));
     }
 
 
-
+   //从栈顶Activity返回到Add_General_activity
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //Add_General_activity回调
-        if(requestCode==0){
+
+        if(requestCode==0){//从Add_General_activity回调
+
           if(resultCode==0){
             //初始化时间表
             Toast.makeText( activity,"关闭",Toast.LENGTH_SHORT).show();
@@ -390,42 +411,19 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
              start=bundle1.getInt("begin");
              end=bundle1.getInt("end");
 
-              //将建立好的事项在btn上显示
-              Log.w(ARG_SHOW_TEXT,"警告信息");
-              getBtn(start).setText( title );
-              //给btn设置背景颜色
-              for(int i=start;i<end;i++){
-                  setBgColor( getBtn( i ),item );
-                  getBtn( i ).setEnabled( false );
-               }
-              //若事项包含多个按钮，使内部下划线跟按钮颜色同步
-               for(int i=start;i<end-1;i++)
-               {
-                   setBgColor( getView( i ),item );
-               }
-               //使显示文字的按钮失去聚焦功能
-               getBtn( start ).setEnabled( true );
-               getBtn( start ).setFocusable( false );
-               setUnderLine();
-               addMark(  );
+             addGeneral(title,start,end,item);
+             //将新的日程添加到数据库
+
                Toast.makeText( activity,"建立成功",Toast.LENGTH_SHORT).show();
         }}
 
-       if(requestCode==1){
+       if(requestCode==1){//从Delete_General_activity回调
            //删除日程
            if(resultCode==1){
-               getBtn( first ).setText( null );
-                getBtn( first ).setFocusableInTouchMode( true );
-               getBtn( first ).setFocusable( true );
-               for(int i=first;i<last;i++){
-                   getBtn( i ).setEnabled( true );
-                   getBtn( i ).setBackgroundResource( R.drawable.bg_btn );
-               }
-               for(int i=first;i<last-1;i++){
-                  getView( i ).setBackgroundResource( R.drawable.bg_underline );
-               }
-               deleteUnderLine();
-               deleteMark();
+
+               deleteGeneral(first,last);
+               //将该日程从数据库删除
+
                Toast.makeText( activity,"删除成功",Toast.LENGTH_SHORT).show();
            }
             //更新日程
@@ -434,6 +432,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
                Bundle bundle2=data.getExtras();
                update=bundle2.getString( "isUpdate" );
                getBtn( first ).setText( update );
+            //在数据库上更新该日程事项内容
 
            }
            //仅返回
@@ -502,10 +501,13 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
           }
           return null;
       }
+
+      //判断该按钮显示的文字是否为"+新建日程"
     public boolean isAdd(Button btn){
         return btn.getText().toString().equals( "+新建日程" );
     }
 
+    //获取该按钮显示的开始时间
     public int rangFirst(Button btn){
         switch (btn.getId()){
             case R.id.btn_1:    return 0;
@@ -535,6 +537,8 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         }
         return 0;
     }
+
+    //获取该按钮的结束时间
     public int rangeLast(Button btn){
         int first=rangFirst( btn );
         int last=first+1;
@@ -574,11 +578,11 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         if(!bt1.isEnabled()){
            getView( start-1 ).setBackgroundResource( R.drawable.bg_underline1 );
         }
-        else if(!isAdd( bt1 )&&!bt1.getText().toString().equals( null )) {
+        else if((!bt1.getText().toString().equals( null ))&&(!isAdd( bt1 ))) {
             getView( start-1 ).setBackgroundResource( R.drawable.bg_underline1 );
         }
         //在该日程的下部分是否存在旧事项
-        if(!isAdd( bt2 )&&!bt2.getText().toString().equals( null )){
+        if((!bt2.getText().toString().equals( null ))&&(!isAdd( bt2 ))){
             getView( end-1 ).setBackgroundResource( R.drawable.bg_underline1 );
         }
      }
@@ -592,11 +596,11 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
          if(!bt1.isEnabled()){
              getView( first-1 ).setBackgroundResource( R.drawable.bg_underline );
          }
-         else if(!isAdd( bt1 )&&!bt1.getText().toString().equals( null )) {
+         else if((!bt1.getText().toString().equals( null ))&&(!isAdd( bt1 ))) {
              getView( first-1 ).setBackgroundResource( R.drawable.bg_underline );
          }
 
-         if(!isAdd( bt2 )&&!bt2.getText().toString().equals( null )){
+         if((!bt2.getText().toString().equals( null ))&&(!isAdd( bt2 ))){
              getView( last-1 ).setBackgroundResource( R.drawable.bg_underline );
          }
      }
@@ -613,6 +617,48 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         }
    }
 
+    //建立日程
+    public void addGeneral(String title,int start,int end,int item){
+        //将建立好的事项在btn上显示
+        getBtn(start).setText( title );
+        //给btn设置背景颜色
+        for(int i=start;i<end;i++){
+            setBgColor( getBtn( i ),item );
+            getBtn( i ).setEnabled( false );
+        }
+        //若事项包含多个按钮，使内部下划线跟按钮颜色同步
+        for(int i=start;i<end-1;i++)
+        {
+            setBgColor( getView( i ),item );
+        }
+        //使显示文字的按钮失去聚焦功能
+        getBtn( start ).setEnabled( true );
+        getBtn( start ).setFocusable( false );
+        //设置下划线
+        setUnderLine();
+        //在日期上添加标记
+        addMark(  );
+    }
+
+    //删除日程
+    public void deleteGeneral(int first,int last){
+        getBtn( first ).setText( null );
+        getBtn( first ).setFocusableInTouchMode( true );
+        getBtn( first ).setFocusable( true );
+        //恢复按钮的点击功能
+        for(int i=first;i<last;i++){
+            getBtn( i ).setEnabled( true );
+            getBtn( i ).setBackgroundResource( R.drawable.bg_btn );
+        }
+        //恢复下划线的颜色
+        for(int i=first;i<last-1;i++){
+            getView( i ).setBackgroundResource( R.drawable.bg_underline );
+        }
+        //删除下划线
+        deleteUnderLine();
+        //删除日期标记
+        deleteMark();
+    }
 
 
     @SuppressLint("SetTextI18n")
@@ -629,9 +675,19 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         mDay=calendar.getDay();
 
         //连接数据库的接口//
+        //初始化与数据库时间的模糊匹配比较的时间date
+        String date = mYear+"-"+mMonth+"-"+mDay;//之所以加上“-”是因为在数据库里面时间日期之间是用“-"连接的
+        //初始化符合模糊匹配的arraylist
+        List<String> lista=new ArrayList<String>();
+
+
         // 日期被点击从数据库获取事项信息刷新时间表//
         if(isClick){
 
         }
+    }
+
+    private void refreshView(){
+
     }
 }
