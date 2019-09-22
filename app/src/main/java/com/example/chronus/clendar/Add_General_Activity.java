@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.example.chronus.R;
 
 public class Add_General_Activity extends AppCompatActivity implements View.OnClickListener ,AdapterView.OnItemSelectedListener {
-    private EditText title,address,cotent;
+    private EditText title,place,content;
     private TextView close,sumbit,begin,end;
     private  Spinner spinner,spinner1;
     private int hour,hour1;
@@ -37,9 +37,9 @@ public class Add_General_Activity extends AppCompatActivity implements View.OnCl
     public void initView(){
         close=findViewById(R.id.tv_close);
         sumbit=findViewById(R.id.tv_submit);
-        title=findViewById(R.id.ADDID);
-        address=findViewById(R.id.AddTitle);
-        cotent=findViewById(R.id.ADDContent);
+        title=findViewById(R.id.AddTitle);
+        place=findViewById(R.id.AddPlace);
+        content=findViewById(R.id.AddContent);
         begin=findViewById(R.id.tv_begin);
         end=findViewById(R.id.tv_end);
         spinner=findViewById(R.id.sp_end);
@@ -74,7 +74,7 @@ public class Add_General_Activity extends AppCompatActivity implements View.OnCl
     }
     @Override
     public void onClick(View view) {
-        //点击关闭图标
+        //点击关闭
         Intent intent=new Intent();
         if(view.getId()==R.id.tv_close){
             Log.d( tag,"close结束" );
@@ -82,7 +82,7 @@ public class Add_General_Activity extends AppCompatActivity implements View.OnCl
             finish();
         }
 
-        //点击对勾图标
+        //点击完成
         if(view.getId()==R.id.tv_submit){
             //标题为空时
             if(title.getText().toString().equals("")) {
@@ -93,6 +93,8 @@ public class Add_General_Activity extends AppCompatActivity implements View.OnCl
                 //将标题内容传回到日历Activity
                 Bundle bundle=new Bundle();
                 bundle.putString("title",title.getText().toString());
+                bundle.putString("place",place.getText().toString());
+                bundle.putString("content",content.getText().toString());
                 bundle.putInt("begin",hour);
                 bundle.putInt("end",hour1);
                 bundle.putInt("scheme",item);

@@ -77,7 +77,7 @@
                     android:background="#FFFFFF">
 
                     <EditText
-                        android:id="@+id/ADDID"
+                        android:id="@+id/AddTitle"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginLeft="10dp"
@@ -101,7 +101,7 @@
                     android:background="#FFFFFF">
 
                     <EditText
-                        android:id="@+id/AddTitle"
+                        android:id="@+id/AddPlace"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginLeft="10dp"
@@ -124,7 +124,7 @@
                     android:background="#FFFFFF">
 
                     <EditText
-                        android:id="@+id/ADDContent"
+                        android:id="@+id/AddContent"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_gravity="top"

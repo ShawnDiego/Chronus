@@ -1,5 +1,7 @@
 package com.example.chronus.Setting;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.chronus.MainActivity;
 import com.example.chronus.R;
@@ -20,6 +23,7 @@ public class SettingFragment extends Fragment{
     private static final String ARG_SHOW_TEXT = "text";
     private  String mContentText;
     private View view;
+
     private RelativeLayout rl_login;
     private RelativeLayout rl_push;
     private RelativeLayout rl_pull;
@@ -60,7 +64,21 @@ public class SettingFragment extends Fragment{
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        init();//重新刷新用户
+    }
+
     private void init(){
+        //如果用户已经创建用户就显示已创建的用户
+        if(MainActivity.user_name!= "admin")
+        {
+            user_name.setText(MainActivity.user_name);
+        }
+        else{
+            user_name.setText("登陆或注册");
+        }
 
     }
 
@@ -79,15 +97,45 @@ public class SettingFragment extends Fragment{
         rl_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("test:","login_success");
-                Intent intent = new Intent(getContext(), LoginActivity.class);
-                startActivity(intent);
+
+                if(SettingFragment.isLogin){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    AlertDialog alertDialog = builder
+                            .setTitle("系统提示")
+                            .setMessage("您已经登陆，要退出？")
+                            .setNegativeButton("退出", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int n) {
+                                    MainActivity.user_name ="admin";
+                                    setLoginFalse();
+                                    Log.d("Back", "退出登陆");
+                                    init();//刷新用户
+                                    Toast.makeText(getContext(), "您已登出", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .setPositiveButton("保持登陆", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int n) {
+
+                                }
+                            }).create();
+                    alertDialog.show();
+
+                }
+                else {
+                    Log.d("test:","跳转到登陆页面");
+
+
+
+                    Intent intent = new Intent(getContext(), LoginActivity.class);
+                    startActivity(intent);
+                }
             }
         });
         rl_pull.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            //将数据从服务器端同步到本地
+                //将数据从服务器端同步到本地
                 new Syn_From_Server(MainActivity.mDBHelper.getDBPath()).start();
             }
         });

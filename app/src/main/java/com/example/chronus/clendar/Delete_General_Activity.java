@@ -14,7 +14,7 @@ import com.example.chronus.R;
 
 public class Delete_General_Activity extends AppCompatActivity implements View.OnClickListener {
      private TextView back,delete,date;
-     private EditText title;
+     private EditText title,place,content;
      private static String id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +31,11 @@ public class Delete_General_Activity extends AppCompatActivity implements View.O
      delete=findViewById( R.id.tv_delete );
      date=findViewById( R.id.tv_date );
      title=findViewById( R.id.ADDID );
+     place=findViewById(R.id.edit_place);
+     content=findViewById(R.id.edit_content);
      back.setOnClickListener( this );
      delete.setOnClickListener( this );
+
     }
 
     private  void initDate(){
@@ -46,6 +49,8 @@ public class Delete_General_Activity extends AppCompatActivity implements View.O
         String a=parseStr( begin );
         String b=parseStr( end );
         date.setText( year+"年"+month+"月"+day+"日"+" "+a+":00-"+b+":00");
+        place.setText(bundle.getString("place"));
+        content.setText(bundle.getString("content"));
         title.setText( id);
     }
     public  String parseStr(int a){
@@ -60,7 +65,9 @@ public class Delete_General_Activity extends AppCompatActivity implements View.O
             case R.id.tv_return :{
                 if(isUpdate()){
                     Bundle bundle1=new Bundle(  );
-                    bundle1.putString( "isUpdate",title.getText().toString() );
+                    bundle1.putString( "UpdateTitle",title.getText().toString() );
+                    bundle1.putString("UpdatePlace",place.getText().toString());
+                    bundle1.putString("UpdateContent",content.getText().toString());
                     intent.putExtras( bundle1 );
                     setResult( Activity.RESULT_OK,intent);
                     finish();

@@ -14,12 +14,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.chronus.MainActivity;
 import com.example.chronus.R;
 import com.haibin.calendarview.Calendar;
 import com.haibin.calendarview.CalendarLayout;
 import com.haibin.calendarview.CalendarView;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class CalendarFragment extends Fragment implements CalendarView.OnDateSelectedListener, CalendarView.OnYearChangeListener{
@@ -33,9 +35,13 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
     private RelativeLayout mRelativeTool;
     private Activity activity;
     private CalendarLayout mCalendarLayout;
+    private static MainActivity mainActivity;
 
     //选中日期的年、月、日
     private static int mYear,mMonth,mDay;
+
+    //选中日期的字符串表示
+    private  static String date;
 
     //标记日期的数组
     private   List<Calendar> schemes= new ArrayList<>();
@@ -46,8 +52,8 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
     //新建日程的起始时间
     private int mHour;
 
-    //Add_General_Activity返回的数据：事项名称
-    private static String title;
+    //Add_General_Activity返回的数据：事项名称、地点、详细内容
+    private static String title,place,content;
 
     //Delete_General_Activity返回的数据：更新后的事项名称
     private static String update;
@@ -83,6 +89,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         super.onCreate(savedInstanceState);
         //获取当前Fragment的Activity
          activity=getActivity();
+         mainActivity=new MainActivity();
     }
 
     @Nullable
@@ -275,15 +282,20 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
                     //获取该已建事项的时间段
                     first=rangFirst( btn );
                     last=rangeLast( btn );
+                    String id=mainActivity.get_Schedule_ID(date,""+first,""+last);
+                    String Place=mainActivity.get_Place_In_Schedule(id);
+                    String Content=mainActivity.get_Content_In_Schedule(id);
                     Intent intent=new Intent(activity,Delete_General_Activity.class);
                     Bundle bundle=new Bundle();
-                    //将年、月、日、开始时间、结束时间存入Bundle
+                    //将年、月、日、开始时间、结束时间、事项标题、地点和详细信息存入Bundle
                     bundle.putInt("year1",mYear);
                     bundle.putInt("month1",mMonth);
                     bundle.putInt("day1",mDay);
                     bundle.putInt("begin",first);
                     bundle.putInt("end",last);
                     bundle.putString( "id",btn.getText().toString() );
+                    bundle.putString("place",Place);
+                    bundle.putString("content",Content);
                     intent.putExtras(bundle);
                     startActivityForResult(intent,1);
                 }
@@ -407,13 +419,16 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
              new Bundle();
              Bundle bundle1=data.getExtras();
              title=bundle1.getString("title");
+             place=bundle1.getString("place");
+             content=bundle1.getString("content");
              item=bundle1.getInt("scheme");
              start=bundle1.getInt("begin");
              end=bundle1.getInt("end");
 
              addGeneral(title,start,end,item);
              //将新的日程添加到数据库
-
+               int id=getNewId();
+              mainActivity.Insert_Schedule(""+id,date,""+start,""+end,title,place,content,""+item);
                Toast.makeText( activity,"建立成功",Toast.LENGTH_SHORT).show();
         }}
 
@@ -423,17 +438,21 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
 
                deleteGeneral(first,last);
                //将该日程从数据库删除
-
+               mainActivity.DELETE_Schedule(date,""+first,""+last);
                Toast.makeText( activity,"删除成功",Toast.LENGTH_SHORT).show();
            }
             //更新日程
            if(resultCode==-1){
+               String Title,Place,Content;
                new Bundle();
                Bundle bundle2=data.getExtras();
-               update=bundle2.getString( "isUpdate" );
-               getBtn( first ).setText( update );
+               Title=bundle2.getString( "UpdateTitle" );
+               Place=bundle2.getString( "UpdatePlace" );
+               Content=bundle2.getString( "UpdateContent" );
+               getBtn( first ).setText( Title );
             //在数据库上更新该日程事项内容
-
+               String id=mainActivity.get_Schedule_ID(date,""+first,""+last);
+               mainActivity.Update_Schedule(Title,Place,Content,id);
            }
            //仅返回
            if(resultCode==0){
@@ -660,7 +679,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         deleteMark();
     }
 
-
+   //日期改变响应事件
     @SuppressLint("SetTextI18n")
     @Override
     public void onDateSelected(Calendar calendar, boolean isClick) {
@@ -676,18 +695,68 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
 
         //连接数据库的接口//
         //初始化与数据库时间的模糊匹配比较的时间date
-        String date = mYear+"-"+mMonth+"-"+mDay;//之所以加上“-”是因为在数据库里面时间日期之间是用“-"连接的
-        //初始化符合模糊匹配的arraylist
-        List<String> lista=new ArrayList<String>();
+         date = mYear+"-"+mMonth+"-"+mDay;//之所以加上“-”是因为在数据库里面时间日期之间是用“-"连接的
 
+        //获取当天所有事项的ID
+        List<String> list = new ArrayList<String>();
 
-        // 日期被点击从数据库获取事项信息刷新时间表//
+        //刷新时间表
+         refreshView(date,list);
+
         if(isClick){
 
         }
     }
 
-    private void refreshView(){
+    //刷新时间表
+    public void refreshView(String date,List<String> list){
+        String id,title;
+        int start,end,color;
+        mainActivity.find_ID_By_date(date,list);
+        Iterator iterator=list.iterator();
+        while (iterator.hasNext()){
+           id=iterator.next().toString();
+           title=mainActivity.get_Title_In_Schedule(id);
+           start=mainActivity.get_StartTime_In_Schedule(id);
+           end=mainActivity.get_EndTime_In_Schedule(id);
+           color=mainActivity.get_Color_In_Schedule(id);
+           addGeneral(title,start,end,color);
+        }
+    }
 
+    //获取一个不重复的新id
+    public int getNewId(){
+        List<String>list=new ArrayList<String>();
+        mainActivity.find_ID_By_date(date,list);
+        int[] a=new int[24];
+        a=getOldID();
+        if(list.isEmpty()) return 1;
+        else{
+            for(int i=1;i<=24;i++){
+                if(!isOldID(a,i)) return i;
+            }
+        }
+        return 0;
+    }
+
+    //获取该date已有的id值
+    private int[] getOldID(){
+        List<String>list=new ArrayList<String>();
+        mainActivity.find_ID_By_date(date,list);
+        int[] a=new int[24];
+        int i=0;
+        Iterator iterator=list.iterator();
+        while (iterator.hasNext()){
+            a[i]=Integer.parseInt(iterator.next().toString());
+            i++;
+        }
+        return a;
+    }
+    //判断该id是否已经存在
+    private  boolean isOldID(int[] a,int i){
+        for(int j=0;j<a.length;j++){
+            if(a[j]==i) return true;
+        }
+        return false;
     }
 }

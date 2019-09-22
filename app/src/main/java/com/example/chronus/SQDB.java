@@ -38,12 +38,17 @@ public class SQDB extends SQLiteOpenHelper {
     //}
 
     @Override
-    //初始化创建TABLE
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE Remind_List( Type CHAR(10), ID String PRIMARY KEY, " +
-                "TITLE String,DAY String ,Content CHAR(20),Checked String)");
-        db.execSQL("CREATE TABLE List( ID String PRIMARY KEY ,name String  ,icon_color String ,number String)");
+                "TITLE String,DAY String ,Content CHAR(20),Checked String,User_name String)");
+        db.execSQL("CREATE TABLE List( ID String PRIMARY KEY ,name String  ,icon_color String ," +
+                "number String,User_name String)");
+        db.execSQL("CREATE TABLE User( User_name String PRIMARY KEY , Password String)");
         // 如果事项已完成，则Checked一项值为“1”，未完成默认为“0”
+
+        //下面这个表用来存日程事项
+        db.execSQL("CREATE TABLE Schedule( ID String PRIMARY KEY , Date String, Start_Time String,End_Time String," +
+                "Title String ,Place String ,Content String,bg_Color String,User_name String) ");
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

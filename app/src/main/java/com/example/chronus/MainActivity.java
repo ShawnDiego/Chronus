@@ -33,6 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener , RemindersFragment.OnTitleSelectedListener{
@@ -50,7 +51,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //用来确定所要修改的数据库条目
     public  static String Edit_ID;
     private static Context context;
-
+    //用来存储当前用户的用户名
+    public static String user_name;
 
 
     private ImageView iv_cal;
@@ -499,9 +501,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-//数据库操作
+    //数据库操作
 //初始化化以及格式化时间
-private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
+    private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
     private static Date date = new Date();
     private static String Day = formatt.format(date);
 
@@ -510,8 +512,8 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
 
         SQLiteDatabase db = mDBHelper.getWritableDatabase();//获取可写数据库实例
 
-        db.execSQL("INSERT INTO Remind_List(Type,ID,TITLE,DAY,Content,Checked) values(?,?,?,?,?,?)",
-                new String[]{type, id,title,time,m,"0"});
+        db.execSQL("INSERT INTO Remind_List(Type,ID,TITLE,DAY,Content,Checked,User_name) values(?,?,?,?,?,?,?)",
+                new String[]{type, id,title,time,m,"0",user_name});
 
     }
 
@@ -520,20 +522,12 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
         SQLiteDatabase db = mDBHelper.getWritableDatabase();
         db.execSQL("DELETE FROM Remind_List WHERE ID = ?", new String[]{id});
     }
-    //删除数据
-    public static void DELETE_LIST(String id) {
-        //删除列表和列表里面的值
-        SQLiteDatabase db = mDBHelper.getWritableDatabase();
-        db.execSQL("DELETE FROM List WHERE ID = ?", new String[]{id});
-        //值
-        db.execSQL("DELETE FROM Remind_List WHERE Type = ?", new String[]{Show_List_name(id)});
-    }
 
     //修改数据
     public static void update(String type, String  id,String content) {
         SQLiteDatabase db = mDBHelper.getWritableDatabase();
-        db.execSQL("UPDATE Remind_List SET Content =?,Type =? WHERE ID = ?",
-                new String[]{content,type,id});
+        db.execSQL("UPDATE Remind_List SET Content =?,Type =? WHERE ID = ? AND User_name =?",
+                new String[]{content,type,id,user_name});
     }
     //根据TITLE查询事项内容
     public static String FIND_Content_By_Title(String title) {
@@ -612,7 +606,7 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
         StringBuilder title = new StringBuilder();
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery
-                ("SELECT * FROM Remind_List WHERE Type =? AND Checked=?", new String[]{type,T});
+                ("SELECT * FROM Remind_List WHERE Type =? AND Checked=? AND User_name =?", new String[]{type,T,user_name});
 
 
         if (cursor.getCount() <= 0) {
@@ -633,7 +627,7 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
     public static String ShowDate_By_Title(String title) {
         StringBuilder result = new StringBuilder();
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM Remind_List WHERE TITLE = ?", new String[]{title});
+        Cursor cursor = db.rawQuery("SELECT * FROM Remind_List WHERE TITLE = ? AND User_name =?", new String[]{title,user_name});
         //存在数据才返回
         if (cursor.moveToFirst()) {
             String data = cursor.getString(cursor.getColumnIndex("DAY"));
@@ -660,7 +654,7 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
     public static int getCount_By_Type(String type,String T)
     {
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
-        Cursor cursor =  db.rawQuery("SELECT COUNT (*) FROM Remind_List WHERE Type=? AND Checked=?",new String[]{type,T});
+        Cursor cursor =  db.rawQuery("SELECT COUNT (*) FROM Remind_List WHERE Type=? AND Checked=? AND User_name =?",new String[]{type,T,user_name});
         cursor.moveToFirst();
         int result = cursor.getInt(0);
         cursor.close();
@@ -671,8 +665,8 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
 
         StringBuilder result = new StringBuilder();
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM Remind_List WHERE ID = ?",
-                new String[]{id});
+        Cursor cursor = db.rawQuery("SELECT * FROM Remind_List WHERE ID = ? AND User_name =?",
+                new String[]{id,user_name});
         //存在数据才返回
         if (cursor.moveToFirst()) {
             String content = cursor.getString(cursor.getColumnIndex("Content"));
@@ -691,7 +685,7 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
     public static String ShowDate(String id) {
         StringBuilder result = new StringBuilder();
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM Remind_List WHERE ID = ?", new String[]{id});
+        Cursor cursor = db.rawQuery("SELECT * FROM Remind_List WHERE ID = ? AND User_name =?", new String[]{id,user_name});
         //存在数据才返回
         if (cursor.moveToFirst()) {
             String data = cursor.getString(cursor.getColumnIndex("DAY"));
@@ -704,11 +698,52 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
         }
     }
 
+    //根据TITLE设置事项已完成
+    public static void SetFinished_By_Title(String title)
+    {
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        db.execSQL("UPDATE Remind_List SET Checked =? WHERE TITLE = ?AND User_name =?",
+                new String[]{"1",title,user_name});
+
+
+    }
+    //根据TITLE检查Checked是否完成
+    public static String Is_Finished_By_Title(String title){
+        StringBuilder result = new StringBuilder();
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM Remind_List WHERE TITLE = ?AND User_name =?", new String[]{title,user_name});
+        //存在数据才返回
+        if (cursor.moveToFirst()) {
+            String checked = cursor.getString(cursor.getColumnIndex("Checked"));
+
+            cursor.close();
+            return result.append(checked).toString();
+        } else {
+            cursor.close();
+            return result.append("该ID下没有信息，出现未知错误").toString();
+        }
+
+    }
+    ////根据TITLE设置事项没有完成
+    public static void Set_UnFinished_By_Title(String title)
+    {
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        db.execSQL("UPDATE Remind_List SET Checked =? WHERE TITLE = ?AND User_name = ?",
+                new String[]{"0",title,user_name});
+
+
+    }
+
+
+
+
+
+
     /////////////////////////////////////////////////////////////////////////////分界线
     //判断列表类别数量
     public static int get_ListCount( ){
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
-        Cursor cursor =  db.rawQuery("SELECT COUNT (*) FROM List",null);
+        Cursor cursor =  db.rawQuery("SELECT COUNT (*) FROM List WHERE User_name =?",new String[]{user_name});
         cursor.moveToFirst();
         int result = cursor.getInt(0);
         cursor.close();
@@ -719,7 +754,7 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
 
         StringBuilder result = new StringBuilder();
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
-        Cursor cursor = db.query("List",null,null,null,null,null,null,null);
+        Cursor cursor = db.query("List",new String[]{"User_name","ID"},"User_name = ?",new String[]{user_name},null,null,null);
 
         if (cursor.getCount()<=0){
             result.append("无信息");
@@ -745,8 +780,8 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
     public static String Show_List_name(String id) {
         StringBuilder result = new StringBuilder();
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM List WHERE ID = ?",
-                new String[]{id});
+        Cursor cursor = db.rawQuery("SELECT * FROM List WHERE ID = ?AND User_name =?",
+                new String[]{id,user_name});
         //存在数据才返回
         if (cursor.moveToFirst()) {
             String name = cursor.getString(cursor.getColumnIndex("name"));
@@ -762,8 +797,8 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
     public static String Show_List_number(String id) {
         StringBuilder result = new StringBuilder();
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM List WHERE ID = ?",
-                new String[]{id});
+        Cursor cursor = db.rawQuery("SELECT * FROM List WHERE ID = ?AND User_name =?",
+                new String[]{id,user_name});
         //存在数据才返回
         if (cursor.moveToFirst()) {
             String number = cursor.getString(cursor.getColumnIndex("number"));
@@ -780,22 +815,22 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
 
         SQLiteDatabase db = mDBHelper.getWritableDatabase();//获取可写数据库实例
 
-        db.execSQL("INSERT INTO List(ID,name,icon_color,number) values(?,?,?,?)",
-                new String[]{id, name,icon_color,number});
+        db.execSQL("INSERT INTO List(ID,name,icon_color,number,User_name) values(?,?,?,?,?)",
+                new String[]{id, name,icon_color,number,user_name});
     }
     //修改数据列表书库对应ID的数据
     public static void update_List(String name, String  id) {
         SQLiteDatabase db = mDBHelper.getWritableDatabase();
-        db.execSQL("UPDATE List SET name =?  WHERE ID = ?",
-                new String[]{name,id});
+        db.execSQL("UPDATE List SET name =?  WHERE ID = ?AND User_name =?",
+                new String[]{name,id,user_name});
     }
     //每当添加新事项时，相应类型的列表数据库中的事项数就会加1
     public static void Increase_List_Number(String type)
     {
         String number_before;
         SQLiteDatabase db1 = mDBHelper.getReadableDatabase();
-        Cursor cursor = db1.rawQuery("SELECT * FROM List WHERE name = ?",
-                new String[]{type});//先提取之前的数据再递增
+        Cursor cursor = db1.rawQuery("SELECT * FROM List WHERE name = ?AND User_name =?",
+                new String[]{type,user_name});//先提取之前的数据再递增
         if (cursor.moveToFirst()) {
             number_before = cursor.getString(cursor.getColumnIndex("number"));
 
@@ -810,15 +845,15 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
         Integer i = Integer.parseInt(number_before);
         i++;
         SQLiteDatabase db2 = mDBHelper.getWritableDatabase();
-        db2.execSQL("UPDATE List SET number =?  WHERE name = ?",
-                new String[]{i.toString(),type});
+        db2.execSQL("UPDATE List SET number =?  WHERE name = ?AND User_name =?",
+                new String[]{i.toString(),type,user_name});
     }
     //根据ID查询列表的条目前面的图标的颜色
     public static int Show_List_Color_By_ID(String id)
     {
         String color;
         SQLiteDatabase db =mDBHelper.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM List WHERE ID =?", new String[]{id});
+        Cursor cursor = db.rawQuery("SELECT * FROM List WHERE ID =?AND User_name =?", new String[]{id,user_name});
         if (cursor.moveToFirst()) {
             color = cursor.getString(cursor.getColumnIndex("icon_color"));
 
@@ -835,9 +870,248 @@ private static SimpleDateFormat formatt = new SimpleDateFormat("yyyy-MM-dd");
         //删除列表和列表里面的值
         //注意这里有顺序问题，要先删除事项的数据，再删除列表数据，不然无法从对应的类型名找到对应的事项
         SQLiteDatabase db = mDBHelper.getWritableDatabase();
-        db.execSQL("DELETE FROM Remind_List WHERE Type = ?", new String[]{Show_List_name(id)});
+        db.execSQL("DELETE FROM Remind_List WHERE Type = ?AND User_name =?", new String[]{Show_List_name(id),user_name});
 
-        db.execSQL("DELETE FROM List WHERE ID = ?", new String[]{id});
+        db.execSQL("DELETE FROM List WHERE ID = ?AND User_name =?", new String[]{id,user_name});
+
+    }
+    //列表类型名搜索
+    public static void Search_Title(String search){
+
+    }
+
+    //以下代码登陆时使用
+    ////////////////////////////////////////////////////////////////////////////
+//判断用户名和密码是否匹配
+    public  static boolean isUser_Password_Match(String password,String username) {
+
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM User WHERE User_name =?", new String[]{username});
+
+        //能查询到用户才返回
+        if (cursor.moveToFirst()) {
+            String password_inDB = cursor.getString(cursor.getColumnIndex("Password"));
+
+            cursor.close();
+            if (password_inDB.equals(password)) {
+                return true;
+            }
+
+        } else {
+            cursor.close();
+            return false;
+        }
+        return false;
+    }
+
+    //判断用户名是否为空
+    public static boolean is_User_name_Ampty(String username){
+
+        SQLiteDatabase db =mDBHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM User WHERE User_name =?", new String[]{username});
+
+        //检查用户数据库里是否有该用户
+        if (cursor.moveToFirst()) {
+            cursor.close();
+            return true;
+
+        } else {
+            cursor.close();
+            return false;
+        }
+    }
+
+
+    //注册用户，将用户名和密码导入数据库
+    public static  void CreateUser(String user_name,String password){
+
+        SQLiteDatabase db =mDBHelper.getWritableDatabase();
+        db.execSQL("INSERT INTO User(User_name,Password) values(?,?)",
+                new String[]{user_name,password});
+
+
+    }
+
+    // 以下用于日历接口
+////////////////////////////////////////////////////////////////////////////
+
+    //根据日期从数据库里找到当天的所有事项ID
+    public static void find_ID_By_date(String date,List<String> a) {
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        String pattern = ".*" + date + ".*";//进行模糊匹配
+        String day;//用来从数据库里读出时间来挨个进行模糊匹配
+        Cursor cursor = db.rawQuery("SELECT * FROM Schedule WHERE User_name =? ", new String[]{MainActivity.user_name});
+        //第一个if判断是否能找到相应数据
+        if (cursor.moveToFirst()) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
+                day = cursor.getString(cursor.getColumnIndex("Date"));
+                //如果模糊匹配成功就把相应事项的ID加入集合
+                if (Pattern.matches(pattern, day)) {
+                    a.add(cursor.getString(cursor.getColumnIndex("ID")));
+                }
+                cursor.close();
+            }
+            cursor.close();
+        } else {
+            cursor.close();
+
+        }
+    }
+
+    //向日程中添加事项
+    public static void Insert_Schedule(String id, String date, String start_time, String end_time, String title,String place, String content,String bg_color){
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        db.execSQL("INSERT INTO Schedule(ID ,Date,Start_Time,End_Time,Title ,Place," +
+                        "Content,bg_Color,User_name) values(?,?,?,?,?,?,?,?,?)",
+                new String[]{id,date,start_time,end_time,title,place,content,bg_color,user_name});
+
+    }
+    //根据ID从数据库中读出TITLE
+    public static String get_Title_In_Schedule(String id){
+
+
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor= db.rawQuery("SELECT * FROM Schedule WHERE User_name =?AND ID =? ", new String[]{MainActivity.user_name,id});
+
+        //能查询到用户才返回
+        if (cursor.moveToFirst()) {
+            String title = cursor.getString(cursor.getColumnIndex("Title"));
+
+            cursor.close();
+            return title;
+        } else {
+            cursor.close();
+            return "查询不到内容，出现意外错误";
+        }
+    }
+    //根据ID从数据库中读出开始时间
+    public static int get_StartTime_In_Schedule(String id){
+
+
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor= db.rawQuery("SELECT * FROM Schedule WHERE User_name =?AND ID =? ", new String[]{MainActivity.user_name,id});
+
+        //能查询到用户才返回
+        if (cursor.moveToFirst()) {
+            String start_time = cursor.getString(cursor.getColumnIndex("Start_Time"));
+            Integer s = Integer.parseInt(start_time);
+            cursor.close();
+            return s;
+        } else {
+            cursor.close();
+            return 0;
+        }
+    }
+
+    //根据ID从数据库中读出结束时间
+    public static int get_EndTime_In_Schedule(String id){
+
+
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor= db.rawQuery("SELECT * FROM Schedule WHERE User_name =?AND ID =? ", new String[]{MainActivity.user_name,id});
+
+        //能查询到用户才返回
+        if (cursor.moveToFirst()) {
+            String end_time = cursor.getString(cursor.getColumnIndex("End_Time"));
+            Integer s = Integer.parseInt(end_time);
+            cursor.close();
+            return s;
+        } else {
+            cursor.close();
+            return 0;
+        }
+    }
+
+
+    //根据ID从数据库中读出地点
+    public static String get_Place_In_Schedule(String id){
+
+
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor= db.rawQuery("SELECT * FROM Schedule WHERE User_name =?AND ID =? ", new String[]{MainActivity.user_name,id});
+
+        //能查询到用户才返回
+        if (cursor.moveToFirst()) {
+            String place = cursor.getString(cursor.getColumnIndex("Place"));
+
+            cursor.close();
+            return place;
+        } else {
+            cursor.close();
+            return "查询不到内容，出现意外错误";
+        }
+    }
+
+
+    //根据ID从数据库中读出详细内容
+    public static String get_Content_In_Schedule(String id){
+
+
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor= db.rawQuery("SELECT * FROM Schedule WHERE User_name =?AND ID =? ", new String[]{MainActivity.user_name,id});
+
+        //能查询到用户才返回
+        if (cursor.moveToFirst()) {
+            String content = cursor.getString(cursor.getColumnIndex("Content"));
+
+            cursor.close();
+            return content;
+        } else {
+            cursor.close();
+            return "查询不到内容，出现意外错误";
+        }
+    }
+
+    //根据ID从数据库中读出背景颜色
+    public static int get_Color_In_Schedule(String id){
+
+
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor= db.rawQuery("SELECT * FROM Schedule WHERE User_name =?AND ID =? ", new String[]{MainActivity.user_name,id});
+
+        //能查询到用户才返回
+        if (cursor.moveToFirst()) {
+            String bg_color = cursor.getString(cursor.getColumnIndex("bg_Color"));
+            Integer s = Integer.parseInt(bg_color);
+            cursor.close();
+            return s;
+        } else {
+            cursor.close();
+            return 0;
+        }
+    }
+
+    //根据date，和开始结束时间匹配删除
+    public static void DELETE_Schedule(String date_time, String start_time,String end_time){
+
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        db.execSQL("DELETE FROM Schedule WHERE Date = ?AND Start_Time =? AND End_Time =?AND User_name =?", new String[]{date_time,start_time,end_time,MainActivity.user_name});
+
+    }
+
+    //修改函数根据ID值修改相应日程
+    public static void Update_Schedule(String title,String content,String place,String id) {
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        db.execSQL("UPDATE Schedule SET Title =? ,Content =?,Place =? WHERE ID = ? AND User_name =?",
+                new String[]{title,content,place,id,user_name});
+    }
+
+    //根据date，start_time，end_time获取日程事项的iD
+    public static String get_Schedule_ID(String date,String start_time,String end_time){
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM Schedule WHERE User_name =?AND Date =?AND Start_Time =? AND End_Time =? ", new String[]{user_name, date,start_time,end_time});
+        //能查询到id才返回
+        if (cursor.moveToFirst()) {
+            String id = cursor.getString(cursor.getColumnIndex("ID"));
+
+            cursor.close();
+            return id;
+        } else {
+            cursor.close();
+            return "找不到对应的ID，出现意外错误";
+        }
 
     }
 }

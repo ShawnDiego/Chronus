@@ -1,6 +1,8 @@
 package com.example.chronus.Setting;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
@@ -14,7 +16,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.example.chronus.MainActivity;
 import com.example.chronus.R;
 
 public class LoginActivity extends AppCompatActivity   {
@@ -54,18 +58,55 @@ public class LoginActivity extends AppCompatActivity   {
         sure_but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if (!isPasswordValid(password.getText())) {
-                    password_layout.setError("密码长度不正确");
-                    //从这里添加验证用户名和密码是否对应
-                    //      1、用户名不存在
-                    //            对话框提示：当前用户不存在，是否用当前输入用户名和密码创建账户？---然后数据库处理
-                    //      2、用户名和密码不对应
-                    Log.d("判断密码：","判断密码已经不正确");
-                } else {
-                    password_layout.setError(null); // Clear the error
-                    Log.d("判断密码：","判断密码正确");
+                    password_layout.setError("密码不能少于8位");
+                    Log.d("password_error", "密码长度不正确");
                 }
-            }
+                else{
+                    if(!MainActivity.is_User_name_Ampty(user_name.getText().toString())) {
+                        //检测用户是否存在，如果不存在执行以下步骤
+                        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                        AlertDialog alertDialog = builder
+                                .setTitle("系统提示")
+                                .setMessage("当前用户不存在，是否用当前输入用户名和密码创建账户？")
+                                .setNegativeButton("不创建", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int n) {
+
+                                    }
+                                })
+                                .setPositiveButton("创建", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int n) {
+                                        MainActivity.CreateUser(user_name.getText().toString(), password.getText().toString());
+                                        Toast.makeText(LoginActivity.this, "欢迎你，新用户！", Toast.LENGTH_SHORT).show();
+
+                                        Log.d("CreateUser", "创建用户账号完成");
+                                        //自动切换为登陆后的用户
+                                        MainActivity.user_name =user_name.getText().toString();
+                                        SettingFragment.setLoginTrue();
+                                        finish();
+                                    }
+                                }).create();
+                        alertDialog.show();
+
+
+                    }
+                    if(MainActivity.isUser_Password_Match(password.getText().toString(), user_name.getText().toString())){
+                        //验证用户名和密码是否对应，如果匹配即登录成功执行以下代码
+                        MainActivity.user_name = user_name.getText().toString();
+                        LoginSuccess();
+
+                        Log.d("判断密码：","密码正确");
+                        finish();
+                    } else {
+                        //password_layout.setError(null); // Clear the error
+                        Log.d("判断密码：","密码不正确");
+                    }
+                }
+
+            }//这个是else的大括号
         });
         // Clear the error once more than 8 characters are typed.
         password.setOnKeyListener(new View.OnKeyListener() {
@@ -81,19 +122,23 @@ public class LoginActivity extends AppCompatActivity   {
         cancel_but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LoginSuccess();
+
                 finish();
             }
         });
     }
     private boolean isPasswordValid(@Nullable Editable text) {
         //判断密码正确
-
         return text != null && text.length() >= 8;//这里是判断密码长度的
 
+
+
     }
+
     private void LoginSuccess(){
         //登陆成功之后的处理
         SettingFragment.setLoginTrue();
+        Toast.makeText(this, "欢迎回来！",Toast.LENGTH_SHORT).show();
+
     }
 }
