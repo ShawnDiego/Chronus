@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
     private Activity activity;
     private CalendarLayout mCalendarLayout;
     private static MainActivity mainActivity;
+
 
     //选中日期的年、月、日
     private static int mYear,mMonth,mDay;
@@ -77,6 +79,10 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
 
     private static final String ARG_SHOW_TEXT = "text";
 
+    private View view;
+
+    private Boolean ifFirstIn = true;
+
     public static CalendarFragment newInstance(String param1){
         CalendarFragment fragment = new CalendarFragment();
         Bundle args = new Bundle();
@@ -95,7 +101,8 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_calendar,container,false);
+        view=inflater.inflate(R.layout.fragment_calendar,container,false);
+        Log.d("顺序","onCreateView");
         //获取日历布局控件ID
         mTextMonthDay = view.findViewById(R.id.tv_month_day);
         mTextYear = view. findViewById(R.id.tv_year);
@@ -364,6 +371,14 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
                 }
             }
         });
+
+        //初始化页面
+        //获取当天所有事项的ID
+        List<String> list = new ArrayList<String>();
+
+        //刷新时间表
+        refreshView(date,list);
+
     }
 
 //    protected void initData() {
@@ -427,8 +442,8 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
 
              addGeneral(title,start,end,item);
              //将新的日程添加到数据库
-               int id=getNewId();
-              mainActivity.Insert_Schedule(""+id,date,""+start,""+end,title,place,content,""+item);
+              String id=getNewId();
+              mainActivity.Insert_Schedule(id,date,""+start,""+end,title,place,content,""+item);
                Toast.makeText( activity,"建立成功",Toast.LENGTH_SHORT).show();
         }}
 
@@ -701,13 +716,15 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         List<String> list = new ArrayList<String>();
 
         //刷新时间表
-         refreshView(date,list);
+        if(ifFirstIn){
 
+        }else{
+            refreshView(date,list);
+        }
         if(isClick){
 
         }
     }
-
     //刷新时间表
     public void refreshView(String date,List<String> list){
         String id,title;
@@ -715,28 +732,29 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         mainActivity.find_ID_By_date(date,list);
         Iterator iterator=list.iterator();
         while (iterator.hasNext()){
-           id=iterator.next().toString();
-           title=mainActivity.get_Title_In_Schedule(id);
-           start=mainActivity.get_StartTime_In_Schedule(id);
-           end=mainActivity.get_EndTime_In_Schedule(id);
-           color=mainActivity.get_Color_In_Schedule(id);
-           addGeneral(title,start,end,color);
+            id=iterator.next().toString();
+            title=mainActivity.get_Title_In_Schedule(id);
+            Log.d("title",title);
+            start=mainActivity.get_StartTime_In_Schedule(id);
+            end=mainActivity.get_EndTime_In_Schedule(id);
+            color=mainActivity.get_Color_In_Schedule(id);
+            addGeneral(title,start,end,color);
         }
-    }
 
-    //获取一个不重复的新id
-    public int getNewId(){
+    }
+   //获取一个不重复的新id
+    public String getNewId(){
         List<String>list=new ArrayList<String>();
         mainActivity.find_ID_By_date(date,list);
         int[] a=new int[24];
         a=getOldID();
-        if(list.isEmpty()) return 1;
+        if(list.isEmpty()) return date+"-"+1;
         else{
             for(int i=1;i<=24;i++){
-                if(!isOldID(a,i)) return i;
+                if(!isOldID(a,i)) return date+"-"+i;
             }
         }
-        return 0;
+        return null;
     }
 
     //获取该date已有的id值
@@ -747,11 +765,18 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         int i=0;
         Iterator iterator=list.iterator();
         while (iterator.hasNext()){
-            a[i]=Integer.parseInt(iterator.next().toString());
+            a[i]=Integer.parseInt(getX(iterator.next().toString()));
             i++;
         }
         return a;
     }
+    //获取id（mYear-mMonth-mDay-x）最后一项x的值
+    public String getX(String id){
+        String[] strings=new String[4];
+        strings=id.split("-");
+        return strings[3];
+    }
+
     //判断该id是否已经存在
     private  boolean isOldID(int[] a,int i){
         for(int j=0;j<a.length;j++){

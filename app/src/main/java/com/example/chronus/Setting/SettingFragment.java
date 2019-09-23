@@ -82,12 +82,6 @@ public class SettingFragment extends Fragment{
         init();//重新刷新用户
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        init();//重新刷新用户
-    }
-
     private void init(){
         //如果用户已经创建用户就显示已创建的用户
         if(MainActivity.user_name.equals("admin") )

@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainActivity =this;
         // Syn_To_Server Syn =new Syn_To_Server( mDBHelper.getDBPath());
         //Syn.start();
-
+        user_name = "admin";
         initView();
     }
 
@@ -1178,7 +1178,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         MainActivity.INSERT("工作",String.valueOf(8949),"整理实际案例"," "," ");
         MainActivity.INSERT("工作",String.valueOf(8948),"和张杨喝咖啡"," "," ");
-        MainActivity.INSERT("工作",String.valueOf(8947),"完成提案文件"," "," ");
+        MainActivity.INSERT("工作",String.valueOf(8947),"完成提案文件","需要在明天之前提交文档"," ");
         MainActivity.INSERT("工作",String.valueOf(8946),"安排员工会议时间"," "," ");
         MainActivity.INSERT("工作",String.valueOf(8945),"发休假申请"," "," ");
 
