@@ -604,22 +604,22 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
     }
 
     //建立新日程时判断上下是否存在已有日程，设置相应下划线
-     private  void setUnderLine(){
+    private  void setUnderLine(int begin,int finish){
         Button bt1,bt2;
-        bt1=getBtn( start -1);
-        bt2=getBtn( end );
+        bt1=getBtn( begin -1);
+        bt2=getBtn( finish);
         //在该日程的上部分是否存在旧事项
         if(!bt1.isEnabled()){
-           getView( start-1 ).setBackgroundResource( R.drawable.bg_underline1 );
+            getView( begin-1 ).setBackgroundResource( R.drawable.bg_underline1 );
         }
         else if((!bt1.getText().toString().equals( null ))&&(!isAdd( bt1 ))) {
-            getView( start-1 ).setBackgroundResource( R.drawable.bg_underline1 );
+            getView( begin-1 ).setBackgroundResource( R.drawable.bg_underline1 );
         }
         //在该日程的下部分是否存在旧事项
         if((!bt2.getText().toString().equals( null ))&&(!isAdd( bt2 ))){
-            getView( end-1 ).setBackgroundResource( R.drawable.bg_underline1 );
+            getView( finish-1 ).setBackgroundResource( R.drawable.bg_underline1 );
         }
-     }
+    }
 
 
      //删除日程时判断上下是否存在已有日程，删除相应下划线
@@ -669,7 +669,8 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         getBtn( start ).setEnabled( true );
         getBtn( start ).setFocusable( false );
         //设置下划线
-        setUnderLine();
+
+        setUnderLine(start,end);
         //在日期上添加标记
         addMark(  );
     }
@@ -721,10 +722,28 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         if(ifFirstIn){
             ifFirstIn=false;
         }else{
+            deleteView();
             refreshView(date,list);
         }
         if(isClick){
 
+        }
+    }
+
+    //清空时间表
+    public  void deleteView(){
+
+        //恢复按钮的点击功能
+        for(int i=0;i<24;i++){
+            getBtn( i ).setEnabled(false );
+            getBtn( i ).setEnabled( true );
+            getBtn( i ).setFocusableInTouchMode( true );
+            getBtn(i).setText(null);
+            getBtn( i ).setBackgroundResource( R.drawable.bg_btn );
+        }
+        //恢复下划线的颜色
+        for(int i=0;i<23;i++){
+            getView( i ).setBackgroundResource( R.drawable.bg_underline );
         }
     }
     //刷新时间表
