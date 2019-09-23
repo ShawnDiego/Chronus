@@ -1,4 +1,4 @@
-package com.example.chronus;
+package com.example.chronus.AlarmNotification;
 
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
@@ -15,6 +15,9 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
+import com.example.chronus.MainActivity;
+import com.example.chronus.R;
+
 import static android.content.Context.ALARM_SERVICE;
 
 
@@ -29,7 +32,7 @@ public class Notify {
     public Notify(Context context){
         this.context = context;
     }
-
+    private int i=1;
     @TargetApi(26)
     public void setNotification(String title, String desc){
 
@@ -64,11 +67,11 @@ public class Notify {
                 .setVibrate(new long[]{0, 1000, 1000, 1000}) //通知栏消息震动
                 .setLights(Color.GREEN, 1000, 2000) //通知栏消息闪灯(亮一秒间隔两秒再亮)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
-                .setSmallIcon(R.drawable.tom);
+                .setSmallIcon(R.drawable.notify_ico);
         Log.i(TAG,"after build a builder");
         //manager.notify(1, builder.getNotification());
         NotificationManagerCompat new_nm = NotificationManagerCompat.from(context);
-        new_nm.notify(1, builder.build());  // 第一个参数1具体实现时 需要修改 用于显示不同消息。
+        new_nm.notify(i++, builder.build());  // 第一个参数1具体实现时 需要修改 用于显示不同消息。
         //return builder.getNotification();
     }
 

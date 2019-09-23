@@ -8,8 +8,6 @@ package com.example.chronus.AlarmNotification;
 import android.content.Context;
 import android.widget.Toast;
 
-import com.example.chronus.Notify;
-
 public class ToastUtil {
 
     // 短时间显示Toast信息
@@ -23,8 +21,14 @@ public class ToastUtil {
     }
 
     // 通知
-    public static void showNotifiction(Context context ,String info){
+    public static void showNotifiction(Context context ,String info,String type_from){
         Notify nm = new Notify(context);
-        nm.setNotification("提醒事项", info);
+        if(type_from.equals("reminder")){
+            nm.setNotification("提醒事项", info);
+        }else if(type_from.equals("calendar")){
+            nm.setNotification("日历", info);
+        }else {
+            nm.setNotification("通知", info);
+        }
     }
 }

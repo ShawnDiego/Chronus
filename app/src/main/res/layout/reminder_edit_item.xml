@@ -38,16 +38,16 @@
                 android:onClick="Store"/>
 
             <TextView
-                android:id="@+id/add_name"
+                android:id="@+id/activity_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="详细信息"
+                android:text="事件详情"
                 android:textColor="#000000"
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/add_tv"
+                android:id="@+id/sure_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -86,7 +86,7 @@
                     android:background="#FFFFFF">
 
                     <EditText
-                        android:id="@+id/EDITTitle"
+                        android:id="@+id/title_et"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginLeft="10dp"
@@ -109,7 +109,7 @@
                     android:background="#FFFFFF">
 
                     <EditText
-                        android:id="@+id/EDITContent"
+                        android:id="@+id/content_et"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_gravity="top"
@@ -204,18 +204,30 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="25dp"
                     android:background="#FFFFFF">
+                    <TextView
+                        android:id="@+id/left_name_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="归属列表："
+                        android:layout_marginTop="12dp"
+                        android:layout_marginBottom="12dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginEnd="0dp"
+                        android:textColor="#000000"
+                        android:textSize="18sp"/>
 
-
-
-                    <Spinner
-                        android:id="@+id/EDITType"
-                        android:layout_width="match_parent"
-                        android:layout_height="55dp"
-                        android:layout_marginLeft="12dp"
-                        android:layout_marginTop="1dp"
-                        android:layout_marginBottom="1dp"
-                        android:layout_centerHorizontal="true"
-                        android:entries="@array/addType" />
+                    <TextView
+                        android:id="@+id/item_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="12dp"
+                        android:text="提醒列表"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        android:layout_centerVertical="true"/>
 
                 </RelativeLayout>
 

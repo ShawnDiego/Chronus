@@ -1,23 +1,6 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:windowFullscreen">true</item>
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
-    <style name="RadioGroupButtonStyle" >
-        <!-- 这个属性是去掉button 默认样式-->
-        <item name="android:button">@null</item>
-        <item name="android:gravity">center</item>
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/colorPrimary</item>
-    </style>
 
     <!--卡片动画-->
     <style name="FragmentCardAnimation" >
@@ -26,29 +9,9 @@
     </style>
 
     <!-- ActionSheet进出动画 -->
-    <style name="ActionSheetDialogAnimation" parent="@android:style/Animation.Dialog">
-        <item name="android:windowEnterAnimation">@anim/fragment_open</item>
-
-    </style>
     <style name="AppTheme.AppBarOverlay"
         parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay"
         parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="AnimActivity" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowAnimationStyle">@style/AnimationActivity</item>
-        <item name="android:windowNoTitle">true</item>
-    </style>
-
-    <style name="AnimationActivity" parent="@android:style/Animation.Activity" >
-        <item name="android:activityOpenEnterAnimation">@anim/up_in</item>
-        <item name="android:activityOpenExitAnimation">@anim/up_out</item>
-        <item name="android:activityCloseEnterAnimation">@anim/down_in</item>
-        <item name="android:activityCloseExitAnimation">@anim/down_out</item>
-    </style>
-    <style name="Widget.Shrine.Toolbar" parent="Widget.AppCompat.Toolbar">
-        <item name="android:background">?attr/colorAccent</item>
-        <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
-        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
-    </style>
 </resources>

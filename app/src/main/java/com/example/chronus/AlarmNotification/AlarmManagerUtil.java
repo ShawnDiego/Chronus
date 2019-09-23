@@ -25,10 +25,11 @@ public class AlarmManagerUtil {
     // triggerAtTime:定时任务开启的时间，毫秒为单位
     // cls:广播接收器的class
     public static void sendAlarmBroadcast(Context context, int requestCode,
-                                          int type, long triggerAtTime, Class cls) {
+                                          int type,String title, long triggerAtTime, Class cls) {
         AlarmManager mgr = getAlarmManager(context);
 
         Intent intent = new Intent(context, cls);
+        intent.putExtra("title",title);
         PendingIntent pi = PendingIntent.getBroadcast(context, requestCode,
                 intent, 0);
 

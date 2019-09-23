@@ -36,6 +36,7 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
     private TextView tvDate, tvTime;
     private Integer number;
     public static final String INTENT_ALARM_LOG = "intent_alarm_log";
+
     //在TextView上显示的字符
 
     @Override
@@ -71,9 +72,11 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
 
 
         String content = editText.getText().toString();
+
         if(content == null){
             content=" ";
         }
+
         Integer tem = number+1;
         String id = tem.toString();
         final String title = editText2.getText().toString();
@@ -105,7 +108,7 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
         }else{
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
             builder.setTitle("提醒");
-            builder.setMessage("未填写提醒事项名称");
+            builder.setMessage("未填写提醒事项标题");
             builder.create();
             builder.show();
         }
@@ -120,7 +123,7 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
             settingTime.set(Calendar.SECOND,0);
             settingTime.set(Calendar.MILLISECOND, 0);
             int day = settingTime.get(Calendar.DAY_OF_YEAR);
-            int day_now = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);//跨两天的时间还没调整好
+            int day_now = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);//跨两天的时间还not fin
             int hour = settingTime.get(Calendar.HOUR_OF_DAY);
             int hour_now = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
             int min = settingTime.get(Calendar.MINUTE);
@@ -135,7 +138,7 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
             // 获取i秒之后的日期时间字符串
             i.putExtra("alarm_time", DateTimeUtil.getNLaterDateTimeString(Calendar.SECOND,count_time));
             i.putExtra("task_id", id);
-            i.putExtra("reminder_title",title);
+            i.putExtra("title",title);
             startService(i);
         }
 

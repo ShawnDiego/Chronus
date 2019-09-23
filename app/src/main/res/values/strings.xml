@@ -1,20 +1,6 @@
 <resources>
     <string name="app_name">时间Box</string>
 
-    <string name="nav_calendar">日历</string>
-    <string name="nav_reminders">事项</string>
-    <string name="nav_tomato">番茄钟</string>
-    <string name="nav_timeline">时间轴</string>
-    <string name="nav_settings">设置</string>
-    <string name="test1">test1</string>
-    <string name="test2">test2</string>
-
-    <string name="channel_critical">Critical events</string>
-    <string name="channel_importance">Importance events</string>
-
-    <string name="channel_default">Default events</string>
-    <string name="channel_low">Low events</string>
-    <string name="channel_media">Media events</string>
     <string-array name="addType">
         <item name="l">提醒事项</item>
         <item name="a">购物单</item>
@@ -22,14 +8,6 @@
         <item name="d">作业</item>
         <item name="d">电影</item>
         <item name="d">书单</item>
-    </string-array>
-    <string-array name="addGeneral">
-        <item name="l">会议</item>
-        <item name="a">节假</item>
-        <item name="b">事项</item>
-        <item name="d">日记</item>
-        <item name="d">电影</item>
-        <item name="d">阅读</item>
     </string-array>
     <string-array name="general_color">
         <item>红色</item>

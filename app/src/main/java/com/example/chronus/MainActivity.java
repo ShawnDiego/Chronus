@@ -1,6 +1,8 @@
 package com.example.chronus;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
@@ -16,6 +18,7 @@ import android.os.Bundle;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -51,7 +54,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public  static String Edit_ID;
     private static Context context;
     //用来存储当前用户的用户名
-    public static String user_name;
+    public static String user_name = "admin";
+    //用来给日历接口
+    public static String type2;
+    public static String title;
+    public static String content;
 
 
     private ImageView iv_cal;
@@ -59,6 +66,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView iv_timeline;
     private ImageView iv_tom;
     private ImageView iv_set;
+    private Integer[] imgIds = new Integer[]{R.mipmap.lise_icon1, R.mipmap.lise_icon2, R.mipmap.lise_icon3,
+            R.mipmap.lise_icon4, R.mipmap.lise_icon5, R.mipmap.lise_icon6};
+
 
     public static String host = "106.54.50.182";
     public static int port = 31247;
@@ -66,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private int chooseTab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setContentView(R.layout.activity_main);
 
-        initView();
+
 
         //数据库
         mDBHelper = new SQDB(this);
@@ -90,6 +101,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainActivity =this;
         // Syn_To_Server Syn =new Syn_To_Server( mDBHelper.getDBPath());
         //Syn.start();
+
+        initView();
     }
 
     @Override
@@ -247,7 +260,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
+       //检测是否为第一次登陆
+        final SharedPreferences sharedPreferences = getSharedPreferences("is_first_in_data",MODE_PRIVATE);
+        Boolean isFirstIn = sharedPreferences.getBoolean("isFirstIn",true);
 
+        if(isFirstIn){
+            initDateofFirstLogin();
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("isFirstIn",false);
+            editor.apply();
+        }else{
+            Log.d("是否为第一次登陆","不是");
+        }
 
     }
 
@@ -930,8 +954,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
-
-    // 以下用于日历接口
+// 以下用于日历接口
 ////////////////////////////////////////////////////////////////////////////
 
     //根据日期从数据库里找到当天的所有事项ID
@@ -1112,5 +1135,55 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return "找不到对应的ID，出现意外错误";
         }
 
+    }
+
+    public void initDateofFirstLogin(){
+        //初始化示例数据库
+        MainActivity.INSERT_List(String.valueOf(9999),"示例列表",imgIds[3].toString(),"0" );
+        MainActivity.INSERT_List(String.valueOf(9998),"提醒事项",imgIds[0].toString(),"0" );
+        MainActivity.INSERT_List(String.valueOf(9997),"备忘录",imgIds[2].toString(),"0" );
+        MainActivity.INSERT_List(String.valueOf(9996),"购物单",imgIds[5].toString(),"0" );
+        MainActivity.INSERT_List(String.valueOf(9995),"生日聚会",imgIds[2].toString(),"0" );
+        MainActivity.INSERT_List(String.valueOf(9994),"工作",imgIds[4].toString(),"0" );
+
+
+        MainActivity.INSERT("示例列表",String.valueOf(8999),"这里展现你当前未完成的提醒事项"," "," ");
+        MainActivity.INSERT("示例列表",String.valueOf(8998),"点击左边的圆圈就标记完成了"," "," ");
+        MainActivity.INSERT("示例列表",String.valueOf(8997),"点错了的话再点一次"," "," ");
+        MainActivity.INSERT("示例列表",String.valueOf(8996),"长按事项还能查看更多的信息","通过这里查看更详细的内容"," ");
+        MainActivity.INSERT("示例列表",String.valueOf(8995),"右上角的才能还能帮助你看到完成的事项"," "," ");
+
+        MainActivity.INSERT("提醒事项",String.valueOf(8989),"下午五点去餐厅"," "," ");
+        MainActivity.INSERT("提醒事项",String.valueOf(8988),"去图书馆还书"," "," ");
+        MainActivity.INSERT("提醒事项",String.valueOf(8987),"到干洗店取衣服"," "," ");
+
+        MainActivity.INSERT("备忘录",String.valueOf(8979),"给王明打电话祝他生日快乐"," "," ");
+        MainActivity.INSERT("备忘录",String.valueOf(8978),"买聚会的饮料"," "," ");
+        MainActivity.INSERT("备忘录",String.valueOf(8977),"洗车"," "," ");
+        MainActivity.INSERT("备忘录",String.valueOf(8976),"约慧雯吃饭"," "," ");
+        MainActivity.INSERT("备忘录",String.valueOf(8975),"到花店取花"," "," ");
+
+        MainActivity.INSERT("购物单",String.valueOf(8969),"牛奶"," "," ");
+        MainActivity.INSERT("购物单",String.valueOf(8968),"鸡蛋"," "," ");
+        MainActivity.INSERT("购物单",String.valueOf(8967),"面包"," "," ");
+        MainActivity.INSERT("购物单",String.valueOf(8966),"草莓"," "," ");
+        MainActivity.INSERT("购物单",String.valueOf(8965),"纸巾"," "," ");
+        MainActivity.INSERT("购物单",String.valueOf(8964),"牙膏"," "," ");
+
+        MainActivity.INSERT("生日聚会",String.valueOf(8959),"蛋糕"," "," ");
+        MainActivity.INSERT("生日聚会",String.valueOf(8958),"各种玩具"," "," ");
+        MainActivity.INSERT("生日聚会",String.valueOf(8957),"邀请人名单"," "," ");
+        MainActivity.INSERT("生日聚会",String.valueOf(8956),"点心"," "," ");
+        MainActivity.INSERT("生日聚会",String.valueOf(8955),"小礼物"," "," ");
+
+        MainActivity.INSERT("工作",String.valueOf(8949),"整理实际案例"," "," ");
+        MainActivity.INSERT("工作",String.valueOf(8948),"和张杨喝咖啡"," "," ");
+        MainActivity.INSERT("工作",String.valueOf(8947),"完成提案文件"," "," ");
+        MainActivity.INSERT("工作",String.valueOf(8946),"安排员工会议时间"," "," ");
+        MainActivity.INSERT("工作",String.valueOf(8945),"发休假申请"," "," ");
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");// HH:mm:ss
+        //获取当前时间
+        //Date date = new Date(System.currentTimeMillis());
     }
 }

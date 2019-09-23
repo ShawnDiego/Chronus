@@ -1,10 +1,13 @@
 package com.example.chronus.Reminders;
 
+import android.app.AlarmManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -15,10 +18,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.example.chronus.AlarmNotification.AlarmManagerUtil;
+import com.example.chronus.AlarmNotification.AlarmReceiver;
+import com.example.chronus.AlarmNotification.DateTimeUtil;
 import com.example.chronus.MainActivity;
 import com.example.chronus.R;
 
 import java.util.Calendar;
+import java.util.Date;
 
 
 public class Update_DATA_Activity extends AppCompatActivity implements View.OnClickListener, DatePicker.OnDateChangedListener, TimePicker.OnTimeChangedListener{
@@ -29,6 +36,12 @@ public class Update_DATA_Activity extends AppCompatActivity implements View.OnCl
     private Context context;
     private RelativeLayout llDate, llTime;
     private TextView tvDate, tvTime;
+
+    EditText item_title;
+    EditText item_content;
+    TextView item_type;
+
+    String item_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +57,15 @@ public class Update_DATA_Activity extends AppCompatActivity implements View.OnCl
 
         //显示ID值
         //textView.setText(MainActivity.Edit_ID);
+        Intent intent = getIntent();
+        item_id = intent.getStringExtra("item_id");
+
+        //找到各个控件
+
+        item_title = (EditText)findViewById(R.id.title_et);
+        item_content = findViewById(R.id.content_et);
+        item_type = findViewById(R.id.item_type);
+
 
     }
 
@@ -51,20 +73,20 @@ public class Update_DATA_Activity extends AppCompatActivity implements View.OnCl
     {
 
 
-        //找到各个控件
 
-        EditText content_et = (EditText)findViewById(R.id.EDITContent);
-        EditText title_et = findViewById(R.id.EDITTitle);
-        Spinner spinner = (Spinner)findViewById(R.id.EDITType);
 
         //从各个控件获取修改后的数值
 
-        String content =  content_et.getText().toString();
-        String title = title_et.getText().toString();
-        String type = spinner.getSelectedItem().toString();
+        String title =  item_title.getText().toString();
+        String content = item_content.getText().toString();
+        String type = item_type.getText().toString();
+
+
 
         //等待修改
-        MainActivity.update(type , MainActivity.Edit_ID,content);
+        //MainActivity.update(type,MainActivity.Edit_ID,content);
+        //MainActivity.update(type,item_id,title,content,String.valueOf(time));
+
 
 
         this.finish();

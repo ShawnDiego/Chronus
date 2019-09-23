@@ -6,17 +6,24 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 public class TransitionActivity extends Activity {
 
     boolean isFirstIn = false;
     private Intent intent;
+    private Integer[] imgIds = new Integer[]{R.mipmap.lise_icon1, R.mipmap.lise_icon2, R.mipmap.lise_icon3,
+            R.mipmap.lise_icon4, R.mipmap.lise_icon5, R.mipmap.lise_icon6};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //进入全屏
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         setContentView(R.layout.start_activity);
 
         final SharedPreferences sharedPreferences = getSharedPreferences("is_first_in_data",MODE_PRIVATE);
@@ -26,12 +33,12 @@ public class TransitionActivity extends Activity {
             @Override
             public void run() {
                 if (isFirstIn) {
-                    Toast.makeText(TransitionActivity.this, "First log", Toast.LENGTH_LONG).show();
-                    //初始化示例数据库
+                    Toast.makeText(TransitionActivity.this, "欢迎来到时间Box", Toast.LENGTH_LONG).show();
+                    //用在Main里面数据库初始化完成后再设置为false
                     intent = new Intent(TransitionActivity.this, MainActivity.class);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean("isFirstIn",false);
-                    editor.apply();
+//                    SharedPreferences.Editor editor = sharedPreferences.edit();
+//                    editor.putBoolean("isFirstIn",false);
+//                    editor.apply();
                     TransitionActivity.this.startActivity(intent);
                     TransitionActivity.this.finish();
                 } else {

@@ -2,7 +2,12 @@ package com.example.chronus.Setting;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.media.tv.TvContract;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -10,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +49,9 @@ public class SettingFragment extends Fragment{
         args.putString(ARG_SHOW_TEXT, param1);
         fragment.setArguments(args);
         return fragment;
+
+
+
     }
 
     @Override
@@ -51,6 +60,8 @@ public class SettingFragment extends Fragment{
         if (getArguments() != null) {
             mContentText = getArguments().getString(ARG_SHOW_TEXT);
         }
+
+
     }
 
     @Override
@@ -61,7 +72,14 @@ public class SettingFragment extends Fragment{
         initView();
         init();
         setListener();
+
+
         return view;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        init();//重新刷新用户
     }
 
     @Override
@@ -72,12 +90,14 @@ public class SettingFragment extends Fragment{
 
     private void init(){
         //如果用户已经创建用户就显示已创建的用户
-        if(MainActivity.user_name!= "admin")
+        if(MainActivity.user_name.equals("admin") )
         {
-            user_name.setText(MainActivity.user_name);
+            user_name.setText("登陆或注册");
+            user_name.setTextColor(0X8E8F90);
         }
         else{
-            user_name.setText("登陆或注册");
+            user_name.setText(MainActivity.user_name);
+            user_name.setTextColor(0XFFFFFF);
         }
 
     }

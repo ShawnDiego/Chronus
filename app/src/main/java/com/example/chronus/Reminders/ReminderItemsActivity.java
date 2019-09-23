@@ -229,7 +229,7 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
 
                     MainActivity.Edit_ID = MainActivity.ShowLineID(MainActivity.Line);
                     Intent intent = new Intent(getApplicationContext(), Update_DATA_Activity.class);
-
+                    intent.putExtra("item_id",MainActivity.ShowLineID(MainActivity.Line));
 
                     startActivity(intent);
                 }

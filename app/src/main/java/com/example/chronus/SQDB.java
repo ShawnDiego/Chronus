@@ -49,6 +49,7 @@ public class SQDB extends SQLiteOpenHelper {
         //下面这个表用来存日程事项
         db.execSQL("CREATE TABLE Schedule( ID String PRIMARY KEY , Date String, Start_Time String,End_Time String," +
                 "Title String ,Place String ,Content String,bg_Color String,User_name String) ");
+
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

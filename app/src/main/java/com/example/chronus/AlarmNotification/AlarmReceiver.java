@@ -12,7 +12,9 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         //ToastUtil.showShort(context, "从服务启动广播：at " + DateTimeUtil.getCurrentDateTimeString());
-        ToastUtil.showNotifiction(context,"123");
+        String title = intent.getStringExtra("title");
+        ToastUtil.showNotifiction(context,title,"reminder");
+
         //Log.d("Alarm", "从服务启动广播：at " + DateTimeUtil.getCurrentDateTimeString());
     }
 
