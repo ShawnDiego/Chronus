@@ -958,10 +958,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 ////////////////////////////////////////////////////////////////////////////
 
     //根据日期从数据库里找到当天的所有事项ID
-    public static void find_ID_By_date(String date,List<String> a) {
+    public static List<String> find_ID_By_date(String date) {
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
         String pattern = ".*" + date + ".*";//进行模糊匹配
         String day;//用来从数据库里读出时间来挨个进行模糊匹配
+        List<String> a =new ArrayList<String>();
         Cursor cursor = db.rawQuery("SELECT * FROM Schedule WHERE User_name =? ", new String[]{MainActivity.user_name});
         //第一个if判断是否能找到相应数据
         if (cursor.moveToFirst()) {
@@ -973,12 +974,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     a.add(cursor.getString(cursor.getColumnIndex("ID")));
                 }
                 cursor.close();
+                return a;
             }
             cursor.close();
         } else {
             cursor.close();
-
+            return a;
         }
+        return a;
     }
 
     //向日程中添加事项

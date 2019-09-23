@@ -715,9 +715,11 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         //获取当天所有事项的ID
         List<String> list = new ArrayList<String>();
 
+        Log.d("date",date);
+        Log.d("ifFirstIn",String.valueOf(ifFirstIn));
         //刷新时间表
         if(ifFirstIn){
-
+            ifFirstIn=false;
         }else{
             refreshView(date,list);
         }
@@ -726,11 +728,11 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         }
     }
     //刷新时间表
-    public void refreshView(String date,List<String> list){
+    public void refreshView(String date,List<String> l){
         String id,title;
         int start,end,color;
-        mainActivity.find_ID_By_date(date,list);
-        Iterator iterator=list.iterator();
+        l=mainActivity.find_ID_By_date(date);
+        Iterator iterator=l.iterator();
         while (iterator.hasNext()){
             id=iterator.next().toString();
             title=mainActivity.get_Title_In_Schedule(id);
@@ -745,7 +747,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
    //获取一个不重复的新id
     public String getNewId(){
         List<String>list=new ArrayList<String>();
-        mainActivity.find_ID_By_date(date,list);
+        list=mainActivity.find_ID_By_date(date);
         int[] a=new int[24];
         a=getOldID();
         if(list.isEmpty()) return date+"-"+1;
@@ -760,7 +762,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
     //获取该date已有的id值
     private int[] getOldID(){
         List<String>list=new ArrayList<String>();
-        mainActivity.find_ID_By_date(date,list);
+        list= mainActivity.find_ID_By_date(date);
         int[] a=new int[24];
         int i=0;
         Iterator iterator=list.iterator();
