@@ -1,4 +1,4 @@
-package com.example.chronus.clendar;
+package com.example.chronus.Calendar;
 
 import android.app.Activity;
 import android.content.Intent;

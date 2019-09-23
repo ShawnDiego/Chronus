@@ -1,4 +1,4 @@
-package com.example.chronus.clendar;
+package com.example.chronus.Calendar;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

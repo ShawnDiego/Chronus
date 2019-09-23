@@ -11,8 +11,8 @@
         android:supportsRtl="true"
 
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".clendar.Delete_General_Activity"></activity>
-        <activity android:name=".clendar.Add_General_Activity" />
+        <activity android:name=".Calendar.Delete_General_Activity"></activity>
+        <activity android:name=".Calendar.Add_General_Activity" />
         <activity android:name=".Reminders.Item_tosee" />
         <activity android:name=".Reminders.Update_DATA_Activity" />
         <activity android:name=".Reminders.ADD_DATA_Activity" />

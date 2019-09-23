@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -27,7 +26,7 @@ import android.widget.ImageView;
 import com.example.chronus.Reminders.RemindersFragment;
 import com.example.chronus.Setting.SettingFragment;
 import com.example.chronus.TimeLine.TimeLineFragment;
-import com.example.chronus.clendar.CalendarFragment;
+import com.example.chronus.Calendar.CalendarFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
