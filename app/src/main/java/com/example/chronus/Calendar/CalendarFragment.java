@@ -728,7 +728,12 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         getBtn(start).setText( title );
         setBgColor_head( getBtn( start ),item );
         setBgColor_tail( getBtn( end-1 ),item );
-        getBtn( end-1 ).setEnabled( false );
+        if(start==end-1){
+
+        }
+       else{
+            getBtn( end-1 ).setEnabled( false );
+        }
         //给btn设置背景颜色
         for(int i=start+1;i<end-1;i++){
             setBgColor_rang( getBtn( i ),item );
@@ -808,6 +813,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
             getBtn( i ).setEnabled(false );
             getBtn( i ).setEnabled( true );
             getBtn( i ).setFocusableInTouchMode( true );
+            getBtn(i).clearFocus();
             getBtn(i).setText(null);
             getBtn( i ).setBackgroundResource( R.drawable.bg_btn );
         }

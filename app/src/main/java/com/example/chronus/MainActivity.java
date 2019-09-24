@@ -33,6 +33,7 @@ import com.example.chronus.Calendar.CalendarFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -1266,6 +1267,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     public void initDateofFirstLogin(){
         //初始化示例数据库
+        Calendar calendar = Calendar.getInstance();
+
+        //获取系统的日期
+        //年
+        int year = calendar.get(Calendar.YEAR);
+        //月
+        int month = calendar.get(Calendar.MONTH)+1;
+        //日
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        String date = year + "-" + month + "-" + day;
         MainActivity.INSERT_List(String.valueOf(9999),"示例列表",imgIds[3].toString(),"5" );
         MainActivity.INSERT_List(String.valueOf(9998),"提醒事项",imgIds[0].toString(),"3" );
         MainActivity.INSERT_List(String.valueOf(9997),"备忘录",imgIds[2].toString(),"5" );
@@ -1308,7 +1320,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         MainActivity.INSERT("工作",String.valueOf(8947),"完成提案文件","需要在明天之前提交文档"," ");
         MainActivity.INSERT("工作",String.valueOf(8946),"安排员工会议时间"," "," ");
         MainActivity.INSERT("工作",String.valueOf(8945),"发休假申请"," "," ");
-
+        Insert_Schedule("999",date,""+9,""+10,"市场团队会议","","",""+0);
+        Insert_Schedule("998",date,""+11,""+12,"项目组项目","","",""+2);
+        Insert_Schedule("997",date,""+13,""+14,"与李铭的电话会议","","",""+4);
+        Insert_Schedule("996",date,""+15,""+17,"设计项目方案","","",""+1);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");// HH:mm:ss
         //获取当前时间
         //Date date = new Date(System.currentTimeMillis());
