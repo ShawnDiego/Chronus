@@ -988,17 +988,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static List<String> Find_All_Date()
     {
         SQLiteDatabase db = mDBHelper.getReadableDatabase();
-        Cursor cursor =  db.rawQuery("SELECT COUNT (*) FROM Schedule WHERE User_name =?",new String[]{user_name});
+        Cursor cursor =  db.rawQuery("select * FROM Schedule WHERE User_name =?",new String[]{user_name});
 
         List<String> a =new ArrayList<String>();
         if (cursor.moveToFirst()) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
-                String temp= cursor.getString(cursor.getColumnIndex("Date"));
+                String temp= cursor.getString(cursor.getColumnIndexOrThrow("Date"));
                 if(a.contains(temp))continue;
                 a.add(temp);
 
-                cursor.close();
             }
             cursor.close();
             return a;

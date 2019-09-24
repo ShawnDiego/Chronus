@@ -609,14 +609,20 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
     //为未添加标记的新建事项增添标记
     private void addMark() {
         Calendar[] a=new Calendar[50];
+        for(int j=0;j<schemes.size();j++){
+            a[j]=schemes.get(j);
+        }
+
         if(schemes.isEmpty()){
+            schemes.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFFFF7F00," "));
+            mCalendarView.setSchemeDate(schemes);
             return;
         }
-        schemes.toArray(a);
-        int i;
-        for(i=0;i<a.length;i++){
+
+        for(int i=0;i<schemes.size();i++){
+            boolean x=(a[i].getDay()==mDay)&&(a[i].getMonth()==mMonth)&&(a[i].getYear()==mYear);
             if((a[i].getDay()==mDay)&&(a[i].getMonth()==mMonth)&&(a[i].getYear()==mYear))
-                return;
+            {return;}
         }
         schemes.add(getSchemeCalendar(mYear, mMonth, mDay, 0xFFFF7F00," "));
         mCalendarView.setSchemeDate(schemes);
@@ -752,7 +758,6 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         //刷新时间表
         deleteView();
         refreshView(date,list);
-        addMark();
         if(isClick){
 
         }
