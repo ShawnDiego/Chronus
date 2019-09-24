@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 public class TimeLineFragment extends Fragment {
@@ -89,6 +91,7 @@ public class TimeLineFragment extends Fragment {
 
 
     private void initData() {
+        list.clear();
         Calendar calendar = Calendar.getInstance();
 
         //获取系统的日期
@@ -106,18 +109,44 @@ public class TimeLineFragment extends Fragment {
         //秒
         int second = calendar.get(Calendar.SECOND);
 
+        String today_day = year + "-" + month + "-" + day;//2019-9-9
+        Log.d("today",today_day);
+        List<String> reminder_today_id= new ArrayList<String>();
+        reminder_today_id = MainActivity.find_ID_By_DAY(today_day);
+        Iterator iterator=reminder_today_id.iterator();
+        String reminder_title, reminder_time;
+        while (iterator.hasNext()){
+            String id = iterator.next().toString();
+            Log.d("id",id);
+            reminder_title = MainActivity.Get_Title_by_ID(id);
+            reminder_time = MainActivity.Get_Day_by_ID(id);
+            list.add(new TimeData(TimeFormat.toDate(reminder_time),reminder_title,""));
+        }
+        List<String> calendar_today_id= new ArrayList<String>();
+        calendar_today_id = MainActivity.find_ID_By_date(today_day);
+        Iterator iterator_cal=calendar_today_id.iterator();
+        String cal_title, cal_time;
+        while (iterator_cal.hasNext()){
+            String id = iterator_cal.next().toString();
+            Log.d("id",id);
+            cal_title = MainActivity.get_Title_In_Schedule(id);
+            String date_cal = today_day +"-"+ String.valueOf(MainActivity.get_StartTime_In_Schedule(id))+"-0";
+            cal_time = date_cal;
+            list.add(new TimeData(TimeFormat.toDate(cal_time),"",cal_title));
+        }
 
-        list.clear();
-        list.add(new TimeData(TimeFormat.toDate("2019-09-09 10:00"),"","准备数学建模竞赛"));
-        list.add(new TimeData(TimeFormat.toDate("2019-09-09 12:00"),"去体育场取快递",""));
-        list.add(new TimeData(TimeFormat.toDate("2019-09-09 14:00"),"","与李铭的电话会议"));
-        list.add(new TimeData(TimeFormat.toDate("2019-09-09 19:30"),"查看花呗账单",""));
-        list.add(new TimeData(TimeFormat.toDate("2019-09-09 12:05"),"找老师签字",""));
-        list.add(new TimeData(TimeFormat.toDate("2019-09-09 12:35"),"去图书馆还书",""));
-        list.add(new TimeData(TimeFormat.toDate("2019-09-10 19:30"),"","去实验室准备器材"));
-        list.add(new TimeData(TimeFormat.toDate("2019-09-11 20:30"),"写实验报告作业",""));
-        list.add(new TimeData(TimeFormat.toDate("2019-09-11 19:30"),"","数学建模开始"));
-        list.add(new TimeData(TimeFormat.toDate("2019-09-11 20:00"),"","小组会议讨论"));
+
+        list.add(new TimeData(TimeFormat.toDate("2019-09-24 10:00"),"","准备数学建模竞赛"));
+        list.add(new TimeData(TimeFormat.toDate("2019-09-24 12:00"),"去体育场取快递",""));
+        list.add(new TimeData(TimeFormat.toDate("2019-09-24 14:00"),"","与李铭的电话会议"));
+        list.add(new TimeData(TimeFormat.toDate("2019-09-24 19:30"),"查看花呗账单",""));
+        list.add(new TimeData(TimeFormat.toDate("2019-09-24 12:05"),"找老师签字",""));
+        list.add(new TimeData(TimeFormat.toDate("2019-09-24 12:35"),"去图书馆还书",""));
+        list.add(new TimeData(TimeFormat.toDate("2019-09-24 19:30"),"","去实验室准备器材"));
+        list.add(new TimeData(TimeFormat.toDate("2019-09-24 20:30"),"写实验报告作业",""));
+        list.add(new TimeData(TimeFormat.toDate("2019-09-24 19:30"),"","数学建模开始"));
+        list.add(new TimeData(TimeFormat.toDate("2019-09-24 20:00"),"","小组会议讨论"));
+
         //加进来的数据，如果是日历则增加desc;如果是事项加title;
     }
 }

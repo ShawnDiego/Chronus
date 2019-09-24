@@ -128,7 +128,7 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
             settingTime.set(Calendar.SECOND,0);
             settingTime.set(Calendar.MILLISECOND, 0);
             int day = settingTime.get(Calendar.DAY_OF_YEAR);
-            int day_now = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);//跨两天的时间还not fin
+            int day_now = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
             int hour = settingTime.get(Calendar.HOUR_OF_DAY);
             int hour_now = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
             int min = settingTime.get(Calendar.MINUTE);
@@ -203,7 +203,7 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
                         if (date.length() > 0) { //清除上次记录的日期
                             date.delete(0, date.length());
                         }
-                        tvDate.setText(date.append(String.valueOf(year)).append("年").append(String.valueOf(month+1)).append("月").append(day).append("日"));
+                        tvDate.setText(date.append(String.valueOf(year)).append("年").append(String.valueOf(month)).append("月").append(day).append("日"));
                         dialog.dismiss();
                     }
                 });

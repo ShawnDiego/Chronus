@@ -1238,6 +1238,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 new String[]{title,content,type,id,user_name});
 
     }
+
+    //根据日期找到该日期所有的id
+    public static List<String> find_ID_By_DAY(String day) //参数的格式必须为（假如今天是9月9号）
+    {
+        List<String> a= new ArrayList<String>();
+        SQLiteDatabase db =mDBHelper.getReadableDatabase();
+        String pattern = ".*" + day + ".*";//进行模糊匹配
+        String date;//用来从数据库里读出时间来挨个进行模糊匹配
+        Cursor cursor = db.rawQuery("SELECT * FROM Remind_List WHERE User_name =? AND Checked =?", new String[]{user_name,"0"});
+        //存在数据才返回
+        if (cursor.moveToFirst()) {
+            for(int i =0;i<cursor.getCount();i++) {
+                cursor.moveToPosition(i);
+                date =cursor.getString(cursor.getColumnIndex("DAY"));
+                String id = cursor.getString(cursor.getColumnIndex("ID"));
+                if (Pattern.matches(pattern, date)) {
+                    a.add(id);
+                }
+            }
+            cursor.close();
+            return a;
+        } else {
+            cursor.close();
+            return a;
+        }
+    }
     public void initDateofFirstLogin(){
         //初始化示例数据库
         MainActivity.INSERT_List(String.valueOf(9999),"示例列表",imgIds[3].toString(),"5" );

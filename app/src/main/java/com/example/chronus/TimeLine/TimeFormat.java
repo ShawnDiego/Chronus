@@ -24,7 +24,7 @@ public class TimeFormat {
 
     public static Date toDate(String dateTime) {
         try {
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(dateTime);
+            return new SimpleDateFormat("yyyy-MM-dd-HH-mm").parse(dateTime);
         } catch (ParseException ignored) {
         }
         return new Date();

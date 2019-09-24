@@ -23,7 +23,7 @@
         android:background="@drawable/shape_rectangle_with_radius"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:orientation="horizontal">
@@ -33,7 +33,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:background="@mipmap/back" />
+                android:layout_centerVertical="true"
+                android:text="返回"
+                android:textColor="#0B85FB"
+                android:textSize="16sp"/>
 
             <TextView
                 android:id="@+id/add_name"
@@ -42,7 +45,8 @@
                 android:layout_marginLeft="25dp"
                 android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:text="日程"
+                android:layout_centerInParent="true"
+                android:text="行程信息"
                 android:textColor="#000000"
                 android:textSize="20sp" />
 
@@ -50,11 +54,15 @@
                 android:id="@+id/tv_delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="170dp"
-                android:text="删除" />
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="10dp"
+                android:text="删除"
+                android:textColor="#0B85FB"
+                android:textSize="16sp"/>
 
 
-        </LinearLayout>
+        </RelativeLayout>
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -101,10 +109,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
                         android:layout_marginTop="5dp"
-                        android:inputType="text"
-                        android:background="#FFFFFF"/>
+                        android:layout_marginRight="10dp"
+                        android:background="#FFFFFF"
+                        android:hint="地点"
+                        android:inputType="text" />
 
                 </RelativeLayout>
                 <View
@@ -123,10 +132,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
                         android:layout_marginTop="5dp"
-                        android:inputType="text"
-                        android:background="#FFFFFF"/>
+                        android:layout_marginRight="10dp"
+                        android:background="#FFFFFF"
+                        android:hint="详细信息"
+                        android:inputType="text" />
 
                 </RelativeLayout>
                 <View
