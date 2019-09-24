@@ -62,7 +62,7 @@ public class Add_General_Activity extends AppCompatActivity implements View.OnCl
         int month=bundle.getInt("month");
         int day=bundle.getInt("day");
         hour=bundle.getInt("hour");
-         String h=parseStr(hour);
+        String h=parseStr(hour);
         begin.setText(year+"年"+month+"月"+day+"日"+" "+h+":00");
         spinner.setSelection(hour+1);
     }
@@ -109,15 +109,15 @@ public class Add_General_Activity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            if(adapterView.getId()==R.id.sp_end){
-               if(i<=hour)
+        if(adapterView.getId()==R.id.sp_end){
+            if(i<=hour)
                 spinner.setSelection(hour+1);
-               else hour1=i;
-            }
-             if(adapterView.getId()==R.id.sp_color){
-                 item=i;
-                 setBgColor_radius( view,i );
-            }
+            else hour1=i;
+        }
+        if(adapterView.getId()==R.id.sp_color){
+            item=i;
+            setBgColor_radius( view,i );
+        }
     }
 
     @Override
