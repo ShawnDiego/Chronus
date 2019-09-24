@@ -1139,15 +1139,90 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+    //9.24添加
+    //*********//提醒事项列表根据行来获取ID值
+    public static String ShowLineID_inType(int i,String type,String T){
 
+        StringBuilder id = new StringBuilder();
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery
+                ("SELECT * FROM Remind_List WHERE Type =? AND Checked=? AND User_name =?", new String[]{type,T,user_name});
+        if (cursor.getCount() <= 0) {
+            id.append("无信息");
+            cursor.close();
+            return id.toString();
+        } else {
+            cursor.moveToPosition(i);
+            id.append(cursor.getString(cursor.getColumnIndex("ID")));
+
+            cursor.close();
+            return id.toString();
+        }
+    }
+    //*********//根据ID值来获取时间
+    public static String Get_Day_by_ID(String id ){
+        StringBuilder day = new StringBuilder();
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery
+                ("SELECT * FROM Remind_List WHERE ID =?  AND User_name =?", new String[]{id,user_name});
+        //存在数据才返回
+        if (cursor.moveToFirst()) {
+            day.append( cursor.getString(cursor.getColumnIndex("DAY")));
+            cursor.close();
+            return day.toString();
+        } else {
+            cursor.close();
+            return day.append("该ID下没有信息，出现未知错误").toString();
+        }
+    }
+    //*********//根据ID值来获取详细内容
+    public static String Get_Title_by_ID(String id ){
+        StringBuilder content = new StringBuilder();
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery
+                ("SELECT * FROM Remind_List WHERE ID =?  AND User_name =?", new String[]{id,user_name});
+        //存在数据才返回
+        if (cursor.moveToFirst()) {
+            content.append( cursor.getString(cursor.getColumnIndex("TITLE")));
+            cursor.close();
+            return content.toString();
+        } else {
+            cursor.close();
+            return content.append("该ID下没有信息，出现未知错误").toString();
+        }
+    }
+    //*********//根据ID值来获取详细内容
+    public static String Get_Content_by_ID(String id ){
+        StringBuilder content = new StringBuilder();
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery
+                ("SELECT * FROM Remind_List WHERE ID =?  AND User_name =?", new String[]{id,user_name});
+        //存在数据才返回
+        if (cursor.moveToFirst()) {
+            content.append( cursor.getString(cursor.getColumnIndex("Content")));
+            cursor.close();
+            return content.toString();
+        } else {
+            cursor.close();
+            return content.append("该ID下没有信息，出现未知错误").toString();
+        }
+    }
+
+    //****************//修改提醒事项的数据
+    public static void Update_Remind_by_ID(String type, String  id,String title, String content) {
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        db.execSQL("UPDATE Remind_List SET TITLE = ?, Content = ? WHERE Type =? AND ID = ? AND User_name =?",
+                new String[]{title,content,type,id,user_name});
+
+    }
     public void initDateofFirstLogin(){
         //初始化示例数据库
-        MainActivity.INSERT_List(String.valueOf(9999),"示例列表",imgIds[3].toString(),"0" );
-        MainActivity.INSERT_List(String.valueOf(9998),"提醒事项",imgIds[0].toString(),"0" );
-        MainActivity.INSERT_List(String.valueOf(9997),"备忘录",imgIds[2].toString(),"0" );
-        MainActivity.INSERT_List(String.valueOf(9996),"购物单",imgIds[5].toString(),"0" );
-        MainActivity.INSERT_List(String.valueOf(9995),"生日聚会",imgIds[2].toString(),"0" );
-        MainActivity.INSERT_List(String.valueOf(9994),"工作",imgIds[4].toString(),"0" );
+        MainActivity.INSERT_List(String.valueOf(9999),"示例列表",imgIds[3].toString(),"5" );
+        MainActivity.INSERT_List(String.valueOf(9998),"提醒事项",imgIds[0].toString(),"3" );
+        MainActivity.INSERT_List(String.valueOf(9997),"备忘录",imgIds[2].toString(),"5" );
+        MainActivity.INSERT_List(String.valueOf(9996),"购物单",imgIds[5].toString(),"6" );
+        MainActivity.INSERT_List(String.valueOf(9995),"生日聚会",imgIds[2].toString(),"5" );
+        MainActivity.INSERT_List(String.valueOf(9994),"工作",imgIds[4].toString(),"5" );
 
 
         MainActivity.INSERT("示例列表",String.valueOf(8999),"这里展现你当前未完成的提醒事项"," "," ");

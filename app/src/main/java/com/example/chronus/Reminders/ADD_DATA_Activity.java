@@ -80,9 +80,14 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
         Integer tem = number+1;
         String id = tem.toString();
         final String title = editText2.getText().toString();
+
         Integer Infactmonth = month+1;
+
         String Alerttime = null;
+
         Boolean Notife_or_not = false;
+
+
         //如果没设置日期
         if(tvDate.getText().equals("点击添加时间")){
             //没设置日期，不设置提醒，时间为空
@@ -130,8 +135,12 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
             int min_now = Calendar.getInstance().get(Calendar.MINUTE);
             int sec = settingTime.get(Calendar.SECOND);
             int sec_now = Calendar.getInstance().get(Calendar.SECOND);
-
-            int count_time = sec - sec_now + (min - min_now)*60 + (hour - hour_now)*3600 ;
+            int count_time;
+            if(day>day_now){
+                count_time = sec - sec_now + (min - min_now)*60 + (24 - hour_now + hour + 24 * (day-day_now-1))*3600 ;
+            }else{
+                count_time = sec - sec_now + (min - min_now)*60 + (hour - hour_now)*3600 ;
+            }
 
             //通知服务
             Intent i = new Intent(getBaseContext(), AlarmService.class);
@@ -145,8 +154,8 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
     }
         //初始化控件，并为两个LinearLayout设置监听事件：
     private void initView() {
-       llDate =  findViewById(R.id.ll_date);
-       tvDate = (TextView) findViewById(R.id.tv_date);//日期
+        llDate =  findViewById(R.id.ll_date);
+        tvDate = (TextView) findViewById(R.id.tv_date);//日期
         llTime =  findViewById(R.id.ll_time);
         tvTime = (TextView) findViewById(R.id.tv_time);//时间
         llDate.setOnClickListener(this);

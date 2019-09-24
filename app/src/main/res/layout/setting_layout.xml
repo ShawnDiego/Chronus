@@ -62,7 +62,8 @@
                         android:background="#FFFFFF"
                         android:text="登录或注册"
                         android:textColor="#8E8F90"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:visibility="visible" />
 
 
                 </RelativeLayout>
@@ -225,95 +226,104 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="#60A4A2A4"
-                    android:padding="12dp" />
+                    android:padding="12dp"
+                    android:visibility="invisible" />
+
                 <RelativeLayout
                     android:id="@+id/rl_add_cal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#FFFFFF"
                     android:padding="10dp"
-                    android:paddingStart="15dp">
+                    android:paddingStart="15dp"
+                    android:visibility="invisible">
 
                     <ImageView
                         android:id="@+id/iv_add_cal"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:layout_centerVertical="true"
                         android:background="@drawable/ico_radius"
                         android:backgroundTint="#157DFA"
                         android:padding="5dp"
-                        android:src="@drawable/cal_add"
-                        android:layout_centerVertical="true"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="添加日历类型"
-                        android:layout_toRightOf="@id/iv_add_cal"
-                        android:layout_marginStart="20dp"
-                        android:textColor="#000000"
-                        android:textSize="18sp"
-                        android:layout_centerVertical="true"/>
+                        android:src="@drawable/cal_add" />
 
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_alignParentRight="true"
-                        android:src="@drawable/to_left"
-                        app:srcCompat="@drawable/left"
                         android:layout_centerVertical="true"
-                        android:layout_marginEnd="5dp"/>
+                        android:layout_marginEnd="5dp"
+                        android:src="@drawable/to_left"
+                        app:srcCompat="@drawable/left" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_toRightOf="@id/iv_add_cal"
+                        android:text="添加日历类型"
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
 
                 </RelativeLayout>
 
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="70dp"
-                    android:background="#60A4A2A4"
-                    android:padding="12dp" />
                 <RelativeLayout
                     android:id="@+id/rl_delete_cal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#FFFFFF"
                     android:padding="10dp"
-                    android:paddingStart="15dp">
+                    android:paddingStart="15dp"
+                    android:visibility="invisible">
 
                     <ImageView
                         android:id="@+id/iv_delete_cal"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:layout_centerVertical="true"
                         android:background="@drawable/ico_radius"
                         android:backgroundTint="#FB3D39"
                         android:padding="5dp"
-                        android:src="@drawable/cal_delete"
-                        android:layout_centerVertical="true"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="删除日历类型"
-                        android:layout_toRightOf="@id/iv_delete_cal"
-                        android:layout_marginStart="20dp"
-                        android:textColor="#000000"
-                        android:textSize="18sp"
-                        android:layout_centerVertical="true"/>
+                        android:src="@drawable/cal_delete" />
 
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_alignParentRight="true"
-                        android:src="@drawable/to_left"
-                        app:srcCompat="@drawable/left"
                         android:layout_centerVertical="true"
-                        android:layout_marginEnd="5dp"/>
+                        android:layout_marginEnd="5dp"
+                        android:src="@drawable/to_left"
+                        app:srcCompat="@drawable/left" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_toRightOf="@id/iv_delete_cal"
+                        android:text="删除日历类型"
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
 
                 </RelativeLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:layout_marginStart="70dp"
                     android:background="#60A4A2A4"
-                    android:padding="12dp" />
+                    android:padding="12dp"
+                    android:visibility="invisible" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#60A4A2A4"
+                    android:padding="12dp"
+                    android:visibility="invisible" />
             </LinearLayout>
         </ScrollView>
 

@@ -100,11 +100,12 @@ public class LoginActivity extends AppCompatActivity   {
                         //验证用户名和密码是否对应，如果匹配即登录成功执行以下代码
                         MainActivity.user_name = user_name.getText().toString();
                         LoginSuccess();
-
+                        password_layout.setError(null); // Clear the error
                         Log.d("判断密码：","密码正确");
                         finish();
                     } else {
                         //password_layout.setError(null); // Clear the error
+                        password_layout.setError("密码不正确");
                         Log.d("判断密码：","密码不正确");
                     }
                 }

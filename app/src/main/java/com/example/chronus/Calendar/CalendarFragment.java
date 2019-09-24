@@ -669,7 +669,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         getBtn( start ).setEnabled( true );
         getBtn( start ).setFocusable( false );
         //设置下划线
-        setUnderLine();
+//        setUnderLine();
         //在日期上添加标记
         addMark(  );
     }
@@ -727,8 +727,25 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
 
         }
     }
+    //清空时间表
+    public  void deleteView(){
+
+        //恢复按钮的点击功能
+        for(int i=0;i<24;i++){
+            getBtn( i ).setEnabled(false );
+            getBtn( i ).setEnabled( true );
+            getBtn( i ).setFocusableInTouchMode( true );
+            getBtn(i).setText(null);
+            getBtn( i ).setBackgroundResource( R.drawable.bg_btn );
+        }
+        //恢复下划线的颜色
+        for(int i=0;i<23;i++){
+            getView( i ).setBackgroundResource( R.drawable.bg_underline );
+        }
+    }
     //刷新时间表
     public void refreshView(String date,List<String> l){
+        deleteView();
         String id,title;
         int start,end,color;
         l=mainActivity.find_ID_By_date(date);

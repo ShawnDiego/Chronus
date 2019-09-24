@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
+import android.transition.Visibility;
 import android.util.Log;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -34,6 +35,7 @@ import com.example.chronus.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -46,11 +48,21 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
     int mCurrentPosition = -1;
     private int imgIds =  R.drawable.radio_unselected;
     private int imgAdd =  R.drawable.item_add;
-    private int checked[] ={0,1,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    //private int checked[] ={0,1,0,1,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     private int seleted_img = R.drawable.radio_selected;
     private ImageView mPopupMenu;
     public static String get_Type;
     public String ListId;
+    //判定是在未完成页面中还是在完成页面中
+    public String  Is_Finished;
+    //确定哪一行的事项将归档
+    public int Line;
+    static int temp =0;
+    //用来将事项设置为已完成
+    public  static List<String> list_unfinished;
+    public  static List<String> list_finished;
+    public static int []clicktime_unfinished =new int[100];
+    public static int []clicktime_finished =new int[100];
 
     @Override
     public void setContentView(View view) {
@@ -78,6 +90,12 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
         //将事项类型显示到页面上方
         TextView textView =(TextView)findViewById(R.id.item_list_name);
         textView.setText(get_Type);
+        for(int i=0;i<100;i++)
+            clicktime_unfinished [i]=0;
+        for(int i=0;i<100;i++)
+            clicktime_finished [i]=0;
+        list_unfinished =new ArrayList<String>();
+        list_finished =new ArrayList<String>();
     }
 
     public void onClick(View v){
@@ -126,18 +144,45 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
         RelativeLayout item_rl = findViewById(R.id.item_rl);
         item_rl.setVisibility(View.INVISIBLE);
         Log.d("state","onPause");
+        Iterator iterator= list_unfinished.iterator();
+        while (iterator.hasNext()) {
+            String title =iterator.next().toString();
+            MainActivity.SetFinished_By_Title(title);
+        }
+        Iterator iterator2= list_finished.iterator();
+        while (iterator2.hasNext()) {
+            String title2 =iterator2.next().toString();
+            MainActivity.Set_UnFinished_By_Title(title2);
+        }
+
+        for(int i=0;i<100;i++)
+            clicktime_unfinished [i]=0;
+        for(int i=0;i<100;i++)
+            clicktime_finished [i]=0;
+        list_unfinished.clear();
+        list_finished.clear();
     }
     private void getListView(String t){
+        Is_Finished =t;
+        if(t.equals("0"))
+            Toast.makeText(MainActivity.mainActivity,"进入未完成事项页面",Toast.LENGTH_SHORT).show();
+        else{
+            Toast.makeText(MainActivity.mainActivity,"进入已完成事项页面",Toast.LENGTH_SHORT).show();
+        }
         List<Map<String, Object>> listitem = new ArrayList<Map<String, Object>>();
+
         for (int i = 0; i < MainActivity.getCount_By_Type(get_Type,t); i++) {
             Map<String, Object> showitem = new HashMap<String, Object>();
-            if(checked[i] == 0){
+            showitem.put("item_name", MainActivity.ShowLineTitle_In_Type(i,get_Type,t));
+            if(t == "0"){
                 showitem.put("item_img", imgIds);
+                showitem.put("item_name", MainActivity.ShowLineTitle_In_Type(i,get_Type,"0"));
+
             }else{
                 showitem.put("item_img",seleted_img);
-            }
+                showitem.put("item_name", MainActivity.ShowLineTitle_In_Type(i,get_Type,"1"));
 
-            showitem.put("item_name", MainActivity.ShowLineTitle_In_Type(i,get_Type,t));
+            }
 
             listitem.add(showitem);
         }
@@ -158,17 +203,19 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
 
     }
     private void init() {
+        Is_Finished ="0";
+
         List<Map<String, Object>> listitem = new ArrayList<Map<String, Object>>();
         for (int i = 0; i < MainActivity.getCount_By_Type(get_Type,"0"); i++) {
             Map<String, Object> showitem = new HashMap<String, Object>();
-            if(checked[i] == 0){
-                showitem.put("item_img", imgIds);
-            }else{
-                showitem.put("item_img",seleted_img);
-            }
-
+            showitem.put("item_img", imgIds);
             showitem.put("item_name", MainActivity.ShowLineTitle_In_Type(i,get_Type,"0"));
 
+
+            // showitem.put("item_img",seleted_img);
+            // MainActivity.SetFinished_By_Title(MainActivity.ShowLineTitle_In_Type(i,get_Type,"0"));
+
+            // getListView("0");
             listitem.add(showitem);
         }
         //final Integer number = listitem.size();
@@ -191,6 +238,11 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
 
                 ImageView sel_img = view.findViewById(R.id.choose_img);
                 TextView sel_tv = view.findViewById(R.id.item_name);
+                // if(Is_Finished == "0")sel_img.setTag("0");
+                // else{sel_img.setTag("1");}
+
+
+
                 if(sel_tv.getText().equals("添加新事项")){
                     //弹出新建
                     //Intent intent = new Intent(getActivity(), ADD_DATA_Activity.class);
@@ -199,15 +251,55 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
                     intent.putExtra("number",number);
                     intent.putExtra("type", get_Type);
                     startActivity(intent);
-                } else if(sel_img.getTag().toString().equals("1") || checked[i] == 1){
-                    sel_img.setImageResource(imgIds);
-                    sel_img.setTag("0");
-                    checked[i]=0;
-                } else if(sel_img.getTag().toString().equals("0") || checked[i] == 0){
-                    sel_img.setImageResource(seleted_img);
-                    sel_img.setTag("1");
-                    checked[i]=1;
+                } else if(Is_Finished=="0"){
+                    Line = i;
+
+                    // sel_img.setTag("1");
+                    if (clicktime_unfinished [Line] % 2 == 0) {
+                        sel_img.setImageResource(seleted_img);
+                        //MainActivity.SetFinished_By_Title(MainActivity.ShowLineTitle_In_Type(Line, get_Type, Is_Finished));
+                        list_unfinished.add(MainActivity.ShowLineTitle_In_Type(Line, get_Type, Is_Finished));
+                        clicktime_unfinished [Line]++;
+                    } else {
+                        sel_img.setImageResource(imgIds);
+
+                        //MainActivity.Set_UnFinished_By_Title(MainActivity.ShowLineTitle_In_Type(Line,get_Type,Is_Finished));
+                        list_unfinished.remove(MainActivity.ShowLineTitle_In_Type(Line, get_Type, Is_Finished));
+                        clicktime_unfinished [Line]++;
+                    }
                 }
+                else if(Is_Finished=="1"){
+                    Line = i;
+
+                    // sel_img.setTag("1");
+                    if (clicktime_finished [Line] % 2 == 0) {
+                        sel_img.setImageResource(imgIds);
+                        //MainActivity.SetFinished_By_Title(MainActivity.ShowLineTitle_In_Type(Line, get_Type, Is_Finished));
+                        list_finished.add(MainActivity.ShowLineTitle_In_Type(Line, get_Type, Is_Finished));
+                        clicktime_finished [Line]++;
+                    } else {
+                        sel_img.setImageResource(seleted_img);
+
+                        //MainActivity.Set_UnFinished_By_Title(MainActivity.ShowLineTitle_In_Type(Line,get_Type,Is_Finished));
+                        //list_finished.add(MainActivity.ShowLineTitle_In_Type(Line, get_Type, Is_Finished));
+                        //String title =MainActivity.ShowLineTitle_In_Type(Line, get_Type, Is_Finished);
+                            /*
+                        for (int p =0; p < 100; p++){
+
+                            if (list_finished.get(p).equals(title)) {
+
+                                list_finished.remove(p);
+
+                            }
+
+                        }
+                        */
+                        list_finished.remove(MainActivity.ShowLineTitle_In_Type(Line, get_Type, Is_Finished));
+
+                        clicktime_finished [Line]++;
+                    }
+                }
+
             }
         });
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -225,11 +317,15 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
                     //MainActivity.Line = i;
                     //MainActivity.type = get_Type;
                     //intent.putExtra("Number", i);
-                   // startActivity(intent);
+                    // startActivity(intent);
 
+                    MainActivity.Line = i;
                     MainActivity.Edit_ID = MainActivity.ShowLineID(MainActivity.Line);
+                    String item_id = MainActivity.ShowLineID_inType(i,get_Type,"0");
                     Intent intent = new Intent(getApplicationContext(), Update_DATA_Activity.class);
-                    intent.putExtra("item_id",MainActivity.ShowLineID(MainActivity.Line));
+                    //intent.putExtra("Number", i);
+                    intent.putExtra("item_id", item_id);
+                    intent.putExtra("item_from_listname",get_Type);
 
                     startActivity(intent);
                 }
@@ -312,8 +408,17 @@ public class ReminderItemsActivity extends AppCompatActivity implements View.OnC
 
                         case R.id.rem_finish:
                             //显示全部完成的事项
-                            getListView("1");
-                            Toast.makeText(context,"此页面为已完成的项目",Toast.LENGTH_SHORT).show();
+
+                            if(menuItem.getTitle().equals("返回")){
+                               // getListView("0");
+                               // menuItem.setTitle("显示已完成项目");
+
+                            }else{
+                                getListView("1");
+                                //menuItem.setTitle("返回");
+                                Toast.makeText(context,"此页面为已完成的项目",Toast.LENGTH_SHORT).show();
+                            }
+
                             return true;
                         default:
                             //do nothing

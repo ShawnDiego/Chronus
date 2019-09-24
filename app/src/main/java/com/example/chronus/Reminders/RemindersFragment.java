@@ -327,40 +327,40 @@ public class RemindersFragment extends Fragment {
             }
         });
         // 列表项目长按
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                //长按显示修改列表名称
-                //需要数据库同步
-                final  EditText et = new EditText(getActivity());
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("修改列表");
-                builder.setView(et);
-                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        //数据获取
-                        Toast.makeText(getActivity(), et.getText().toString(), Toast.LENGTH_LONG).show();
-                        //修改列表的数据库
-                        Toast.makeText(getActivity(), "成功修改列表 "+et.getText().toString(), Toast.LENGTH_SHORT).show();
-                        MediaPlayer mMediaPlayer;
-                        mMediaPlayer =  MediaPlayer.create(getContext(),R.raw.confirm_up);
-                        mMediaPlayer.start();
-                    }
-                });
-                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getActivity(), "取消修改列表", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-                builder.create();
-                builder.show();
-                return true;
-            }
-        });
+//        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+//                //长按显示修改列表名称
+//                //需要数据库同步
+//                final  EditText et = new EditText(getActivity());
+//
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//                builder.setTitle("修改列表");
+//                builder.setView(et);
+//                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface arg0, int arg1) {
+//                        //数据获取
+//                        Toast.makeText(getActivity(), et.getText().toString(), Toast.LENGTH_LONG).show();
+//                        //修改列表的数据库
+//                        Toast.makeText(getActivity(), "成功修改列表 "+et.getText().toString(), Toast.LENGTH_SHORT).show();
+//                        MediaPlayer mMediaPlayer;
+//                        mMediaPlayer =  MediaPlayer.create(getContext(),R.raw.confirm_up);
+//                        mMediaPlayer.start();
+//                    }
+//                });
+//                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        Toast.makeText(getActivity(), "取消修改列表", Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//
+//                builder.create();
+//                builder.show();
+//                return true;
+//            }
+//        });
         //搜索 区域被点击
         search_et.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -87,11 +87,11 @@ public class SettingFragment extends Fragment{
         if(MainActivity.user_name.equals("admin") )
         {
             user_name.setText("登陆或注册");
-            user_name.setTextColor(0X8E8F90);
+            //user_name.setTextColor(0X8E8F90);
         }
         else{
             user_name.setText(MainActivity.user_name);
-            user_name.setTextColor(0XFFFFFF);
+            //user_name.setTextColor(0X000000);
         }
 
     }
