@@ -3,7 +3,6 @@ package com.example.chronus.Calendar;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,8 +24,6 @@ import com.haibin.calendarview.CalendarView;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class CalendarFragment extends Fragment implements CalendarView.OnDateSelectedListener, CalendarView.OnYearChangeListener{
 
@@ -337,7 +334,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         btn23.setOnClickListener(listener);
         btn24.setOnClickListener(listener);
 
-
+        mCalendarView.setSchemeDate(schemes);
         initView();
         return view;
     }
@@ -427,6 +424,10 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
 
             if(resultCode==0){
                 //初始化时间表
+                List<String> list = new ArrayList<String>();
+                //刷新时间表
+                deleteView();
+                refreshView(date,list);
                 Toast.makeText( activity,"关闭",Toast.LENGTH_SHORT).show();
             }
             //新建事项
@@ -445,8 +446,6 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
                 //将新的日程添加到数据库
                 String id=getNewId();
                 mainActivity.Insert_Schedule(id,date,""+start,""+end,title,place,content,""+item);
-
-
                 Toast.makeText( activity,"建立成功",Toast.LENGTH_SHORT).show();
             }}
 
@@ -455,8 +454,11 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
             if(resultCode==1){
                 //将该日程从数据库删除
                 mainActivity.DELETE_Schedule(date,""+first,""+last);
-
-                deleteGeneral(first,last);
+                //获取当天所有事项的ID
+                List<String> list = new ArrayList<String>();
+                //刷新时间表
+                deleteView();
+                refreshView(date,list);
                 deleteMark();
                 Toast.makeText( activity,"删除成功",Toast.LENGTH_SHORT).show();
             }
@@ -468,14 +470,23 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
                 Title=bundle2.getString( "UpdateTitle" );
                 Place=bundle2.getString( "UpdatePlace" );
                 Content=bundle2.getString( "UpdateContent" );
-                getBtn( first ).setText( Title );
                 //在数据库上更新该日程事项内容
                 String id=mainActivity.get_Schedule_ID(date,""+first,""+last);
                 mainActivity.Update_Schedule(Title,Place,Content,id);
+                //初始化时间表
+                List<String> list = new ArrayList<String>();
+                //刷新时间表
+                deleteView();
+                refreshView(date,list);
+
             }
             //仅返回
             if(resultCode==0){
-
+                //初始化时间表
+                List<String> list = new ArrayList<String>();
+                //刷新时间表
+                deleteView();
+                refreshView(date,list);
             }
         }
     }
@@ -675,15 +686,39 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         }
     }
 
-    public void setBgColor(View view,int i){
+    public void setBgColor_head(View view,int i){
         switch (i){
-            case 0: view.setBackgroundResource( R.drawable.bg_red );break;
-            case 1: view.setBackgroundResource( R.drawable.bg_yellow );break;
-            case 2: view.setBackgroundResource( R.drawable.bg_orange );break;
-            case 3: view.setBackgroundResource( R.drawable.bg_green);break;
-            case 4: view.setBackgroundResource( R.drawable.bg_blue );break;
-            case 5: view.setBackgroundResource( R.drawable.bg_purper );break;
-            case 6: view.setBackgroundResource( R.drawable.bg_grey );break;
+            case 0: view.setBackgroundResource( R.drawable.bg_red_head);break;
+            case 1: view.setBackgroundResource( R.drawable.bg_yellow_head);break;
+            case 2: view.setBackgroundResource( R.drawable.bg_orange_head);break;
+            case 3: view.setBackgroundResource( R.drawable.bg_green_head);break;
+            case 4: view.setBackgroundResource( R.drawable.bg_blue_head);break;
+            case 5: view.setBackgroundResource( R.drawable.bg_purper_head);break;
+            case 6: view.setBackgroundResource( R.drawable.bg_grey_head);break;
+        }
+    }
+
+    public void setBgColor_rang(View view,int i){
+        switch (i){
+            case 0: view.setBackgroundResource( R.drawable.bg_red_rang );break;
+            case 1: view.setBackgroundResource( R.drawable.bg_yellow_rang );break;
+            case 2: view.setBackgroundResource( R.drawable.bg_orange_rang );break;
+            case 3: view.setBackgroundResource( R.drawable.bg_green_rang);break;
+            case 4: view.setBackgroundResource( R.drawable.bg_blue_rang);break;
+            case 5: view.setBackgroundResource( R.drawable.bg_purper_rang);break;
+            case 6: view.setBackgroundResource( R.drawable.bg_grey_rang );break;
+        }
+    }
+
+    public void setBgColor_tail(View view,int i){
+        switch (i){
+            case 0: view.setBackgroundResource( R.drawable.bg_red_tail);break;
+            case 1: view.setBackgroundResource( R.drawable.bg_yellow_tail);break;
+            case 2: view.setBackgroundResource( R.drawable.bg_orange_tail);break;
+            case 3: view.setBackgroundResource( R.drawable.bg_green_tail);break;
+            case 4: view.setBackgroundResource( R.drawable.bg_blue_tail);break;
+            case 5: view.setBackgroundResource( R.drawable.bg_purper_tail);break;
+            case 6: view.setBackgroundResource( R.drawable.bg_grey_tail);break;
         }
     }
 
@@ -691,18 +726,20 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
     public void addGeneral(String title,int start,int end,int item){
         //将建立好的事项在btn上显示
         getBtn(start).setText( title );
+        setBgColor_head( getBtn( start ),item );
+        setBgColor_tail( getBtn( end-1 ),item );
+        getBtn( end-1 ).setEnabled( false );
         //给btn设置背景颜色
-        for(int i=start;i<end;i++){
-            setBgColor( getBtn( i ),item );
+        for(int i=start+1;i<end-1;i++){
+            setBgColor_rang( getBtn( i ),item );
             getBtn( i ).setEnabled( false );
         }
         //若事项包含多个按钮，使内部下划线跟按钮颜色同步
         for(int i=start;i<end-1;i++)
         {
-            setBgColor( getView( i ),item );
+            setBgColor_rang( getView( i ),item );
         }
         //使显示文字的按钮失去聚焦功能
-        getBtn( start ).setEnabled( true );
         getBtn( start ).setFocusable( false );
         //设置下划线
 

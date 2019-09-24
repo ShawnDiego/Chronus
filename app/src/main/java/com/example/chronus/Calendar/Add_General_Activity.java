@@ -116,7 +116,7 @@ public class Add_General_Activity extends AppCompatActivity implements View.OnCl
             }
              if(adapterView.getId()==R.id.sp_color){
                  item=i;
-                 setBgColor( view,i );
+                 setBgColor_radius( view,i );
             }
     }
 
@@ -125,15 +125,15 @@ public class Add_General_Activity extends AppCompatActivity implements View.OnCl
 
     }
 
-    public void setBgColor(View view,int i){
+    public void setBgColor_radius(View view,int i){
         switch (i){
-            case 0: view.setBackgroundResource( R.drawable.bg_red );break;
-            case 1: view.setBackgroundResource( R.drawable.bg_yellow );break;
-            case 2: view.setBackgroundResource( R.drawable.bg_orange );break;
-            case 3: view.setBackgroundResource( R.drawable.bg_green);break;
-            case 4: view.setBackgroundResource( R.drawable.bg_blue );break;
-            case 5: view.setBackgroundResource( R.drawable.bg_purper );break;
-            case 6: view.setBackgroundResource( R.drawable.bg_grey );break;
+            case 0: view.setBackgroundResource( R.drawable.bg_red_radius);break;
+            case 1: view.setBackgroundResource( R.drawable.bg_yellow_radius);break;
+            case 2: view.setBackgroundResource( R.drawable.bg_orange_radius);break;
+            case 3: view.setBackgroundResource( R.drawable.bg_green_radius);break;
+            case 4: view.setBackgroundResource( R.drawable.bg_blue_radius);break;
+            case 5: view.setBackgroundResource( R.drawable.bg_purper_radius);break;
+            case 6: view.setBackgroundResource( R.drawable.bg_grey_radius);break;
         }
     }
 }
