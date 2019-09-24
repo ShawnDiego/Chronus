@@ -973,15 +973,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (Pattern.matches(pattern, day)) {
                     a.add(cursor.getString(cursor.getColumnIndex("ID")));
                 }
-                cursor.close();
-                return a;
+
             }
             cursor.close();
+            return a;
         } else {
             cursor.close();
             return a;
         }
-        return a;
+
+    }
+
+    //获取日程数据库中的所有的date值返回List
+    public static List<String> Find_All_Date()
+    {
+        SQLiteDatabase db = mDBHelper.getReadableDatabase();
+        Cursor cursor =  db.rawQuery("SELECT COUNT (*) FROM Schedule WHERE User_name =?",new String[]{user_name});
+
+        List<String> a =new ArrayList<String>();
+        if (cursor.moveToFirst()) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
+                String temp= cursor.getString(cursor.getColumnIndex("Date"));
+                if(a.contains(temp))continue;
+                a.add(temp);
+
+                cursor.close();
+            }
+            cursor.close();
+            return a;
+        } else {
+            cursor.close();
+            return a;
+        }
     }
 
     //向日程中添加事项
