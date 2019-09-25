@@ -151,7 +151,7 @@ public class TimeAdapter extends RecyclerView.Adapter{
             }
             if(isEmpty(timeData.getDesc()))
             {
-                text_cal_title.setVisibility(View.GONE);
+                text_cal_title.setVisibility(View.INVISIBLE);
             }else{
                 text_cal_title.setText(timeData.getDesc());
             }

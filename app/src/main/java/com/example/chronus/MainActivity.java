@@ -1283,6 +1283,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         db.execSQL("DELETE FROM Schedule WHERE User_name = ?", new String[]{user_name});
 
     }
+    //将用户名替换
+    public static void Update_User_Inf()
+    {
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        db.execSQL("UPDATE Remind_List SET User_name = ? WHERE User_name = ?", new String[]{user_name,"admin"});
+        db.execSQL("UPDATE List SET User_name = ? WHERE User_name = ?", new String[]{user_name,"admin"});
+        db.execSQL("UPDATE Schedule SET User_name = ? WHERE User_name = ?", new String[]{user_name,"admin"});
+
+    }
     static public void initDateofFirstLogin(){
         //初始化示例数据库
         Calendar calendar = Calendar.getInstance();
@@ -1310,15 +1319,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         MainActivity.INSERT("示例列表",String.valueOf(8996),"长按事项还能查看更多的信息","通过这里查看更详细的内容"," ");
         MainActivity.INSERT("示例列表",String.valueOf(8995),"右上角的才能还能帮助你看到完成的事项"," "," ");
 
-        MainActivity.INSERT("提醒事项",String.valueOf(8989),"下午五点去餐厅"," "," ");
+        MainActivity.INSERT("提醒事项",String.valueOf(8989),"下午五点去餐厅"," ",date+"-17-0");
         MainActivity.INSERT("提醒事项",String.valueOf(8988),"去图书馆还书"," "," ");
-        MainActivity.INSERT("提醒事项",String.valueOf(8987),"到干洗店取衣服"," "," ");
+        MainActivity.INSERT("提醒事项",String.valueOf(8987),"到干洗店取衣服"," ",date+"-19-0");
 
         MainActivity.INSERT("备忘录",String.valueOf(8979),"给王明打电话祝他生日快乐"," "," ");
         MainActivity.INSERT("备忘录",String.valueOf(8978),"买聚会的饮料"," "," ");
         MainActivity.INSERT("备忘录",String.valueOf(8977),"洗车"," "," ");
         MainActivity.INSERT("备忘录",String.valueOf(8976),"约慧雯吃饭"," "," ");
-        MainActivity.INSERT("备忘录",String.valueOf(8975),"到花店取花"," "," ");
+        MainActivity.INSERT("备忘录",String.valueOf(8975),"到花店取花"," ",date+"-15-35");
 
         MainActivity.INSERT("购物单",String.valueOf(8969),"牛奶"," "," ");
         MainActivity.INSERT("购物单",String.valueOf(8968),"鸡蛋"," "," ");

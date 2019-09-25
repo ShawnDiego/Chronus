@@ -153,7 +153,7 @@ public class TimeLineFragment extends Fragment {
             list.add(new TimeData(TimeFormat.toDate(today_day+"-12-05"),"去图书馆还书",""));
             list.add(new TimeData(TimeFormat.toDate(today_day+"-19-30"),"","去实验室准备器材"));
             list.add(new TimeData(TimeFormat.toDate(today_day+"-20-30"),"写实验报告作业",""));
-            list.add(new TimeData(TimeFormat.toDate(today_day+"-19-30"),"","数学建模开始"));
+            list.add(new TimeData(TimeFormat.toDate(today_day+"-19-30"),"数学建模开始",""));
             list.add(new TimeData(TimeFormat.toDate(today_day+"-20-00"),"","小组会议讨论"));
 
         }

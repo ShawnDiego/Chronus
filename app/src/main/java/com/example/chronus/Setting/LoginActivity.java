@@ -107,11 +107,12 @@ public class LoginActivity extends AppCompatActivity   {
                                                 .setPositiveButton("保留", new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialogInterface, int n) {
-                                                        MainActivity.initDateofFirstLogin();
+                                                        MainActivity.Update_User_Inf();
+                                                        finish();
                                                     }
                                                 }).create();
                                         alertDialog2.show();
-                                        finish();
+
                                     }
                                 }).create();
                         alertDialog.show();
