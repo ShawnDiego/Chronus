@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView iv_timeline;
     private ImageView iv_tom;
     private ImageView iv_set;
-    private Integer[] imgIds = new Integer[]{R.mipmap.lise_icon1, R.mipmap.lise_icon2, R.mipmap.lise_icon3,
+    static private Integer[] imgIds = new Integer[]{R.mipmap.lise_icon1, R.mipmap.lise_icon2, R.mipmap.lise_icon3,
             R.mipmap.lise_icon4, R.mipmap.lise_icon5, R.mipmap.lise_icon6};
 
 
@@ -276,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(isFirstIn){
             initDateofFirstLogin();
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean("isFirstIn",false);
+            editor.putBoolean("is_first_in_data",false);
             editor.apply();
         }else{
             Log.d("是否为第一次登陆","不是");
@@ -1273,7 +1273,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return a;
         }
     }
-    public void initDateofFirstLogin(){
+    //当前用户数据清除
+    public static void Delete_All()
+    {
+        SQLiteDatabase db = mDBHelper.getWritableDatabase();
+        db.execSQL("DELETE FROM Remind_List WHERE User_name = ?", new String[]{user_name});
+        db.execSQL("DELETE FROM List WHERE User_name = ?", new String[]{user_name});
+        //db.execSQL("DELETE FROM User WHERE User_name = ?", new String[]{user_name});
+        db.execSQL("DELETE FROM Schedule WHERE User_name = ?", new String[]{user_name});
+
+    }
+    static public void initDateofFirstLogin(){
         //初始化示例数据库
         Calendar calendar = Calendar.getInstance();
 

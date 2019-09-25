@@ -170,6 +170,25 @@ public class SettingFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 //Log.d("test:",Boolean.toString(getisLogin()));
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                AlertDialog alertDialog = builder
+                        .setTitle("系统提示")
+                        .setMessage("确定要清空所有数据吗，此操作不可复原！")
+                        .setNegativeButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int n) {
+                                MainActivity.Delete_All();
+                                Toast.makeText(getContext(), "已清除用户所有数据", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setPositiveButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int n) {
+
+                            }
+                        }).create();
+                alertDialog.show();
+
             }
         });
     }

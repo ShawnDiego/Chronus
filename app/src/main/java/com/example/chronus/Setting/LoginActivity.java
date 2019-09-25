@@ -93,6 +93,24 @@ public class LoginActivity extends AppCompatActivity   {
                                         //自动切换为登陆后的用户
                                         MainActivity.user_name =user_name.getText().toString();
                                         SettingFragment.setLoginTrue();
+                                        //是否保留示例数据
+                                        AlertDialog.Builder builder2 = new AlertDialog.Builder(LoginActivity.this);
+                                        AlertDialog alertDialog2 = builder2
+                                                .setTitle("示例数据")
+                                                .setMessage("是否保留示例数据")
+                                                .setNegativeButton("不保留", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int n) {
+
+                                                    }
+                                                })
+                                                .setPositiveButton("保留", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int n) {
+                                                        MainActivity.initDateofFirstLogin();
+                                                    }
+                                                }).create();
+                                        alertDialog2.show();
                                         finish();
                                     }
                                 }).create();
