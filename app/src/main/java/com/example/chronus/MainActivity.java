@@ -271,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
        //检测是否为第一次登陆
         final SharedPreferences sharedPreferences = getSharedPreferences("is_first_in_data",MODE_PRIVATE);
-        Boolean isFirstIn = sharedPreferences.getBoolean("isFirstIn",true);
+        Boolean isFirstIn = sharedPreferences.getBoolean("is_first_in_data",true);
 
         if(isFirstIn){
             initDateofFirstLogin();
