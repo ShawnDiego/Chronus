@@ -155,15 +155,45 @@ public class SettingFragment extends Fragment{
             @Override
             public void onClick(View v) {
                 //将数据从服务器端同步到本地
-                new Syn_From_Server(MainActivity.mDBHelper.getDBPath()).start();
+                if(MainActivity.user_name.equals("admin")){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    AlertDialog alertDialog = builder
+                            .setTitle("系统提示")
+                            .setMessage("请在登录后尝试此操作。")
+                            .setNegativeButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int n) {
+
+                                }
+                            }).create();
+                    alertDialog.show();
+                }else{
+                    new Syn_From_Server(MainActivity.mDBHelper.getDBPath()).start();
+                }
+
             }
         });
         rl_push.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //将数据从本地同步到服务器
-                Syn_To_Server syn_to_server = new Syn_To_Server( MainActivity.mDBHelper.getDBPath());
-                syn_to_server.start();
+                if(MainActivity.user_name.equals("admin")){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    AlertDialog alertDialog = builder
+                            .setTitle("系统提示")
+                            .setMessage("请在登录后尝试此操作。")
+                            .setNegativeButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int n) {
+
+                                }
+                            }).create();
+                    alertDialog.show();
+                }else{
+                    Syn_To_Server syn_to_server = new Syn_To_Server( MainActivity.mDBHelper.getDBPath());
+                    syn_to_server.start();
+                }
+
             }
         });
         rl_clean.setOnClickListener(new View.OnClickListener() {
