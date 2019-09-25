@@ -79,7 +79,9 @@ public class TimeAdapter extends RecyclerView.Adapter{
             if (position == 0) {
                 txt_date_title.setBackgroundResource(R.drawable.message_sys_bg);
                 text_cal_title.setBackgroundResource(R.drawable.message_shadow_bg);
-                layoutParams.setMargins(0, DensityUtil.dip2px(vLine.getContext(), 23), 0, 0);
+
+                layoutParams.setMargins(0, DensityUtil.dip2px(vLine.getContext(), 25), 0, 0);
+
                 im_pod.setVisibility(View.INVISIBLE);
                 rlTitle.setVisibility(View.VISIBLE);
                 txtTime.setText(TimeFormat.toTime(timeData.getPostDate()));
@@ -89,7 +91,6 @@ public class TimeAdapter extends RecyclerView.Adapter{
                 layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.txt_date_title);
             } else if (position < data.size() - 1) {
                 if (timeData.getPostDate().equals(data.get(position - 1).getPostDate())) {
-
                         rlTitle.setVisibility(View.GONE);
                         //layoutParams.setMargins(0, DensityUtil.dip2px(vLine.getContext(), 15), 0, 0);
                         txt_date_title.setBackgroundResource(R.drawable.message_sys_bg);
@@ -98,8 +99,6 @@ public class TimeAdapter extends RecyclerView.Adapter{
                         layoutParams_calender_title.setMargins(0, DensityUtil.dip2px(text_cal_title.getContext(), 10),layoutParams_calender_title.getMarginEnd(),0);
                         layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, R.id.txt_date_title);
                         layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.txt_date_title);
-
-
                 } else {
 
                     txt_date_title.setBackgroundResource(R.drawable.message_sys_bg);

@@ -70,6 +70,13 @@ public class TimeLineFragment extends Fragment {
         init();
         return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        init();
+    }
+
     private void  init(){
         RecyclerView rlView = (RecyclerView) view.findViewById(R.id.activity_rlview);
 //        rlTitle = (RelativeLayout) view.findViewById(R.id.rl_title);
@@ -110,14 +117,16 @@ public class TimeLineFragment extends Fragment {
         int second = calendar.get(Calendar.SECOND);
 
         String today_day = year + "-" + month + "-" + day;//2019-9-9
-        Log.d("today",today_day);
+
+
+       // Log.d("today",today_day);
         List<String> reminder_today_id= new ArrayList<String>();
         reminder_today_id = MainActivity.find_ID_By_DAY(today_day);
         Iterator iterator=reminder_today_id.iterator();
         String reminder_title, reminder_time;
         while (iterator.hasNext()){
             String id = iterator.next().toString();
-            Log.d("id",id);
+            Log.d("reminder-id",id);
             reminder_title = MainActivity.Get_Title_by_ID(id);
             reminder_time = MainActivity.Get_Day_by_ID(id);
             list.add(new TimeData(TimeFormat.toDate(reminder_time),reminder_title,""));
@@ -128,24 +137,26 @@ public class TimeLineFragment extends Fragment {
         String cal_title, cal_time;
         while (iterator_cal.hasNext()){
             String id = iterator_cal.next().toString();
-            Log.d("id",id);
+            //Log.d("id",id);
             cal_title = MainActivity.get_Title_In_Schedule(id);
             String date_cal = today_day +"-"+ String.valueOf(MainActivity.get_StartTime_In_Schedule(id))+"-0";
             cal_time = date_cal;
             list.add(new TimeData(TimeFormat.toDate(cal_time),"",cal_title));
         }
 
+        if(MainActivity.user_name.equals("admin")){
+            list.add(new TimeData(TimeFormat.toDate(today_day+"-10-00"),"","示例数据"));
+            list.add(new TimeData(TimeFormat.toDate(today_day+"-12-00"),"在登录后消失",""));
+            list.add(new TimeData(TimeFormat.toDate(today_day+"-14-00"),"","与李铭的电话会议"));
+            list.add(new TimeData(TimeFormat.toDate(today_day+"-19-30"),"查看花呗账单",""));
+            list.add(new TimeData(TimeFormat.toDate(today_day+"-12-05"),"找老师签字",""));
+            list.add(new TimeData(TimeFormat.toDate(today_day+"-12-05"),"去图书馆还书",""));
+            list.add(new TimeData(TimeFormat.toDate(today_day+"-19-30"),"","去实验室准备器材"));
+            list.add(new TimeData(TimeFormat.toDate(today_day+"-20-30"),"写实验报告作业",""));
+            list.add(new TimeData(TimeFormat.toDate(today_day+"-19-30"),"","数学建模开始"));
+            list.add(new TimeData(TimeFormat.toDate(today_day+"-20-00"),"","小组会议讨论"));
 
-        list.add(new TimeData(TimeFormat.toDate("2019-09-24 10:00"),"","准备数学建模竞赛"));
-        list.add(new TimeData(TimeFormat.toDate("2019-09-24 12:00"),"去体育场取快递",""));
-        list.add(new TimeData(TimeFormat.toDate("2019-09-24 14:00"),"","与李铭的电话会议"));
-        list.add(new TimeData(TimeFormat.toDate("2019-09-24 19:30"),"查看花呗账单",""));
-        list.add(new TimeData(TimeFormat.toDate("2019-09-24 12:05"),"找老师签字",""));
-        list.add(new TimeData(TimeFormat.toDate("2019-09-24 12:35"),"去图书馆还书",""));
-        list.add(new TimeData(TimeFormat.toDate("2019-09-24 19:30"),"","去实验室准备器材"));
-        list.add(new TimeData(TimeFormat.toDate("2019-09-24 20:30"),"写实验报告作业",""));
-        list.add(new TimeData(TimeFormat.toDate("2019-09-24 19:30"),"","数学建模开始"));
-        list.add(new TimeData(TimeFormat.toDate("2019-09-24 20:00"),"","小组会议讨论"));
+        }
 
         //加进来的数据，如果是日历则增加desc;如果是事项加title;
     }

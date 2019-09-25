@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 
 import com.example.chronus.Reminders.RemindersFragment;
@@ -138,7 +139,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // register listener
         mViewPager.addOnPageChangeListener(mPageChangeListener);
 
-
+        final SharedPreferences SP_user = getSharedPreferences("user_name",MODE_PRIVATE);
+        String user = SP_user.getString("user_name","admin");
+        if(!user.equals("admin")){
+            MainActivity.user_name = user;
+            SettingFragment.setLoginTrue();
+            Log.d("user",MainActivity.user_name);
+            Toast.makeText(this, "欢迎回来！",Toast.LENGTH_SHORT).show();
+        }
         findViewById(R.id.calendar_tab).setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -1328,4 +1336,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //获取当前时间
         //Date date = new Date(System.currentTimeMillis());
     }
+     public void LogOut(){
+        final SharedPreferences SP_user = getSharedPreferences("user_name",MODE_PRIVATE);
+        SharedPreferences.Editor editor = SP_user.edit();
+        editor.putString("user_name","admin");
+        editor.apply();
+    }
+
 }

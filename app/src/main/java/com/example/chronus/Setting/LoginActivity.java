@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
@@ -84,7 +85,10 @@ public class LoginActivity extends AppCompatActivity   {
                                     public void onClick(DialogInterface dialogInterface, int n) {
                                         MainActivity.CreateUser(user_name.getText().toString(), password.getText().toString());
                                         Toast.makeText(LoginActivity.this, "欢迎你，新用户！", Toast.LENGTH_SHORT).show();
-
+                                        final SharedPreferences SP_user = getSharedPreferences("user_name",MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = SP_user.edit();
+                                        editor.putString("user_name",user_name.getText().toString());
+                                        editor.apply();
                                         Log.d("CreateUser", "创建用户账号完成");
                                         //自动切换为登陆后的用户
                                         MainActivity.user_name =user_name.getText().toString();
@@ -99,6 +103,13 @@ public class LoginActivity extends AppCompatActivity   {
                     if(MainActivity.isUser_Password_Match(password.getText().toString(), user_name.getText().toString())){
                         //验证用户名和密码是否对应，如果匹配即登录成功执行以下代码
                         MainActivity.user_name = user_name.getText().toString();
+                        final SharedPreferences SP_user = getSharedPreferences("user_name",MODE_PRIVATE);
+                        SharedPreferences.Editor editor = SP_user.edit();
+                        editor.putString("user_name",user_name.getText().toString());
+                        editor.apply();
+
+
+
                         LoginSuccess();
                         password_layout.setError(null); // Clear the error
                         Log.d("判断密码：","密码正确");

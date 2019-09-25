@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.tv.TvContract;
 import android.os.Bundle;
@@ -19,11 +20,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.SharedPreferences;
 
 import com.example.chronus.MainActivity;
 import com.example.chronus.R;
 import com.example.chronus.Server.Syn_From_Server;
 import com.example.chronus.Server.Syn_To_Server;
+
 
 public class SettingFragment extends Fragment{
     private static final String ARG_SHOW_TEXT = "text";
@@ -37,6 +40,7 @@ public class SettingFragment extends Fragment{
     private ImageView avatar_img;
     private TextView user_name;
     public static boolean isLogin = false;
+
 
     public SettingFragment() {
         // Required empty public constructor
@@ -87,11 +91,12 @@ public class SettingFragment extends Fragment{
         if(MainActivity.user_name.equals("admin") )
         {
             user_name.setText("登陆或注册");
+            Log.d("Setting-UserName",MainActivity.user_name);
             //user_name.setTextColor(0X8E8F90);
-        }
-        else{
+        } else{
             user_name.setText(MainActivity.user_name);
             //user_name.setTextColor(0X000000);
+            Log.d("Setting-UserName-in",MainActivity.user_name);
         }
 
     }

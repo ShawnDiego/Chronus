@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -95,7 +96,7 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
             Notife_or_not =false;
         }else if(tvTime.getText().equals("点击添加时间")){
             //设置了日期没设置时刻，那按照9：00计算
-            Alerttime = year.toString()+"-"+(Infactmonth).toString()+"-"+
+            Alerttime = year.toString()+"-"+(month)+"-"+
                     day.toString()+"-"+"9"+"-"+"0";
             Notife_or_not = true;
         }else if(tvTime.getText() != null){
@@ -108,6 +109,7 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
         if(!title.equals("")){
             //将信息写入数据库
             MainActivity.INSERT(pre_type,id,title,content,Alerttime);
+            Log.d("insert_rem",id+": "+Alerttime);
             MainActivity.Increase_List_Number(pre_type);//相应类型事项数增加
             this.finish();
         }else{
@@ -181,15 +183,15 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
     private void initDateTime() {
         Calendar calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
-        month = calendar.get(Calendar.MONTH) + 1;
+        month = calendar.get(Calendar.MONTH);
         day = calendar.get(Calendar.DAY_OF_MONTH);
-        hour = calendar.get(Calendar.HOUR);
+        hour = calendar.get(Calendar.HOUR_OF_DAY);
         minute = calendar.get(Calendar.MINUTE);
     }
 
     public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
         this.year = year;
-        this.month = monthOfYear;
+        this.month = monthOfYear+1;
         this.day = dayOfMonth;
     }
 
@@ -203,7 +205,7 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
                         if (date.length() > 0) { //清除上次记录的日期
                             date.delete(0, date.length());
                         }
-                        tvDate.setText(date.append(String.valueOf(year)).append("年").append(String.valueOf(month)).append("月").append(day).append("日"));
+                        tvDate.setText(date.append(String.valueOf(year)).append("年").append(String.valueOf(month+1)).append("月").append(day).append("日"));
                         dialog.dismiss();
                     }
                 });
@@ -221,7 +223,7 @@ public class ADD_DATA_Activity extends AppCompatActivity implements View.OnClick
                 dialog.setView(dialogView);
                 dialog.show();
                 //初始化日期监听事件
-                datePicker.init(year, month-1 , day, this);
+                datePicker.init(year, month , day, this);//
                 break;
             case R.id.ll_time:
                 AlertDialog.Builder builder2 = new AlertDialog.Builder(context);
