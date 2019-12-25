@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.chronus.R;
 
@@ -19,7 +20,8 @@ public class Add_General_Activity extends AppCompatActivity implements View.OnCl
     private EditText title,place,content;
     private TextView close,sumbit,begin,end;
     private  Spinner spinner,spinner1;
-    private int hour,hour1;
+    private int hour,endHour;
+    private int boundary;
     private int item;
     private static final String tag="TAG";
     @Override
@@ -62,6 +64,7 @@ public class Add_General_Activity extends AppCompatActivity implements View.OnCl
         int month=bundle.getInt("month");
         int day=bundle.getInt("day");
         hour=bundle.getInt("hour");
+        boundary=bundle.getInt("boundary");
         String h=parseStr(hour);
         begin.setText(year+"年"+month+"月"+day+"日"+" "+h+":00");
         spinner.setSelection(hour+1);
@@ -96,7 +99,7 @@ public class Add_General_Activity extends AppCompatActivity implements View.OnCl
                 bundle.putString("place",place.getText().toString());
                 bundle.putString("content",content.getText().toString());
                 bundle.putInt("begin",hour);
-                bundle.putInt("end",hour1);
+                bundle.putInt("end",endHour);
                 bundle.putInt("scheme",item);
                 intent.putExtras(bundle);
                 setResult(Activity.RESULT_OK,intent);
@@ -109,12 +112,17 @@ public class Add_General_Activity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        if(adapterView.getId()==R.id.sp_end){
+        if(adapterView.getId()==R.id.sp_end){                  //日期下拉列表
             if(i<=hour)
                 spinner.setSelection(hour+1);
-            else hour1=i;
+
+            if(i>boundary){        //越界，弹出警告
+                Toast.makeText(this,"您选择的时间与已有项冲突！请重新选择",Toast.LENGTH_LONG).show();
+                spinner.setSelection(hour+1);
+            }
+            endHour=i;
         }
-        if(adapterView.getId()==R.id.sp_color){
+        if(adapterView.getId()==R.id.sp_color){             //颜色选择下拉列表
             item=i;
             setBgColor_radius( view,i );
         }

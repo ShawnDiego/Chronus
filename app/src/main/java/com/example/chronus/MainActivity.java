@@ -1347,10 +1347,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         MainActivity.INSERT("工作",String.valueOf(8947),"完成提案文件","需要在明天之前提交文档"," ");
         MainActivity.INSERT("工作",String.valueOf(8946),"安排员工会议时间"," "," ");
         MainActivity.INSERT("工作",String.valueOf(8945),"发休假申请"," "," ");
-        Insert_Schedule("999",date,""+9,""+10,"市场团队会议","","",""+0);
-        Insert_Schedule("998",date,""+11,""+12,"项目组项目","","",""+2);
-        Insert_Schedule("997",date,""+13,""+14,"与李铭的电话会议","","",""+4);
-        Insert_Schedule("996",date,""+15,""+17,"设计项目方案","","",""+1);
+        Insert_Schedule("1-1-1-999",date,""+9,""+10,"市场团队会议","","",""+0);
+        Insert_Schedule("1-1-1-998",date,""+11,""+12,"项目组项目","","",""+2);
+        Insert_Schedule("1-1-1-997",date,""+13,""+14,"与李铭的电话会议","","",""+4);
+        Insert_Schedule("1-1-1-996",date,""+15,""+17,"设计项目方案","","",""+1);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");// HH:mm:ss
         //获取当前时间
         //Date date = new Date(System.currentTimeMillis());

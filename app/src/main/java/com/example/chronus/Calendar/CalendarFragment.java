@@ -280,6 +280,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
                     bundle.putInt("month",mMonth);
                     bundle.putInt("day",mDay);
                     bundle.putInt("hour",mHour);
+                    bundle.putInt("boundary",boundary(mHour));
                     intent.putExtras(bundle);
                     startActivityForResult(intent,0);
                 }
@@ -587,6 +588,15 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateSel
         return 0;
     }
 
+    //获取此按钮下方最近的时间点
+    public  int  boundary(int  btn){
+        int bound=btn+1;
+        while (getBtn(bound).getText().toString().equals("")){
+            bound++;
+            if(bound==24) break;
+        }
+        return bound;
+    }
     //获取该按钮的结束时间
     public int rangeLast(Button btn){
         int first=rangFirst( btn );
